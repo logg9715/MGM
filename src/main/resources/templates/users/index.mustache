@@ -1,0 +1,36 @@
+{{>layouts/header}}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">회원 아이디</th>
+        <th scope="col">비밀번호</th>
+        <th scope="col">닉네임</th>
+        <th scope="col">이름</th>
+        <th scope="col">나이</th>
+        <th scope="col">전화번호</th>
+        <th scope="col">이메일</th>
+        <th scope="col">등급</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#userList}}
+        <tr>
+            <th>{{id}}</th>
+            <td><a href="/user/{{id}}">{{loginId}}</a></td>
+            <td>{{password}}</td>
+            <td>{{nickname}}</td>
+            <td>{{name}}</td>
+            <td>{{age}}</td>
+            <td>{{phonenumber}}</td>
+            <td>{{email}}</td>
+            <th>{{role}}</th>
+        </tr>
+    {{/userList}}
+    </tbody>
+</table>
+<a href="/user/new" class="btn btn-success">회원 추가</a></li>
+<a href="/session-login/admin" class="btn btn-warning">돌아가기</a>
+
+{{>layouts/footer}}

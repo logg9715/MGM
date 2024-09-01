@@ -1,0 +1,18 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">제목</th>
+        <th scope="col">내용</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#announceList}}
+        <tr>
+            <td>{{id}}</td>
+            <td><a href="/announces/{{id}}">{{title}}</a></td>
+            <td>{{content}}</td>
+        </tr>
+    {{/announceList}}
+    </tbody>
+</table>

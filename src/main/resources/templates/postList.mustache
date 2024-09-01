@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post List</title>
+</head>
+<body>
+<h1>Post List</h1>
+<ul>
+    {{#posts}}
+        <li>
+            <h2>{{title}}</h2>
+            <p>{{content}}</p>
+            {{#pictureBase64}}
+                <img src="data:image/jpeg;base64,{{pictureBase64}}" alt="Post Image"/>
+            {{/pictureBase64}}
+            <p>Likes: {{likeCount}}</p>
+            <p>Views: {{count}}</p>
+            <p>Posted on: {{regdate}}</p>
+        </li>
+    {{/posts}}
+</ul>
+</body>
+</html>

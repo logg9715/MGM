@@ -1,0 +1,161 @@
+{{>layouts/header}}
+
+{{#user}}
+    <form id="userForm" class="container">
+        <input name="id" type="hidden" value="{{id}}"> id: {{id}}
+
+        {{^isAdmin}}
+            <div class="mb-3">
+                <label class="form-label">회원 아이디</label>
+                <input type="text" class="form-control" id="loginId" name="loginId" value="{{loginId}}" readonly>
+            </div>
+        {{/isAdmin}}
+        {{#isAdmin}}
+            <div class="mb-3">
+                <label class="form-label">회원 아이디</label>
+                <input type="text" class="form-control" id="loginId" name="loginId" value="{{loginId}}">
+                <button type="button" id="checkDuplicateButton" class="btn btn-secondary">중복 체크</button>
+                <div id="duplicateCheckResult"></div>
+            </div>
+        {{/isAdmin}}
+
+        <div class="mb-3">
+            <label class="form-label">비밀번호</label>
+            <input type="text" class="form-control" name="password" value="{{password}}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">닉네임</label>
+            <input type="text" class="form-control" id="nickname" name="nickname" value="{{nickname}}">
+            <button type="button" id="checkNicknameDuplicateButton" class="btn btn-secondary">중복 체크</button>
+            <div id="nicknameDuplicateCheckResult"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">이름</label>
+            <input type="text" class="form-control" name="name" value="{{name}}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">나이</label>
+            <input type="text" class="form-control" name="age" value="{{age}}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">전화번호</label>
+            <input type="text" class="form-control" name="phonenumber" value="{{phonenumber}}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">이메일</label>
+            <input type="text" class="form-control" name="email" value="{{email}}">
+        </div>
+
+        {{^isAdmin}}
+            <label class="form-label" for="role">회원 등급</label>
+            <input type="text" class="form-control" id="role" name="role" value="{{role}}" readonly>
+        {{/isAdmin}}
+
+        {{#isAdmin}}
+            <div class="mb-3">
+                <label class="form-label" for="role">회원 등급</label>
+                <select class="form-control" id="role" name="role">
+                    <option value="USER">일반 사용자</option>
+                    <option value="ADMIN">관리자</option>
+                </select>
+            </div>
+        {{/isAdmin}}
+
+        <button type="button" id="submitButton" class="btn btn-primary">입력하기</button>
+        <a href="/user/{{id}}" class="btn btn-warning">돌아가기</a>
+    </form>
+{{/user}}
+
+{{>layouts/footer}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // 회원 아이디 중복 체크 버튼 이벤트 핸들러
+    const checkDuplicateButton = document.getElementById('checkDuplicateButton');
+    if (checkDuplicateButton) {
+        checkDuplicateButton.addEventListener('click', function () {
+            const loginId = document.getElementById('loginId').value;
+            fetch('/api/users/check-duplicate?loginId=' + encodeURIComponent(loginId))
+                .then(response => response.json())
+                .then(data => {
+                    const resultElement = document.getElementById('duplicateCheckResult');
+                    if (data.isDuplicate) {
+                        resultElement.textContent = "중복되었습니다";
+                        resultElement.style.color = "red";
+                    } else {
+                        resultElement.textContent = "사용할 수 있는 아이디입니다";
+                        resultElement.style.color = "green";
+                    }
+                })
+                .catch((error) => {
+                    console.error('실패:', error);
+                    alert('아이디 중복 체크에 실패했습니다.');
+                });
+        });
+    }
+
+    // 닉네임 중복 체크 버튼 이벤트 핸들러
+    const checkNicknameDuplicateButton = document.getElementById('checkNicknameDuplicateButton');
+    if (checkNicknameDuplicateButton) {
+        checkNicknameDuplicateButton.addEventListener('click', function () {
+            const nickname = document.getElementById('nickname').value;
+            fetch('/api/users/check-nickname-duplicate?nickname=' + encodeURIComponent(nickname))
+                .then(response => response.json())
+                .then(data => {
+                    const resultElement = document.getElementById('nicknameDuplicateCheckResult');
+                    if (data.isDuplicate) {
+                        resultElement.textContent = "중복되었습니다";
+                        resultElement.style.color = "red";
+                    } else {
+                        resultElement.textContent = "사용할 수 있는 닉네임입니다";
+                        resultElement.style.color = "green";
+                    }
+                })
+                .catch((error) => {
+                    console.error('실패:', error);
+                    alert('닉네임 중복 체크에 실패했습니다.');
+                });
+        });
+    }
+
+    // 제출 버튼 클릭 핸들러
+    document.getElementById('submitButton').addEventListener('click', function () {
+        // Form 데이터를 JSON으로 변환
+        const formData = new FormData(document.getElementById('userForm'));
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // AJAX 요청
+        fetch('/api/users/update?id=' + data.id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('서버 오류');
+        })
+        .then(data => {
+            console.log('성공:', data);
+            // 수정 성공 시 show.mustache 페이지로 리디렉션
+            window.location.href = '/user/' + data.id;
+        })
+        .catch((error) => {
+            console.error('실패:', error);
+            // 실패 처리
+            alert('사용자 정보 업데이트에 실패했습니다.');
+        });
+    });
+});
+
+</script>

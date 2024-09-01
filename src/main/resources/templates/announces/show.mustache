@@ -1,0 +1,30 @@
+{{>layouts/header}}
+<table class ="table">
+    <thead>
+    <tr>
+        <th scope = "col">ID</th>
+        <th scope = "col">Title</th>
+        <th scope = "col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#announce}}
+    <tr>
+        <th>{{id}}</th>
+        <th>{{title}}</th>
+        <th>{{content}}</th>
+    </tr>
+    {{/announce}}
+    </tbody>
+</table>
+{{#nickname}}
+    <div>
+        {{#isAdmin}}
+            <a href="/announces/{{announce.id}}/delete"  id="btn-delete" class="btn btn-danger"> 글삭제 </a>
+        {{/isAdmin}}
+    </div>
+{{/nickname}}
+<a href="/announces" class="btn btn-success"> 게시판 목록 </a>
+
+{{>layouts/footer}}
+

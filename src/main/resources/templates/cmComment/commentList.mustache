@@ -1,0 +1,44 @@
+<body>
+<ul id="commentList">
+    <!-- 댓글 목록이 여기에서 동적으로 삽입됩니다. -->
+</ul>
+<script>
+    // 페이지 로드 시 댓글 목록을 불러오기
+    document.addEventListener('DOMContentLoaded', function() {
+        // 특정 유저의 댓글을 가져오기 위한 API 호출
+        fetch('/api/comments/user/{userId}') // {userId}를 실제 사용자 ID로 바꿔야 함
+            .then(response => response.json())
+            .then(comments => {
+                const commentList = document.getElementById('commentList');
+                comments.forEach(comment => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <p><strong>댓글 ID:</strong> ${comment.id}</p>
+                        <p><strong>내용:</strong> ${comment.content}</p>
+                        <p><strong>작성 시간:</strong> ${new Date(comment.regdate).toLocaleString()}</p>
+                        <p><strong>좋아요 수:</strong> ${comment.likeCount}</p>
+                    `;
+                    commentList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching comments:', error);
+            });
+    });
+</script>
+</body>
+<style>
+    /* 기본 스타일 추가 (선택 사항) */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    #commentList {
+        list-style-type: none;
+        padding: 0;
+    }
+    #commentList li {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+</style>

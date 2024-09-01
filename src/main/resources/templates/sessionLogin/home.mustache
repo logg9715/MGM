@@ -1,0 +1,22 @@
+{{>layouts/header}}
+{{^nickname}}
+<div>
+    <h3>로그인 되어있지 않습니다!</h3>
+    <a href="/session-login/join" class="btn btn-primary">회원 가입</a> <br/><br/>
+    <a href="/session-login/login" class="btn btn-success">로그인</a>
+</div>
+{{/nickname}}
+{{#nickname}}
+    <div>
+        <h3>{{nickname}}님 환영합니다!</h3>
+        {{^isAdmin}}
+            <a href="/session-login/mypage" class="btn btn-primary">마이 페이지</a> <br/><br/>
+        {{/isAdmin}}
+        {{#isAdmin}}
+            <a href="/session-login/admin" class="btn btn-success">관리자 페이지</a> <br/><br/>
+        {{/isAdmin}}
+        <a href="/session-login/logout" class="btn btn-danger">로그아웃</a>
+    </div>
+{{/nickname}}
+
+{{>layouts/footer}}

@@ -1,0 +1,26 @@
+{{>layouts/header}}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">제목</th>
+        <th scope="col">내용</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#announceList}}
+        <tr>
+            <th>{{id}}</th>
+            <td><a href="/announces/{{id}}">{{title}}</a></td>
+            <td>{{content}}</td>
+        </tr>
+    {{/announceList}}
+    </tbody>
+</table>
+{{#isAdmin}}
+    <a href="/announces/new" class="btn btn-primary"> 글 쓰기 </a>
+{{/isAdmin}}
+<a href="/" class="btn btn-warning"> 돌아가기 </a>
+
+{{>layouts/footer}}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UDP Streaming</title>
+</head>
+<body>
+{{>layouts/header}}
+
+<h1>Stream Viewer</h1>
+<img id="stream" src="http://175.123.202.85:20800/stream.mjpg" alt="Stream not available">
+
+<h1>UDP Streaming</h1>
+<div>
+    <button onclick="fetchSensorData()">Get Sensor Data</button>
+    <div id="sensorData"></div>
+    <button onclick="fetchRotaterData()">Get Rotater Data</button>
+    <div id="rotaterData"></div>
+    <button onclick="fetchSprinklerData()">Get Sprinkler Data</button>
+    <div id="sprinklerData"></div>
+    <button onclick="fetchLedData()">Get LED Data</button>
+    <div id="ledData"></div>
+    <button id="fetchUdpDataButton">Capture Screenshot</button>
+    <div id="udpDataContainer" style="display: none;">
+        <h3>Captured Screenshot</h3>
+        <img id="udpScreenshot" alt="Screenshot not available">
+    </div>
+</div>
+
+<script>
+    function fetchSensorData() {
+        const url = '/api/udp/sensor'; // 서버의 엔드포인트 URL
+        fetchAndDisplayData(url, 'sensorData', 'Sensor'); // 데이터를 가져오고 표시하는 함수 호출
+    }
+
+    function fetchRotaterData() {
+        const url = '/api/udp/rotater'; // 서버의 엔드포인트 URL
+        fetchAndDisplayData(url, 'rotaterData', 'Rotater'); // 데이터를 가져오고 표시하는 함수 호출
+    }
+
+    function fetchSprinklerData() {
+        const url = '/api/udp/sprinkler'; // 서버의 엔드포인트 URL
+        fetchAndDisplayData(url, 'sprinklerData', 'Sprinkler'); // 데이터를 가져오고 표시하는 함수 호출
+    }
+
+    function fetchLedData() {
+        const url = '/api/udp/led'; // 서버의 엔드포인트 URL
+        fetchAndDisplayData(url, 'ledData', 'LED'); // 데이터를 가져오고 표시하는 함수 호출
+    }
+
+    function fetchAndDisplayData(url, containerId, dataTypeName) {
+        fetch(url, {
+            method: 'GET', // HTTP 요청 메서드를 GET으로 설정
+            headers: {
+                'Content-Type': 'application/json' // 요청 헤더에 Content-Type을 JSON으로 설정
+            }
+        })
+        .then(response => response.json()) // 서버 응답을 JSON 형식으로 파싱
+        .then(data => {
+            const container = document.getElementById(containerId); // 데이터를 표시할 HTML 요소 선택
+            container.textContent = JSON.stringify(data, null, 2); // 요소의 텍스트 콘텐츠를 JSON 데이터로 설정 (보기 좋게 포맷팅)
+
+            const dataTypeInfo = document.createElement('p'); // 새로운 <p> 요소 생성
+            dataTypeInfo.textContent = `${dataTypeName} Data`; // <p> 요소의 텍스트 콘텐츠를 데이터 유형으로 설정
+            container.prepend(dataTypeInfo); // <p> 요소를 컨테이너의 첫 번째 자식으로 추가
+        })
+        .catch(error => console.error(`Error fetching ${containerId} data:`, error)); // 에러 발생 시 콘솔에 에러 메시지 출력
+    }
+
+    // 스크린샷
+    const fetchUdpDataButton = document.getElementById('fetchUdpDataButton');
+    const udpDataContainer = document.getElementById('udpDataContainer');
+    const udpScreenshotElement = document.getElementById('udpScreenshot');
+
+    fetchUdpDataButton.onclick = function() {
+        fetch('/api/udp/screenshot')
+            .then(response => response.json())
+            .then(data => {
+                if (data.screenshot) {
+                    udpScreenshotElement.src = 'data:image/jpeg;base64,' + data.screenshot;
+                    udpDataContainer.style.display = 'block';
+                } else {
+                    console.error('Error fetching screenshot:', data.error);
+                }
+            })
+            .catch(error => console.error('Error fetching screenshot:', error));
+    };
+</script>
+
+{{>layouts/footer}}
+</body>
+</html>

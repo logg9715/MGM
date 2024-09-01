@@ -1,0 +1,177 @@
+{{> layouts/header}}
+
+<h1 id="postTitle"></h1>
+<p id="postAuthor"></p>
+<p id="postContent"></p>
+<div id="postImages"></div>
+<p id="postLikeCount"></p>
+<button id="likePost">좋아요</button>
+<p id="postCount"></p>
+<p id="postRegdate"></p>
+
+<h3>댓글 작성</h3>
+<form id="commentForm">
+    <textarea id="commentContent" name="content" required></textarea>
+    <br>
+    <button type="submit">작성</button>
+</form>
+
+<h3>댓글 목록</h3>
+<ul id="commentList"></ul>
+
+{{> layouts/footer}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var postId = {{post.id}}; // postId는 서버 사이드에서 렌더링하여 전달
+
+        // 게시글 상세 정보를 불러오기
+        fetch('/api/posts/' + postId)
+            .then(response => response.json())
+            .then(post => {
+                document.getElementById('postTitle').textContent = post.title;
+                document.getElementById('postAuthor').textContent = '작성자: ' + post.user.nickname;
+                document.getElementById('postContent').textContent = post.content;
+                document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + post.likeCount;
+                document.getElementById('postCount').textContent = '조회수: ' + post.count;
+                document.getElementById('postRegdate').textContent = '작성시간: ' + post.regdate;
+
+                var postImages = document.getElementById('postImages');
+                post.pictureBase64List.forEach(image => {
+                    var img = document.createElement('img');
+                    img.src = 'data:image/jpeg;base64,' + image;
+                    img.alt = 'Post Image';
+                    postImages.appendChild(img);
+                });
+            });
+
+        // 댓글 목록을 불러오기
+        fetch('/api/comments/post/' + postId)
+            .then(response => response.json())
+            .then(comments => {
+                const commentList = document.getElementById('commentList');
+                comments.forEach(comment => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <p>작성자: ${comment.user.nickname}</p>
+                        <p>${comment.content}</p>
+                        <p id="commentLikeCount${comment.id}">추천: ${comment.likeCount}</p>
+                        <button class="likeComment" data-comment-id="${comment.id}">추천</button>
+                        <p>작성 시간: ${comment.regdate}</p>
+                        <!-- 대댓글 작성 form -->
+                        <h4>대댓글 달기</h4>
+                        <form class="recommentForm" data-comment-id="${comment.id}">
+                            <textarea name="content" required></textarea>
+                            <br>
+                            <button type="submit">작성</button>
+                        </form>
+                        <!-- 대댓글 목록 -->
+                        <h5>대댓글</h5>
+                        <ul id="recommentList${comment.id}"></ul>
+                    `;
+                    commentList.appendChild(listItem);
+
+                    // 대댓글 목록을 불러오기
+                    fetch('/api/recomments/comment/' + comment.id)
+                        .then(response => response.json())
+                        .then(recomments => {
+                            const recommentList = document.getElementById('recommentList' + comment.id);
+                            recomments.forEach(recomment => {
+                                const recommentItem = document.createElement('li');
+                                recommentItem.innerHTML = `
+                                    <p>작성자: ${recomment.user.nickname}</p>
+                                    <p>${recomment.content}</p>
+                                    <p id="recommentLikeCount${recomment.id}">추천: ${recomment.likeCount}</p>
+                                    <button class="likeRecomment" data-recomment-id="${recomment.id}">추천</button>
+                                    <p>작성 날짜: ${recomment.regdate}</p>
+                                `;
+                                recommentList.appendChild(recommentItem);
+                            });
+                        });
+                });
+            });
+
+        // 게시글 좋아요
+        document.getElementById('likePost').addEventListener('click', function() {
+            fetch('/api/posts/' + postId + '/like', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + data;
+            });
+        });
+
+        // 댓글 작성
+        document.getElementById('commentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            formData.append('cmPostId', postId);
+
+            fetch('/api/comments/new', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                window.location.reload(); // 댓글 작성 후 페이지 새로고침
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // 댓글과 대댓글 이벤트 위임 처리
+        document.body.addEventListener('submit', function(event) {
+            if (event.target.classList.contains('recommentForm')) {
+                event.preventDefault();
+                var form = event.target;
+                var commentId = form.getAttribute('data-comment-id');
+                var formData = new FormData(form);
+                formData.append('cmCommentId', commentId);
+
+                fetch('/api/recomments/new', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    window.location.reload(); // 대댓글 작성 후 페이지 새로고침
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+
+        // 대댓글 좋아요 이벤트 처리
+        document.body.addEventListener('click', function(event) {
+            if (event.target.classList.contains('likeRecomment')) {
+                var recommentId = event.target.getAttribute('data-recomment-id');
+                fetch('/api/recomments/' + recommentId + '/like', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('recommentLikeCount' + recommentId).textContent = '추천: ' + data;
+                });
+            }
+        });
+
+        // 댓글 좋아요 이벤트 처리
+        document.body.addEventListener('click', function(event) {
+            if (event.target.classList.contains('likeComment')) {
+                var commentId = event.target.getAttribute('data-comment-id');
+                fetch('/api/comments/' + commentId + '/like', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('commentLikeCount' + commentId).textContent = '추천: ' + data;
+                });
+            }
+        });
+    });
+</script>

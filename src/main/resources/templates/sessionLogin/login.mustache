@@ -1,0 +1,52 @@
+{{>layouts/header}}
+
+<h1>로그인</h1>
+<br/>
+<form id="loginForm">
+    <div class="mb-3">
+        <label class="form-label" for="loginId">회원 아이디</label>
+        <input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디를 입력해주세요"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="password">비밀번호</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력해주세요"/>
+    </div>
+    <button type="button" class="btn btn-success" onclick="login()">로그인</button>
+    <a href="/session-login" class="btn btn-warning">돌아가기</a>
+</form>
+
+<div id="error-message" style="color: red; display: none;"></div>
+
+<script>
+    async function login() {
+        const loginRequest = {
+            loginId: document.getElementById("loginId").value,
+            password: document.getElementById("password").value
+        };
+
+        try {
+            const response = await fetch('/api/session-login/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginRequest)
+            });
+
+            if (response.ok) {
+                console.log("로그인 성공"); // 로그인 성공 시 콘솔에 메시지 출력
+                window.location.href = '/session-login'; // 로그인 성공 시 홈 페이지로 리다이렉트
+            } else {
+                const error = await response.text();
+                document.getElementById("error-message").innerText = "로그인 실패: " + error;
+                document.getElementById("error-message").style.display = "block";
+            }
+        } catch (err) {
+            console.error("로그인 요청 중 오류 발생:", err);
+            document.getElementById("error-message").innerText = "로그인 요청 중 오류가 발생했습니다.";
+            document.getElementById("error-message").style.display = "block";
+        }
+    }
+</script>
+
+{{>layouts/footer}}

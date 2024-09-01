@@ -1,0 +1,52 @@
+{{> layouts/header}}
+
+<h1>게시글 작성</h1>
+<form id="postForm" enctype="multipart/form-data">
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="content">내용:</label>
+    <textarea id="content" name="content" required></textarea>
+    <br>
+    <label for="pictures">사진:</label>
+    <div id="pictureFields">
+        <input type="file" name="pictures" class="pictureField" multiple>
+        <br>
+    </div>
+    <button type="button" onclick="addPictureField()">사진 추가하기</button>
+    <br><br>
+    <button type="submit">작성</button>
+</form>
+
+{{> layouts/footer}}
+
+<script>
+    function addPictureField() {
+        var container = document.getElementById("pictureFields");
+        var input = document.createElement("input");
+        input.type = "file";
+        input.name = "pictures";
+        input.className = "pictureField";
+        container.appendChild(input);
+        var br = document.createElement("br");
+        container.appendChild(br);
+    }
+
+    document.getElementById('postForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        fetch('/api/posts/new', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+            alert(result);
+            window.location.href = '/posts'; // 작성 후 게시글 목록으로 이동
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>

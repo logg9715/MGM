@@ -1,0 +1,28 @@
+{{>layouts/header}}
+
+<h1>Plants</h1>
+<form action="/plants" method="post" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="ypImage">Young Plant Image:</label>
+    <input type="file" id="ypImage" name="ypImage" required><br><br>
+    <label for="mpImage">Mature Plant Image:</label>
+    <input type="file" id="mpImage" name="mpImage" required><br><br>
+    <button type="submit">Upload Plant</button>
+</form>
+<h2>List of Plants</h2>
+<ul>
+    {{#plants}}
+        <li>
+            <h3>{{name}}</h3>
+            <div>
+                <strong>Young Plant:</strong><br>
+                <img src="data:image/jpeg;base64,{{ypImage}}" alt="Young Plant Image" style="max-width:200px; max-height:200px;"/><br>
+                <strong>Mature Plant:</strong><br>
+                <img src="data:image/jpeg;base64,{{mpImage}}" alt="Mature Plant Image" style="max-width:200px; max-height:200px;"/>
+            </div>
+        </li>
+    {{/plants}}
+</ul>
+
+{{>layouts/footer}}
