@@ -22,10 +22,6 @@
         <input type="text" class="form-control" id="name" name="name">
     </div>
     <div class="mb-3">
-        <label class="form-label" for="age">나이</label>
-        <input type="text" class="form-control" id="age" name="age">
-    </div>
-    <div class="mb-3">
         <label class="form-label" for="phonenumber">전화번호</label>
         <input type="text" class="form-control" id="phonenumber" name="phonenumber">
     </div>
@@ -53,23 +49,30 @@ document.getElementById('nickname').addEventListener('input',()=>{
     nickNameCheckFlag = false;
     document.getElementById('nicknameDuplicateCheckResult').textContent = "";
 });
-// ----------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------
 
 // ----------------------------------- 입력 폼 정상 양식인지 검사 -------------------------------------------------
-function checkFormError(id, pw, name) {
-    if (id === "" || pw === "" || name === "") {
-        alert("모든 값을 입력 해 주십시오.");
-        return true;
-    }
+function hasFormError(obj) {
     if (!idCheckFlag || !nickNameCheckFlag) {
         alert("아이디 혹은 닉네임 중복 여부를 확인 해 주십시오.")
         return true;
     }
+
+    for (const [key, value] of Object.entries(obj)) {
+        console.log(value);
+        if (value === "") {
+            alert("모든 항목을 입력해 주십시오.")
+            return true;
+        }
+    }
+
     return false;
 }
 // ------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------------- 버튼에 이벤트 부여 ---------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function () {
+
     // 회원 아이디 중복 체크 버튼 이벤트 핸들러
     document.getElementById('checkDuplicateButton').addEventListener('click', function () {
         const loginId = document.getElementById('loginId').value;
@@ -81,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 resultElement.textContent = "중복되었습니다";
                 resultElement.style.color = "red";
             } else {
+                idCheckFlag = true;
                 resultElement.textContent = "사용할 수 있는 아이디입니다";
                 resultElement.style.color = "green";
             }
@@ -102,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 resultElement.textContent = "중복되었습니다";
                 resultElement.style.color = "red";
             } else {
+                nickNameCheckFlag = true;
                 resultElement.textContent = "사용할 수 있는 닉네임입니다";
                 resultElement.style.color = "green";
             }
@@ -116,9 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('submitButton').addEventListener('click', function () {
         const formData = new FormData(document.getElementById('userForm'));
         const data = {};
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
+        formData.forEach((value, key) => { data[key] = value; });
+
+        // 양식 검토
+        if(hasFormError(data)) return;
 
         fetch('/api/users/join', {
             method: 'POST',
@@ -134,13 +140,14 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error('서버 오류');
         })
         .then(data => {
-            console.log('성공:', data);
+            //console.log('성공:', data);
             window.location.href = '/session-login';
         })
         .catch((error) => {
-            console.error('실패:', error);
+            //console.error('실패:', error);
             alert('사용자 생성에 실패했습니다.');
         });
     });
 });
+// ----------------------------------------------------------------------------------------------------------
 </script>
