@@ -1,4 +1,6 @@
 package com.example.MultiGreenMaster.entity;
+// ============================================= 공지사항 entity =====================================
+
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +19,8 @@ public class Announce {
     private String title;
     @Column
     private String content;
+    @Column
+    private boolean disable;
 
     public void patch(Announce announce){ //update를 원하지 않는 필드들이 null로 변하지 않게(유지되게) 하는 목적.
         if(announce.title != null){

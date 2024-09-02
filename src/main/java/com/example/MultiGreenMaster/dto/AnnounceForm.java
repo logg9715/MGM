@@ -16,6 +16,7 @@ public class AnnounceForm {
                 .id(this.id)
                 .title(this.title)
                 .content(this.content)
+                .disable(false)
                 .build();
     }
 
