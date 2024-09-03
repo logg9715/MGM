@@ -19,26 +19,26 @@ public class SessionLoginController extends SessionCheckController {
     @Autowired
     private UserService userService;
 
-    // 홈 페이지로 이동
+    /* 홈 페이지로 이동 */
     @GetMapping(value = {"", "/"})
     public String home(Model model) {
         return "sessionLogin/home";
     }
 
-    // 회원가입 페이지로 이동
+    /* 회원가입 페이지로 이동 */
     @GetMapping("/join")
     public String joinPage(Model model) {
         return "sessionLogin/join";
     }
 
-    // 로그인 페이지로 이동
+    /* 로그인 페이지로 이동 */
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("loginRequest", new LoginRequest());
         return "sessionLogin/login";
     }
 
-    // 로그인 처리
+    /* 로그인 처리 */
     @PostMapping("/login")
     public String login(@ModelAttribute LoginRequest loginRequest,
                         HttpServletRequest httpServletRequest, Model model, RedirectAttributes rttr) {
@@ -56,7 +56,7 @@ public class SessionLoginController extends SessionCheckController {
         return "redirect:/session-login";
     }
 
-    // 사용자 정보 페이지로 이동
+    /* 사용자 정보 페이지로 이동 */
     @GetMapping("/info")
     public String userInfo(@SessionAttribute(name="userId", required = false) Long userId, Model model) {
         User loginUser = userService.getLoginUserById(userId);
@@ -67,7 +67,7 @@ public class SessionLoginController extends SessionCheckController {
         return "sessionLogin/info";
     }
 
-    // 로그아웃 처리
+    /* 로그아웃 처리 */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -77,22 +77,26 @@ public class SessionLoginController extends SessionCheckController {
         return "redirect:/";
     }
 
-    // 마이 페이지로 이동
+    /* 마이 페이지로 이동 */
     @GetMapping("/mypage")
     public String myPage(Model model) {
         return "sessionLogin/mypage";
     }
 
-    // 관리자 페이지로 이동
+    /* 관리자 페이지로 이동 */
     @GetMapping("/admin")
     public String adminPage(@SessionAttribute(name="userId", required = false) Long userId, Model model) {
         User loginUser = userService.getLoginUserById(userId);
+
+        // case 1. 로그아웃 상태
         if (loginUser == null) {
             return "redirect:/session-login/login";
         }
+        // case 2. 일반 사용자 계정
         if (!loginUser.getRole().equals(UserRole.ADMIN)) {
             return "redirect:/session-login/mypage";
         }
+        // case 3. 관리자 계정
         return "sessionLogin/admin";
     }
 }

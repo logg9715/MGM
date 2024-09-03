@@ -1,5 +1,5 @@
 package com.example.MultiGreenMaster.controller;
-
+//공지사항 컨트롤러
 
 import com.example.MultiGreenMaster.dto.AnnounceForm;
 import com.example.MultiGreenMaster.entity.Announce;
@@ -20,64 +20,56 @@ import java.util.List;
 @Slf4j
 @Controller
 public class AnnounceController extends SessionCheckController{
-    //공지사항 컨트롤러
-    //01. 의존성 주입
     @Autowired
     private AnnounceRepository announceRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
 
-
+    /* 공지사항 목록 */
     @GetMapping("/announces")
     public String index(Model model) {
-        List<Announce> announceEntityList = (List<Announce>) announceRepository.findAll();
+        List<Announce> announceEntityList = (List<Announce>) announceRepository.findByDisableFalse();
         model.addAttribute("announceList", announceEntityList);
         return "announces/index";
     }
 
+    /* 새 공지사항 작성 */
     @GetMapping("/announces/new")
     public String newAnnounceForm(Model model) {
         return "announces/new";
     }
 
+    /* 새 공지사항 제출 */
     @PostMapping("/announces/create")
     public String createAnnounce(AnnounceForm form, Model model) {  //DTO AnnounceForm
-
-        //System.out.println(form.toString());
-        log.info(form.toString());
-
-        // 1. DTO를 엔티티로 변환
         Announce announce = form.toEntity();
-        log.info(announce.toString());
-        //System.out.println(announce.toString());
-
         Announce saved = announceRepository.save(announce);
-        //System.out.println(saved.toString());
-        log.info(saved.toString());
         return "redirect:/announces/"+saved.getId();
     }
 
+    /* 공지사항 열람 */
     @GetMapping("/announces/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-
-        log.info("id = " + id);
         Announce announceEntity = announceRepository.findById(id).orElse(null);
-        model.addAttribute("announce", announceEntity);//show.mustache의 {{#announce}} {{/announce}}의 값
 
-        //List<CommentDto> commentsDtos = commentService.comments(id);
-        //model.addAttribute("commentDtos",commentsDtos);
+        // 비활성화 된 글 접속 시도시 튕겨내기
+        if(announceEntity.isDisable()) return "redirect:/announces";
 
-        return "announces/show";//show.mustache 리턴
+        //show.mustache의 {{#announce}} {{/announce}}의 값
+        model.addAttribute("announce", announceEntity);
+
+        return "announces/show";
     }
 
+    /* 공지사항 삭제 구버젼 (수정 필요) */
     @GetMapping("/announces/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model) {
         Announce target = announceRepository.findById(id).orElse(null);
         if (target != null) {
-            announceRepository.delete(target);
+            target.toDisable();
+            announceRepository.save(target);
             rttr.addFlashAttribute("msg", "삭제됐습니다!");
         }
         return "redirect:/announces";

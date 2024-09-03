@@ -30,4 +30,10 @@ public class Announce {
             this.content = announce.content;
         }
     }
+
+    public void toDisable() {
+        this.disable = true;
+    }
+
+
 }
