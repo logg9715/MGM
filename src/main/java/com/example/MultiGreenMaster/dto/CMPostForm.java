@@ -47,7 +47,7 @@ public class CMPostForm {
                 .content(this.content)
                 .pictures(pictureBytesList)
                 .likeCount(this.likeCount)
-                .regdate(this.regdate != null ? this.regdate : LocalDateTime.now()) // 기본값 설정
+                .regdate(this.regdate != null ? this.regdate : LocalDateTime.now().withNano(0)) // 기본값 설정
                 .count(this.count)
                 .build();
     }

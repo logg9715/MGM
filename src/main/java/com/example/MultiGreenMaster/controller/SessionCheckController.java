@@ -26,6 +26,7 @@ public class SessionCheckController {
     //로그인 한 아이디가 관리자 여부인가를 체크
     @ModelAttribute
     public void adminUserCheck(Model model, @SessionAttribute(name="userId", required=false) Long userId) {
+        System.out.println("@@@@@@@ 모델 어트리부트");
         if (userId != null) {
             User loginUser = userService.getLoginUserById(userId);
             if (loginUser != null) {
