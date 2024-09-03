@@ -71,7 +71,7 @@ public class CMPostApiController extends SessionCheckController {
                 post.getUser(),
                 post.getTitle(),
                 post.getLikeCount(),
-                post.getRegdate(),
+                post.getRegdate().withNano(0),
                 post.getCount()
         )).collect(Collectors.toList()); // 변환된 게시글 리스트로 수집
         logger.info("Post list retrieved successfully"); // 게시글 목록 조회 완료 로그 출력
@@ -96,7 +96,7 @@ public class CMPostApiController extends SessionCheckController {
                 post.getContent(),
                 pictureBase64List,
                 post.getLikeCount(),
-                post.getRegdate(),
+                post.getRegdate().withNano(0),
                 post.getCount()
         );
 
@@ -127,7 +127,7 @@ public class CMPostApiController extends SessionCheckController {
                     post.getContent(),
                     pictureBase64List,
                     post.getLikeCount(),
-                    post.getRegdate(),
+                    post.getRegdate().withNano(0),
                     post.getCount()
             );
         }).collect(Collectors.toList());
@@ -148,7 +148,7 @@ public class CMPostApiController extends SessionCheckController {
                     post.getContent(),
                     pictureBase64List,
                     post.getLikeCount(),
-                    post.getRegdate(),
+                    post.getRegdate().withNano(0),
                     post.getCount()
             );
         }).collect(Collectors.toList()); // 변환된 게시글 리스트로 수집
