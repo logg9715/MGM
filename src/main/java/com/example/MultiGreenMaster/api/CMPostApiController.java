@@ -31,8 +31,9 @@ public class CMPostApiController extends SessionCheckController {
     @Autowired
     private UserService userService; // UserService 의존성 주입
 
+    /* 자유게시판 글 작성 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/new") // POST 요청을 "/new" 경로와 매핑
+    @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
     public ResponseEntity<String> createPost(@ModelAttribute CMPostForm form, HttpSession session) {
         logger.info("Request to create new post: {}", form); // 새 게시글 생성 요청
 
@@ -62,6 +63,7 @@ public class CMPostApiController extends SessionCheckController {
         return ResponseEntity.ok("Post created successfully"); // 성공 응답 반환
     }
 
+    /* 자유게시판 목록 */
     @GetMapping // GET 요청을 기본 경로와 매핑
     public ResponseEntity<List<CMGetpostForm>> listPosts() {
         logger.info("Requesting post list"); // 게시글 목록 요청
@@ -78,6 +80,7 @@ public class CMPostApiController extends SessionCheckController {
         return ResponseEntity.ok(postForms); // 조회된 게시글 목록 반환
     }
 
+    /* 자유게시판 게시글 열람 */
     @GetMapping("/{id}") // GET 요청을 "/{id}" 경로와 매핑
     public ResponseEntity<CMPostForm> getPost(@PathVariable Long id) {
         logger.info("Requesting post detail: Post ID {}", id); // 게시글 상세 조회 요청
@@ -104,6 +107,7 @@ public class CMPostApiController extends SessionCheckController {
         return ResponseEntity.ok(postForm); // 조회된 게시글 반환
     }
 
+    /* 자유게시판 좋아요 추가 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/{id}/like") // POST 요청을 "/{id}/like" 경로와 매핑
     public ResponseEntity<Integer> likePost(@PathVariable Long id) {
@@ -113,7 +117,7 @@ public class CMPostApiController extends SessionCheckController {
         return post != null ? ResponseEntity.ok(post.getLikeCount()) : ResponseEntity.notFound().build(); // 게시글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
     }
 
-    // 최신 4개의 게시글을 내림차순으로 반환
+    /* 최신 4개의 게시글을 내림차순으로 반환 */
     @GetMapping("/recent")
     public List<CMPostForm> getRecentPosts() {
         List<CMPost> posts = cmPostService.findTop4PostsDesc(); // 내림차순으로 정렬된 게시글 조회
@@ -133,7 +137,7 @@ public class CMPostApiController extends SessionCheckController {
         }).collect(Collectors.toList());
     }
 
-    // 특정 사용자가 작성한 게시글을 내림차순으로 반환
+    /* 특정 사용자가 작성한 게시글을 내림차순으로 반환 */
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<List<CMPostForm>> getPostsByUser(@PathVariable Long userId) {
         logger.info("Requesting posts by user: User ID {}", userId); // 사용자의 게시글 요청
