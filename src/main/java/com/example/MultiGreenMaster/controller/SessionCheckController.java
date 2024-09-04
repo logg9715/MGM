@@ -8,8 +8,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+/******************************************************************************
+ *                                                                             *
+ *                                                                             *
+ *                                                                             *
+ * 사용자 로그인 상태 확인하는 메소드                                          *
+ *                                                                             *
+ * 1. 모든 컨트롤러에 상속해서 사용                                            *
+ * 2. 상속시키면, 해당 컨트롤러에 요청이 들어올때마다 @ModelAttribute가 붙은   *
+ * 메소드들이 자동으로 실행됨.                                                 *
+ * 3. 자동 실행 메소드에서 세션 정보를 읽고 모델에 담는다                      *
+ * (근데 이건 머스태치 용도임)                                                 *
+ *                                                                             *
+ *                                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 public class SessionCheckController {
-    //로그인 한 아이디 체크를 위한 코드
+    // 로그인 한 아이디 체크를 위한 코드
     @Autowired // UserService Bean 객체를 주입
     private UserService userService;
     @ModelAttribute//공통 데이터를 모델에 추가할 때 @ModelAttribute를 사용하여 컨트롤러 레벨에서 공통 처리를 할 수 있습니다.
@@ -23,10 +39,10 @@ public class SessionCheckController {
             }
         }
     }
-    //로그인 한 아이디가 관리자 여부인가를 체크
+    // 로그인 한 아이디가 관리자 여부인가를 체크
     @ModelAttribute
     public void adminUserCheck(Model model, @SessionAttribute(name="userId", required=false) Long userId) {
-        System.out.println("@@@@@@@ 모델 어트리부트");
+        System.out.println("@@@@@@@@@ 어드민체크 \n");
         if (userId != null) {
             User loginUser = userService.getLoginUserById(userId);
             if (loginUser != null) {

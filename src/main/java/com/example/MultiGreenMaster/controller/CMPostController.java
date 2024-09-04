@@ -118,7 +118,7 @@ public class CMPostController extends SessionCheckController {
         logger.info("Requesting post detail: Post ID {}", id); // 게시글 상세 조회 요청
         cmPostService.incrementCount(id); // 조회수 증가
         CMPost post = cmPostService.findPostById(id); // ID로 게시글 조회
-        if (post != null) {
+        if (post != null) { 
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
                     .map(Base64.getEncoder()::encodeToString).collect(Collectors.toList()) : null; // 사진을 Base64로 인코딩
             CMPostForm postForm = new CMPostForm(

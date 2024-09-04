@@ -63,7 +63,7 @@ public class AnnounceController extends SessionCheckController{
         return "announces/show";
     }
 
-    /* 공지사항 삭제 구버젼 (수정 필요) */
+    /* 공지사항 삭제(비활성화) */
     @GetMapping("/announces/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model) {
         Announce target = announceRepository.findById(id).orElse(null);
