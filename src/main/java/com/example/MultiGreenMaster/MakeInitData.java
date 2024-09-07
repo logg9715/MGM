@@ -1,10 +1,10 @@
 package com.example.MultiGreenMaster;
 
 import com.example.MultiGreenMaster.entity.*;
-import com.example.MultiGreenMaster.repository.AnnounceRepository;
-import com.example.MultiGreenMaster.repository.CMCommentRepository;
-import com.example.MultiGreenMaster.repository.CMPostRepository;
-import com.example.MultiGreenMaster.repository.UserRepository;
+import com.example.MultiGreenMaster.repository.AnnounceREP;
+import com.example.MultiGreenMaster.repository.CMCommentREP;
+import com.example.MultiGreenMaster.repository.CMPostREP;
+import com.example.MultiGreenMaster.repository.UserREP;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,63 +16,63 @@ import java.time.LocalDateTime;
 @Component //스프링 컨테이너에게 자바 객체를 생성하라는 명령.
 @RequiredArgsConstructor
 public class MakeInitData {
-    private final UserRepository userRepository;
-    private final AnnounceRepository announceRepository;
-    private final CMPostRepository cmPostRepository;
-    private final CMCommentRepository cmCommentRepository;
+    private final UserREP userRepository;
+    private final AnnounceREP announceRepository;
+    private final CMPostREP cmPostRepository;
+    private final CMCommentREP cmCommentRepository;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
     public void makeAdminAndUserAndCMPostAndCMComment() {
-        User admin1 = User.builder()
+        UserENT admin1 = UserENT.builder()
                 .loginId("admin1")
                 .password("1234")
                 .nickname("관리자")
                 .name("김동현")
                 .phonenumber("010-5656-1541")
                 .email("hayasdan@naver.com")
-                .role(UserRole.ADMIN)
+                .role(User_RoleENT.ADMIN)
                 .active(1)
                 .build();
         userRepository.save(admin1);
 
-        User user1 = User.builder()
+        UserENT user1 = UserENT.builder()
                 .loginId("user1")
                 .password("1234")
                 .nickname("밀양 박씨")
                 .name("박덕수")
                 .phonenumber("010-1234-1234")
                 .email("user1@naver.com")
-                .role(UserRole.USER)
+                .role(User_RoleENT.USER)
                 .active(1)
                 .build();
         userRepository.save(user1);
 
-        User user2 = User.builder()
+        UserENT user2 = UserENT.builder()
                 .loginId("user2")
                 .password("1234")
                 .nickname("황소그림")
                 .name("이중섭")
                 .phonenumber("010-5432-1234")
                 .email("user2@naver.com")
-                .role(UserRole.USER)
+                .role(User_RoleENT.USER)
                 .active(1)
                 .build();
         userRepository.save(user2);
 
-        User user3 = User.builder()
+        UserENT user3 = UserENT.builder()
                 .loginId("user3")
                 .password("1234")
                 .nickname("AR리따움")
                 .name("황진이")
                 .phonenumber("016-1432-1234")
                 .email("hwang2@naver.com")
-                .role(UserRole.USER)
+                .role(User_RoleENT.USER)
                 .active(1)
                 .build();
         userRepository.save(user3);
 
-        CMPost cmpost1 = CMPost.builder()
+        CMPostENT cmpost1 = CMPostENT.builder()
                 .title("게시글 1")
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
@@ -82,7 +82,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost1);
 
-        CMPost cmpost2 = CMPost.builder()
+        CMPostENT cmpost2 = CMPostENT.builder()
                 .title("게시글 2")
                 .content("이 글은 게시글 2입니다.")
                 .count(0)
@@ -92,7 +92,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost2);
 
-        CMPost cmpost3 = CMPost.builder()
+        CMPostENT cmpost3 = CMPostENT.builder()
                 .title("게시글 3")
                 .content("이 글은 게시글 3입니다.")
                 .count(0)
@@ -102,7 +102,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost3);
 
-        CMPost cmpost4 = CMPost.builder()
+        CMPostENT cmpost4 = CMPostENT.builder()
                 .title("게시글 4")
                 .content("이 글은 게시글 4입니다.")
                 .count(0)
@@ -112,7 +112,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost4);
 
-        CMPost cmpost5 = CMPost.builder()
+        CMPostENT cmpost5 = CMPostENT.builder()
                 .title("게시글 5")
                 .content("이 글은 게시글 5입니다.")
                 .count(0)
@@ -122,7 +122,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost5);
 
-        CMPost cmpost6 = CMPost.builder()
+        CMPostENT cmpost6 = CMPostENT.builder()
                 .title("게시글 6")
                 .content("이 글은 게시글 6입니다.")
                 .count(0)
@@ -133,7 +133,7 @@ public class MakeInitData {
         cmPostRepository.save(cmpost6);
 
         //댓글
-        CMComment cmcomment1 = CMComment.builder()
+        FreeBoard_CommentENT cmcomment1 = FreeBoard_CommentENT.builder()
                 .content("이 글은 1번 댓글입니다.")
                 .likeCount(1)
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
@@ -142,7 +142,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment1);
 
-        CMComment cmcomment2 = CMComment.builder()
+        FreeBoard_CommentENT cmcomment2 = FreeBoard_CommentENT.builder()
                 .content("이 글은 2번 댓글입니다.")
                 .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 2, 5, 45))
@@ -151,7 +151,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment2);
 
-        CMComment cmcomment3 = CMComment.builder()
+        FreeBoard_CommentENT cmcomment3 = FreeBoard_CommentENT.builder()
                 .content("이 글은 3번 댓글입니다.")
                 .likeCount(4)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 45))
@@ -160,7 +160,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment3);
 
-        CMComment cmcomment4 = CMComment.builder()
+        FreeBoard_CommentENT cmcomment4 = FreeBoard_CommentENT.builder()
                 .content("이 글은 4번 댓글입니다.")
                 .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 55))
@@ -174,31 +174,31 @@ public class MakeInitData {
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
     public void makeAnnounce() {
-        Announce announce1 = Announce.builder()
+        AnnounceENT announce1 = AnnounceENT.builder()
                 .title("공지사항 1")
                 .content("이 글은 공지사항 1번입니다.")
                 .build();
         announceRepository.save(announce1);
 
-        Announce announce2 = Announce.builder()
+        AnnounceENT announce2 = AnnounceENT.builder()
                 .title("공지사항 2")
                 .content("이 글은 공지사항 2번입니다.")
                 .build();
         announceRepository.save(announce2);
 
-        Announce announce3 = Announce.builder()
+        AnnounceENT announce3 = AnnounceENT.builder()
                 .title("공지사항 3")
                 .content("이 글은 공지사항 3번입니다.")
                 .build();
         announceRepository.save(announce3);
 
-        Announce announce4 = Announce.builder()
+        AnnounceENT announce4 = AnnounceENT.builder()
                 .title("공지사항 4")
                 .content("이 글은 공지사항 4번입니다.")
                 .build();
         announceRepository.save(announce4);
 
-        Announce announce5 = Announce.builder()
+        AnnounceENT announce5 = AnnounceENT.builder()
                 .title("공지사항 5")
                 .content("이 글은 공지사항 5번입니다.")
                 .build();

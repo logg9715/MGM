@@ -38,18 +38,18 @@ public class UdpCon {
     public String[] parseData(String stringData) {
         String[] dataArr = stringData.trim().split(",");
 
-        if (dataArr[ScForm.TAG].equals(ScForm.TAGSENSOR)) {
+        if (dataArr[ScFrm.TAG].equals(ScFrm.TAGSENSOR)) {
             // 소켓 종류가 센서일 때
-            System.out.println("tag : " + dataArr[ScForm.TAG]);
-            System.out.println("temp : " + dataArr[ScForm.TEMP]);
-            System.out.println("wet : " + dataArr[ScForm.WET]);
-            System.out.println("light : " + dataArr[ScForm.LIGHT]);
-            System.out.println("daylight : " + dataArr[ScForm.DAYLIGHT]);
-        } else if (dataArr[ScForm.TAG].equals(ScForm.TAGACTUATOR)) {
+            System.out.println("tag : " + dataArr[ScFrm.TAG]);
+            System.out.println("temp : " + dataArr[ScFrm.TEMP]);
+            System.out.println("wet : " + dataArr[ScFrm.WET]);
+            System.out.println("light : " + dataArr[ScFrm.LIGHT]);
+            System.out.println("daylight : " + dataArr[ScFrm.DAYLIGHT]);
+        } else if (dataArr[ScFrm.TAG].equals(ScFrm.TAGACTUATOR)) {
             // 소켓 종류가 액추에이터일 때
-            System.out.println("tag : " + dataArr[ScForm.TAG]);
-            System.out.println("moter : " + dataArr[ScForm.MOTERTYPE]);
-            System.out.println("result : " + dataArr[ScForm.RESULT]);
+            System.out.println("tag : " + dataArr[ScFrm.TAG]);
+            System.out.println("moter : " + dataArr[ScFrm.MOTERTYPE]);
+            System.out.println("result : " + dataArr[ScFrm.RESULT]);
         }
 
         return dataArr;
