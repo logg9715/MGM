@@ -4,11 +4,11 @@ import com.example.MultiGreenMaster.dto.CommentResponseFRM;
 import com.example.MultiGreenMaster.dto.JoinRequestFRM;
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
-import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
+import com.example.MultiGreenMaster.entity.CMCommentENT;
 import com.example.MultiGreenMaster.entity.CMRecomment;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.repository.FreeBoard_CommentREP;
+import com.example.MultiGreenMaster.repository.CMCommentREP;
 import com.example.MultiGreenMaster.repository.CMRecommentREP;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
@@ -154,13 +154,13 @@ public class UserSRV {
 
 
 
-    private final FreeBoard_CommentREP commentRepository;
+    private final CMCommentREP commentRepository;
     private final CMRecommentREP recommentRepository;
 
     //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
     public List<CommentResponseFRM> getUserCommentsAndRecomments(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<FreeBoard_CommentENT> comments = commentRepository.findByUser_Id(userId);
+        List<CMCommentENT> comments = commentRepository.findByUser_Id(userId);
 
         // 사용자의 대댓글을 가져오기
         List<CMRecomment> recomments = recommentRepository.findByUser_Id(userId);

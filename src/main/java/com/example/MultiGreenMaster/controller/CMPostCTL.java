@@ -1,10 +1,10 @@
 package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.dto.CMPostFRM;
-import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
+import com.example.MultiGreenMaster.entity.CMCommentENT;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
+import com.example.MultiGreenMaster.service.CMCommentSRV;
 import com.example.MultiGreenMaster.service.CMPostSRV;
 import com.example.MultiGreenMaster.service.CMRecommentSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -34,10 +34,8 @@ public class CMPostCTL extends SessionCheckCTL {
     private CMPostSRV cmPostService;
 
     @Autowired
-    private FreeBoard_CommentSRV cmCommentService;
+    private CMCommentSRV cmCommentService;
 
-    @Autowired
-    private CMRecommentSRV cmRecommentService;
 
     @Autowired // UserService Bean 객체를 주입
     private UserSRV userService;
@@ -51,43 +49,8 @@ public class CMPostCTL extends SessionCheckCTL {
 
     @PostMapping("/new") // POST 요청을 "/new" 경로와 매핑
     public String createPost(@ModelAttribute CMPostFRM form, HttpServletRequest request) {
-        logger.info("Request to create new post: {}", form); // 새 게시글 생성 요청
+        return null;
 
-        // Retrieve the logged-in user from the session
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            logger.error("No user is logged in.");
-            return "redirect:/session-login/login"; // Redirect to login page if no user is logged in
-        }
-
-        Long userId = (Long) session.getAttribute("userId");
-        UserENT loginUser = userService.getLoginUserById(userId);
-        if (loginUser == null) {
-            logger.error("Logged in user not found.");
-            return "redirect:/session-login/login";
-        }
-
-        List<MultipartFile> pictures = form.getPictures(); // MultipartFile 리스트를 가져옴
-        List<byte[]> pictureBytesList = new ArrayList<>(); // byte[] 리스트를 초기화
-
-        if (pictures != null && !pictures.isEmpty()) { // pictures가 null이 아니고 비어있지 않은 경우
-            for (MultipartFile picture : pictures) {
-                if (!picture.isEmpty()) {
-                    try {
-                        pictureBytesList.add(picture.getBytes()); // 각 파일을 byte[]로 변환하여 리스트에 추가
-                    } catch (IOException e) {
-                        logger.error("Error converting picture to bytes: {}", e.getMessage()); // 사진 변환 중 에러 발생
-                        e.printStackTrace(); // 에러 출력
-                    }
-                }
-            }
-        }
-
-        CMPostENT post = form.toEntity(pictureBytesList);
-        post.setUser(loginUser); // Set the logged-in user to the post entity
-        cmPostService.savePost(post); // 게시글 저장
-        logger.info("Post saved successfully: {}", post); // 게시글 저장 완료
-        return "redirect:/posts"; // "/posts"로 리디렉션
     }
 
     @GetMapping // GET 요청을 기본 경로와 매핑
@@ -96,7 +59,8 @@ public class CMPostCTL extends SessionCheckCTL {
         List<CMPostENT> posts = cmPostService.findAllPosts(); // 모든 게시글 조회
         List<CMPostFRM> postForms = posts.stream().map(post -> { // 각 게시글을 CMPostForm으로 변환
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
-                    .map(Base64.getEncoder()::encodeToString).collect(Collectors.toList()) : null; // 사진을 Base64로 인코딩
+                    .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환
+                    .collect(Collectors.toList()) : null;
             return new CMPostFRM(
                     post.getId(),
                     post.getUser(),
@@ -118,9 +82,10 @@ public class CMPostCTL extends SessionCheckCTL {
         logger.info("Requesting post detail: Post ID {}", id); // 게시글 상세 조회 요청
         cmPostService.incrementCount(id); // 조회수 증가
         CMPostENT post = cmPostService.findPostById(id); // ID로 게시글 조회
-        if (post != null) { 
+        if (post != null) {
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
-                    .map(Base64.getEncoder()::encodeToString).collect(Collectors.toList()) : null; // 사진을 Base64로 인코딩
+                    .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환
+                    .collect(Collectors.toList()) : null;
             CMPostFRM postForm = new CMPostFRM(
                     post.getId(),
                     post.getUser(),
@@ -133,7 +98,7 @@ public class CMPostCTL extends SessionCheckCTL {
             );
             model.addAttribute("post", postForm); // 게시글을 모델에 추가
 
-            List<FreeBoard_CommentENT> comments = cmCommentService.findCommentsByPostId(id); // 게시글의 모든 댓글 조회
+            List<CMCommentENT> comments = cmCommentService.findCommentsByPostId(id); // 게시글의 모든 댓글 조회
             model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가
             logger.info("Post detail retrieved successfully: Post ID {}", id); // 게시글 상세 조회 완료
         }

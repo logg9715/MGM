@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.dto;
 
+import com.example.MultiGreenMaster.entity.CMPicture;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import lombok.AllArgsConstructor;
@@ -8,8 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +29,7 @@ public class CMPostFRM {
     private LocalDateTime regdate; // 작성 시간
     private int count; // 조회수
 
-    // 기본 생성자 이외에 특정 필드들을 초기화하는 생성자
+    // 생성자 - MultipartFile을 포함하지 않음
     public CMPostFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, int likeCount, LocalDateTime regdate, int count) {
         this.id = id;
         this.user = user;
@@ -38,18 +41,34 @@ public class CMPostFRM {
         this.count = count;
     }
 
-    // 엔티티로 변환하는 메서드, pictureBytesList는 List<byte[]> 형식의 이미지 데이터를 받음
-    public CMPostENT toEntity(List<byte[]> pictureBytesList) {
-        return CMPostENT.builder()
+    // 엔티티로 변환하는 메서드
+    public CMPostENT toEntity() {
+        List<CMPicture> pictures = this.pictures.stream()
+                .map(multipartFile -> {
+                    try {
+                        return CMPicture.builder()
+                                .pictureData(multipartFile.getBytes())
+                                .build();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to convert MultipartFile to byte[]", e);
+                    }
+                })
+                .collect(Collectors.toList());
+
+        CMPostENT post = CMPostENT.builder()
                 .id(this.id)
                 .user(this.user)
                 .title(this.title)
                 .content(this.content)
-                .pictures(pictureBytesList)
+                .pictures(pictures)
                 .likeCount(this.likeCount)
-                .regdate(this.regdate != null ? this.regdate : LocalDateTime.now().withNano(0)) // 기본값 설정
+                .regdate(this.regdate != null ? this.regdate : LocalDateTime.now())
                 .count(this.count)
+                .disable(false)
                 .build();
+
+        pictures.forEach(picture -> picture.setCmPost(post));
+        return post;
     }
 }
 

@@ -1,9 +1,9 @@
 package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.dto.CMRecommentForm;
-import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
+import com.example.MultiGreenMaster.entity.CMCommentENT;
 import com.example.MultiGreenMaster.entity.CMRecomment;
-import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
+import com.example.MultiGreenMaster.service.CMCommentSRV;
 import com.example.MultiGreenMaster.service.CMRecommentSRV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,12 @@ public class CMRecommentCTL {
     private CMRecommentSRV cmRecommentService;
 
     @Autowired
-    private FreeBoard_CommentSRV cmCommentService; // CMComment 서비스
+    private CMCommentSRV cmCommentService; // CMComment 서비스
 
     @PostMapping("/new") // POST 요청을 "/new" 경로와 매핑
     public String createRecomment(CMRecommentForm form) {
         logger.info("Request to create new recomment: {}", form); // 새 대댓글 생성 요청
-        FreeBoard_CommentENT comment = cmCommentService.findCommentById(form.getCmCommentId().getId()); // 댓글 ID로 댓글 조회
+        CMCommentENT comment = cmCommentService.findCommentById(form.getCmCommentId().getId()); // 댓글 ID로 댓글 조회
 
         if (comment != null) {
             CMRecomment recomment = new CMRecomment(); // 새로운 대댓글 생성

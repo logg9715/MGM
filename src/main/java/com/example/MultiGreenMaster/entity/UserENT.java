@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "UserMember")
+@Table(name = "usermember")
 @Builder
 @Getter
 @Setter

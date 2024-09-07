@@ -1,19 +1,22 @@
 package com.example.MultiGreenMaster.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
+@Table(name = "CMComment")
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 @ToString(exclude = {"user", "cmPost", "recomments"}) // users, cmPost, recomments 필드를 toString()에서 제외하여 순환 참조를 피함
 @Entity
-public class FreeBoard_CommentENT {
+public class CMCommentENT {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 댓글 고유번호
@@ -49,12 +52,14 @@ public class FreeBoard_CommentENT {
         this.likeCount++;
     }
 
-    /* 원래 있던 대댓글 가져오기 컬럼 삭제함 */
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference // 순환 참조를 방지하기 위해 사용
+    private List<CMCommentENT> recomments; // 대댓글 목록 가져오기
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     @JsonBackReference // 순환 참조를 방지하기 위해 사용
-    private FreeBoard_CommentENT parentComment; // 부모 댓글 참조
+    private CMCommentENT parentComment; // 부모 댓글 참조
 
     // 유저 ID 가져오기
     public Long getUserId() {

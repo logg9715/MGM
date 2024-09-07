@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,9 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@ToString(exclude = "user") // users 필드를 toString()에서 제외하여 순환 참조를 피함
+@ToString(exclude = {"user", "comments", "pictures"}) // 순환 참조 방지
 @Entity
+@Table(name = "cm_post")
 public class CMPostENT {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 게시글 고유 번호
@@ -28,10 +31,6 @@ public class CMPostENT {
     @Column(name = "content", nullable = true) // "content"라는 이름의 열을 정의하고 null 값을 허용
     private String content; // 게시글 내용
 
-    @ElementCollection
-    @Column(name = "pictures", columnDefinition = "LONGBLOB") // "pictures"라는 이름의 열을 정의하고 데이터 타입을 LONGBLOB으로 설정
-    private List<byte[]> pictures; // 사진 리스트
-
     @Column(name = "like_count")
     private int likeCount; // 좋아요 갯수
 
@@ -45,6 +44,19 @@ public class CMPostENT {
 
     @Column
     private int count; // 조회수
+
+    @Column
+    private boolean disable; // 비활성화 여부
+
+    // 사진과의 관계 설정
+    @OneToMany(mappedBy = "cmPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference // 순환 참조 방지
+    private List<CMPicture> pictures;  // 게시글에 포함된 사진 목록
+
+    // 댓글과의 관계 설정
+    @OneToMany(mappedBy = "cmPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference // 순환 참조 방지
+    private List<CMCommentENT> comments;  // 게시글에 달린 댓글 목록
 
     // 조회수 증가 메서드
     public void incrementCount() {
