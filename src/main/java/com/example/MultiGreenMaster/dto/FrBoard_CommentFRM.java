@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString(exclude = "cmPostId") // cmPostId 필드를 toString()에서 제외하여 순환 참조를 피함
-public class FreeBoardCommentFRM {
+public class FrBoard_CommentFRM {
     private Long id; // 댓글 ID
     private CMPostENT cmPostId; // 게시글 ID
     private UserENT userId; // 사용자 ID

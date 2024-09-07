@@ -2,7 +2,7 @@ package com.example.MultiGreenMaster;
 
 import com.example.MultiGreenMaster.entity.*;
 import com.example.MultiGreenMaster.repository.AnnounceREP;
-import com.example.MultiGreenMaster.repository.CMCommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoard_CommentREP;
 import com.example.MultiGreenMaster.repository.CMPostREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import jakarta.annotation.PostConstruct;
@@ -19,7 +19,7 @@ public class MakeInitData {
     private final UserREP userRepository;
     private final AnnounceREP announceRepository;
     private final CMPostREP cmPostRepository;
-    private final CMCommentREP cmCommentRepository;
+    private final FreeBoard_CommentREP cmCommentRepository;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
@@ -174,31 +174,31 @@ public class MakeInitData {
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
     public void makeAnnounce() {
-        AnnounceENT announce1 = AnnounceENT.builder()
+        AnnounceBoardENT announce1 = AnnounceBoardENT.builder()
                 .title("공지사항 1")
                 .content("이 글은 공지사항 1번입니다.")
                 .build();
         announceRepository.save(announce1);
 
-        AnnounceENT announce2 = AnnounceENT.builder()
+        AnnounceBoardENT announce2 = AnnounceBoardENT.builder()
                 .title("공지사항 2")
                 .content("이 글은 공지사항 2번입니다.")
                 .build();
         announceRepository.save(announce2);
 
-        AnnounceENT announce3 = AnnounceENT.builder()
+        AnnounceBoardENT announce3 = AnnounceBoardENT.builder()
                 .title("공지사항 3")
                 .content("이 글은 공지사항 3번입니다.")
                 .build();
         announceRepository.save(announce3);
 
-        AnnounceENT announce4 = AnnounceENT.builder()
+        AnnounceBoardENT announce4 = AnnounceBoardENT.builder()
                 .title("공지사항 4")
                 .content("이 글은 공지사항 4번입니다.")
                 .build();
         announceRepository.save(announce4);
 
-        AnnounceENT announce5 = AnnounceENT.builder()
+        AnnounceBoardENT announce5 = AnnounceBoardENT.builder()
                 .title("공지사항 5")
                 .content("이 글은 공지사항 5번입니다.")
                 .build();

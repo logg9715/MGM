@@ -1,8 +1,8 @@
 package com.example.MultiGreenMaster.api;
 // 공지사항 api 컨트롤러
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
-import com.example.MultiGreenMaster.dto.AnnounceFRM;
-import com.example.MultiGreenMaster.entity.AnnounceENT;
+import com.example.MultiGreenMaster.dto.AnnounceBoardFRM;
+import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
 import com.example.MultiGreenMaster.repository.AnnounceREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/announces")
-public class AnnounceAPI extends SessionCheckCTL {
+public class AnnounceBoardAPI extends SessionCheckCTL {
     @Autowired
     private AnnounceREP announceRepository;
     @Autowired
@@ -27,31 +27,31 @@ public class AnnounceAPI extends SessionCheckCTL {
     /* 공지사항 목록 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping
-    public ResponseEntity<List<AnnounceENT>> index() {
-        List<AnnounceENT> announceEntityList = (List<AnnounceENT>) announceRepository.findByDisableFalse();
+    public ResponseEntity<List<AnnounceBoardENT>> index() {
+        List<AnnounceBoardENT> announceEntityList = (List<AnnounceBoardENT>) announceRepository.findByDisableFalse();
         return ResponseEntity.ok(announceEntityList);
     }
 
     /* 새 공지사항 제출 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create")
-    public ResponseEntity<AnnounceENT> createAnnounce(AnnounceFRM form, Model model) {  //DTO AnnounceForm
-        AnnounceENT announce = form.toEntity();
-        AnnounceENT saved = announceRepository.save(announce);
+    public ResponseEntity<AnnounceBoardENT> createAnnounce(AnnounceBoardFRM form, Model model) {  //DTO AnnounceForm
+        AnnounceBoardENT announce = form.toEntity();
+        AnnounceBoardENT saved = announceRepository.save(announce);
         return ResponseEntity.ok(saved);
     }
 
     /* 공지사항 열람 */
     @GetMapping("/{id}")
-    public ResponseEntity<AnnounceENT> show(@PathVariable("id") Long id) {
-        AnnounceENT announceEntity = announceRepository.findById(id).orElse(null);
+    public ResponseEntity<AnnounceBoardENT> show(@PathVariable("id") Long id) {
+        AnnounceBoardENT announceEntity = announceRepository.findById(id).orElse(null);
         return ResponseEntity.ok(announceEntity);
     }
 
     /* 공지사항 삭제(비활성화) */
     @DeleteMapping("/{id}")
-    public ResponseEntity<AnnounceENT> delete(@PathVariable Long id, RedirectAttributes rttr) {
-        AnnounceENT target = announceRepository.findById(id).orElse(null);
+    public ResponseEntity<AnnounceBoardENT> delete(@PathVariable Long id, RedirectAttributes rttr) {
+        AnnounceBoardENT target = announceRepository.findById(id).orElse(null);
         if (target != null) {
             target.toDisable();
             announceRepository.save(target);

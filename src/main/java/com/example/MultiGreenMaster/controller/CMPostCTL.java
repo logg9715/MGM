@@ -4,7 +4,7 @@ import com.example.MultiGreenMaster.dto.CMPostFRM;
 import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.CMCommentSRV;
+import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
 import com.example.MultiGreenMaster.service.CMPostSRV;
 import com.example.MultiGreenMaster.service.CMRecommentSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -34,7 +34,7 @@ public class CMPostCTL extends SessionCheckCTL {
     private CMPostSRV cmPostService;
 
     @Autowired
-    private CMCommentSRV cmCommentService;
+    private FreeBoard_CommentSRV cmCommentService;
 
     @Autowired
     private CMRecommentSRV cmRecommentService;

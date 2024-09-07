@@ -1,10 +1,10 @@
 package com.example.MultiGreenMaster.controller;
 
-import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
+import com.example.MultiGreenMaster.dto.FrBoard_CommentFRM;
 import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.CMCommentSRV;
+import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
 import com.example.MultiGreenMaster.service.CMPostSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class CMCommentCtl {
     private static final Logger logger = LoggerFactory.getLogger(CMCommentCtl.class); // 로그 설정
 
     @Autowired
-    private CMCommentSRV cmCommentService;
+    private FreeBoard_CommentSRV cmCommentService;
 
     @Autowired
     private CMPostSRV cmPostService;
@@ -34,7 +34,7 @@ public class CMCommentCtl {
     private UserSRV userService;
 
     @PostMapping("/new")
-    public String createComment(FreeBoardCommentFRM form, HttpServletRequest request) {
+    public String createComment(FrBoard_CommentFRM form, HttpServletRequest request) {
         logger.info("Request to create new comment: {}", form);
 
         HttpSession session = request.getSession(false);

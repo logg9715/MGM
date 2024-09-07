@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.controller;
 
-import com.example.MultiGreenMaster.entity.AnnounceENT;
+import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.repository.AnnounceREP;
 import com.example.MultiGreenMaster.repository.CMPostREP;
@@ -24,11 +24,11 @@ public class MainCTL extends SessionCheckCTL {
     @GetMapping("/")
     public String home(Model model) {
         // 공지사항 목록 가져오기
-        List<AnnounceENT> announceList = announceRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<AnnounceBoardENT> announceList = announceRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
         // 최대 3개의 공지사항만 추출
         int maxAnnounceCount = 3;
-        List<AnnounceENT> recentAnnounces = announceList.subList(0, Math.min(announceList.size(), maxAnnounceCount));
+        List<AnnounceBoardENT> recentAnnounces = announceList.subList(0, Math.min(announceList.size(), maxAnnounceCount));
 
         // 최신 4개의 게시글을 오름차순으로 가져오기
         List<CMPostENT> recentPosts = cmPostRepository.findTop4ByOrderByRegdateDesc();

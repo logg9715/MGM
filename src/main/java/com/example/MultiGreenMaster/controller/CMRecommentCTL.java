@@ -3,7 +3,7 @@ package com.example.MultiGreenMaster.controller;
 import com.example.MultiGreenMaster.dto.CMRecommentForm;
 import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
 import com.example.MultiGreenMaster.entity.CMRecomment;
-import com.example.MultiGreenMaster.service.CMCommentSRV;
+import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
 import com.example.MultiGreenMaster.service.CMRecommentSRV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class CMRecommentCTL {
     private CMRecommentSRV cmRecommentService;
 
     @Autowired
-    private CMCommentSRV cmCommentService; // CMComment 서비스
+    private FreeBoard_CommentSRV cmCommentService; // CMComment 서비스
 
     @PostMapping("/new") // POST 요청을 "/new" 경로와 매핑
     public String createRecomment(CMRecommentForm form) {

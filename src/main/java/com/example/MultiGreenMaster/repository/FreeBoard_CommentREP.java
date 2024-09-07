@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CMCommentREP extends CrudRepository<FreeBoard_CommentENT, Long> {
+public interface FreeBoard_CommentREP extends CrudRepository<FreeBoard_CommentENT, Long> {
     // 특정 게시글의 모든 댓글을 조회하는 메서드
     List<FreeBoard_CommentENT> findByCmPostId(Long cmPostId);
 

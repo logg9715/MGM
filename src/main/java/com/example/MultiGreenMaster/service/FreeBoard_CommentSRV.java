@@ -1,7 +1,7 @@
 package com.example.MultiGreenMaster.service;
 
 import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
-import com.example.MultiGreenMaster.repository.CMCommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoard_CommentREP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CMCommentSRV {
+public class FreeBoard_CommentSRV {
 
     @Autowired
-    private CMCommentREP cmCommentRepository; // CMCommentRepository 의존성 주입
+    private FreeBoard_CommentREP cmCommentRepository; // CMCommentRepository 의존성 주입
 
     // 댓글 저장 메서드
     public void saveComment(FreeBoard_CommentENT comment) {

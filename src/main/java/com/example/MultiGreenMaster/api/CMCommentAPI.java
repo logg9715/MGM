@@ -1,11 +1,11 @@
 package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
-import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
+import com.example.MultiGreenMaster.dto.FrBoard_CommentFRM;
 import com.example.MultiGreenMaster.entity.FreeBoard_CommentENT;
 import com.example.MultiGreenMaster.entity.CMPostENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.CMCommentSRV;
+import com.example.MultiGreenMaster.service.FreeBoard_CommentSRV;
 import com.example.MultiGreenMaster.service.CMPostSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +24,7 @@ public class CMCommentAPI extends SessionCheckCTL {
     private static final Logger logger = LoggerFactory.getLogger(CMCommentAPI.class); // 로그 설정
 
     @Autowired
-    private CMCommentSRV cmCommentService; // CMCommentService 의존성 주입
+    private FreeBoard_CommentSRV cmCommentService; // CMCommentService 의존성 주입
 
     @Autowired
     private CMPostSRV cmPostService; // CMPostService 의존성 주입
@@ -34,7 +34,7 @@ public class CMCommentAPI extends SessionCheckCTL {
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/new") // POST 요청을 "/new" 경로와 매핑
-    public ResponseEntity<String> createComment(@ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
+    public ResponseEntity<String> createComment(@ModelAttribute FrBoard_CommentFRM form, HttpSession session) {
         logger.info("Request to create new comment: {}", form); // 새 댓글 생성 요청
 
         Long userId = (Long) session.getAttribute("userId"); // 세션에서 userId 추출

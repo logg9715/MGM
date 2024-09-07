@@ -1,8 +1,8 @@
 package com.example.MultiGreenMaster.controller;
 //공지사항 컨트롤러
 
-import com.example.MultiGreenMaster.dto.AnnounceFRM;
-import com.example.MultiGreenMaster.entity.AnnounceENT;
+import com.example.MultiGreenMaster.dto.AnnounceBoardFRM;
+import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
 import com.example.MultiGreenMaster.repository.AnnounceREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class AnnounceCTL extends SessionCheckCTL {
+public class AnnounceBoardCTL extends SessionCheckCTL {
     @Autowired
     private AnnounceREP announceRepository;
     @Autowired
@@ -30,7 +30,7 @@ public class AnnounceCTL extends SessionCheckCTL {
     /* 공지사항 목록 */
     @GetMapping("/announces")
     public String index(Model model) {
-        List<AnnounceENT> announceEntityList = (List<AnnounceENT>) announceRepository.findByDisableFalse();
+        List<AnnounceBoardENT> announceEntityList = (List<AnnounceBoardENT>) announceRepository.findByDisableFalse();
         model.addAttribute("announceList", announceEntityList);
         return "announces/index";
     }
@@ -43,16 +43,16 @@ public class AnnounceCTL extends SessionCheckCTL {
 
     /* 새 공지사항 제출 */
     @PostMapping("/announces/create")
-    public String createAnnounce(AnnounceFRM form, Model model) {  //DTO AnnounceForm
-        AnnounceENT announce = form.toEntity();
-        AnnounceENT saved = announceRepository.save(announce);
+    public String createAnnounce(AnnounceBoardFRM form, Model model) {  //DTO AnnounceForm
+        AnnounceBoardENT announce = form.toEntity();
+        AnnounceBoardENT saved = announceRepository.save(announce);
         return "redirect:/announces/"+saved.getId();
     }
 
     /* 공지사항 열람 */
     @GetMapping("/announces/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        AnnounceENT announceEntity = announceRepository.findById(id).orElse(null);
+        AnnounceBoardENT announceEntity = announceRepository.findById(id).orElse(null);
 
         // 비활성화 된 글 접속 시도시 튕겨내기
         if(announceEntity.isDisable()) return "redirect:/announces";
@@ -66,7 +66,7 @@ public class AnnounceCTL extends SessionCheckCTL {
     /* 공지사항 삭제(비활성화) */
     @GetMapping("/announces/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model) {
-        AnnounceENT target = announceRepository.findById(id).orElse(null);
+        AnnounceBoardENT target = announceRepository.findById(id).orElse(null);
         if (target != null) {
             target.toDisable();
             announceRepository.save(target);
