@@ -1,7 +1,7 @@
 {{> layouts/header}}
 
-<h1>게시글 작성</h1>
-<form id="postForm" enctype="multipart/form-data">
+<h1>일기 작성</h1>
+<form id="diaryForm" enctype="multipart/form-data">
     <label for="title">제목:</label>
     <input type="text" id="title" name="title" required>
     <br>
@@ -15,12 +15,20 @@
     </div>
     <button type="button" onclick="addPictureField()">사진 추가하기</button>
     <br><br>
+
+    <!-- 공개 여부 추가 -->
+    <label for="isPublic">공개 여부:</label>
+    <input type="radio" id="private" name="isPublic" value="0" checked> 비공개
+    <input type="radio" id="public" name="isPublic" value="1"> 전체 공개
+    <br><br>
+
     <button type="submit">작성</button>
 </form>
 
 {{> layouts/footer}}
 
 <script>
+    // 추가적인 사진 필드 생성 함수
     function addPictureField() {
         var container = document.getElementById("pictureFields");
         var input = document.createElement("input");
@@ -32,18 +40,19 @@
         container.appendChild(br);
     }
 
-    document.getElementById('postForm').addEventListener('submit', function(event) {
+    // 폼 제출 이벤트 처리
+    document.getElementById('diaryForm').addEventListener('submit', function(event) {
         event.preventDefault();
         var formData = new FormData(this);
 
-        fetch('/api/posts/new', {
+        fetch('/api/diaries/create', {
             method: 'POST',
             body: formData
         })
         .then(response => response.text())
         .then(result => {
             alert(result);
-            window.location.href = '/posts'; // 작성 후 게시글 목록으로 이동
+            window.location.href = '/diaries'; // 작성 후 일기장 목록으로 이동
         })
         .catch(error => {
             console.error('Error:', error);

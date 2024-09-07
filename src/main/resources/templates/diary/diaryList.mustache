@@ -1,0 +1,28 @@
+{{> layouts/header}}
+
+<h1>일기 목록</h1>
+<ul id="diaryList">
+    <!-- 일기 목록이 여기에서 동적으로 삽입됩니다. -->
+</ul>
+
+{{> layouts/footer}}
+
+<script>
+    // 페이지 로드 시 일기 목록을 불러오기
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/diaries')
+            .then(response => response.json())
+            .then(diaries => {
+                const diaryList = document.getElementById('diaryList');
+                diaries.forEach(diary => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <a href="/diaries/${diary.id}"><h2>${diary.title}</h2></a>
+                        <p>작성자: ${diary.user.nickname}</p>
+                        <p>작성 시간: ${diary.regdate}</p>
+                    `;
+                    diaryList.appendChild(listItem);
+                });
+            });
+    });
+</script>

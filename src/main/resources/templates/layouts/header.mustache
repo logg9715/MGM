@@ -39,6 +39,13 @@
                     </li>
                 {{/nickname}}
                 {{#nickname}}
+                    <!-- 일기장 관련 링크 추가 -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/diaries">일기장 목록</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/diaries/create">일기장 작성</a>
+                    </li>
                     {{^isAdmin}}
                         <li class="nav-item">
                             <a class="nav-link" href="/session-login/mypage">마이페이지</a>

@@ -36,7 +36,7 @@
         event.preventDefault();
         var formData = new FormData(this);
 
-        fetch('/api/posts/new', {
+        fetch('/api/posts/create', {
             method: 'POST',
             body: formData
         })
