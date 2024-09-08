@@ -1,9 +1,9 @@
 package com.example.MultiGreenMaster;
 
 import com.example.MultiGreenMaster.entity.*;
-import com.example.MultiGreenMaster.repository.AnnounceREP;
-import com.example.MultiGreenMaster.repository.CMCommentREP;
-import com.example.MultiGreenMaster.repository.CMPostREP;
+import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
+import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoardREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MakeInitData {
     private final UserREP userRepository;
-    private final AnnounceREP announceRepository;
-    private final CMPostREP cmPostRepository;
-    private final CMCommentREP cmCommentRepository;
+    private final AnnounceBoardREP announceRepository;
+    private final FreeBoardREP cmPostRepository;
+    private final FreeBoardCommentREP cmCommentRepository;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
@@ -72,7 +72,7 @@ public class MakeInitData {
                 .build();
         userRepository.save(user3);
 
-        CMPostENT cmpost1 = CMPostENT.builder()
+        FreeBoardENT cmpost1 = FreeBoardENT.builder()
                 .title("게시글 1")
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
@@ -82,7 +82,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost1);
 
-        CMPostENT cmpost2 = CMPostENT.builder()
+        FreeBoardENT cmpost2 = FreeBoardENT.builder()
                 .title("게시글 2")
                 .content("이 글은 게시글 2입니다.")
                 .count(0)
@@ -92,7 +92,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost2);
 
-        CMPostENT cmpost3 = CMPostENT.builder()
+        FreeBoardENT cmpost3 = FreeBoardENT.builder()
                 .title("게시글 3")
                 .content("이 글은 게시글 3입니다.")
                 .count(0)
@@ -102,7 +102,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost3);
 
-        CMPostENT cmpost4 = CMPostENT.builder()
+        FreeBoardENT cmpost4 = FreeBoardENT.builder()
                 .title("게시글 4")
                 .content("이 글은 게시글 4입니다.")
                 .count(0)
@@ -112,7 +112,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost4);
 
-        CMPostENT cmpost5 = CMPostENT.builder()
+        FreeBoardENT cmpost5 = FreeBoardENT.builder()
                 .title("게시글 5")
                 .content("이 글은 게시글 5입니다.")
                 .count(0)
@@ -122,7 +122,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost5);
 
-        CMPostENT cmpost6 = CMPostENT.builder()
+        FreeBoardENT cmpost6 = FreeBoardENT.builder()
                 .title("게시글 6")
                 .content("이 글은 게시글 6입니다.")
                 .count(0)
@@ -133,7 +133,7 @@ public class MakeInitData {
         cmPostRepository.save(cmpost6);
 
         //댓글
-        CMCommentENT cmcomment1 = CMCommentENT.builder()
+        FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.")
                 .likeCount(1)
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
@@ -142,7 +142,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment1);
 
-        CMCommentENT cmcomment2 = CMCommentENT.builder()
+        FreeBoardCommentENT cmcomment2 = FreeBoardCommentENT.builder()
                 .content("이 글은 2번 댓글입니다.")
                 .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 2, 5, 45))
@@ -151,7 +151,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment2);
 
-        CMCommentENT cmcomment3 = CMCommentENT.builder()
+        FreeBoardCommentENT cmcomment3 = FreeBoardCommentENT.builder()
                 .content("이 글은 3번 댓글입니다.")
                 .likeCount(4)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 45))
@@ -160,7 +160,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment3);
 
-        CMCommentENT cmcomment4 = CMCommentENT.builder()
+        FreeBoardCommentENT cmcomment4 = FreeBoardCommentENT.builder()
                 .content("이 글은 4번 댓글입니다.")
                 .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 55))

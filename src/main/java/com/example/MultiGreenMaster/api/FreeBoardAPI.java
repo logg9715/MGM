@@ -2,11 +2,11 @@ package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
 import com.example.MultiGreenMaster.dto.CMGetpostFrm;
-import com.example.MultiGreenMaster.dto.CMPostFRM;
-import com.example.MultiGreenMaster.entity.CMPicture;
-import com.example.MultiGreenMaster.entity.CMPostENT;
+import com.example.MultiGreenMaster.dto.FreeBoardFRM;
+import com.example.MultiGreenMaster.entity.FreeBoardPictureENT;
+import com.example.MultiGreenMaster.entity.FreeBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.CMPostSRV;
+import com.example.MultiGreenMaster.service.FreeBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts") // "/api/posts" 경로와 매핑
-public class CMPostAPI extends SessionCheckCTL {
+public class FreeBoardAPI extends SessionCheckCTL {
 
-    private static final Logger logger = LoggerFactory.getLogger(CMPostAPI.class); // 로그 설정
+    private static final Logger logger = LoggerFactory.getLogger(FreeBoardAPI.class); // 로그 설정
 
     @Autowired
-    private CMPostSRV cmPostService; // CMPostService 의존성 주입
+    private FreeBoardSRV cmPostService; // CMPostService 의존성 주입
 
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
@@ -38,7 +38,7 @@ public class CMPostAPI extends SessionCheckCTL {
     /* 자유게시판 글 작성 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
-    public ResponseEntity<String> createPost(@ModelAttribute CMPostFRM form, HttpSession session) {
+    public ResponseEntity<String> createPost(@ModelAttribute FreeBoardFRM form, HttpSession session) {
 
         logger.info("Request to create new post: {}", form); // 새 게시글 생성 요청
 
@@ -49,7 +49,7 @@ public class CMPostAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found"); // 오류 응답 반환
         }
 
-        CMPostENT post = form.toEntity(); // CMPostForm을 CMPost 엔티티로 변환
+        FreeBoardENT post = form.toEntity(); // CMPostForm을 CMPost 엔티티로 변환
         post.setUser(loginUser); // 로그인한 사용자 설정
         cmPostService.savePost(post); // 게시글 저장
         logger.info("Post saved successfully: {}", post); // 게시글 저장 완료 로그 출력
@@ -61,7 +61,7 @@ public class CMPostAPI extends SessionCheckCTL {
     @GetMapping // GET 요청을 기본 경로와 매핑
     public ResponseEntity<List<CMGetpostFrm>> listPosts() {
         logger.info("Requesting post list"); // 게시글 목록 요청
-        List<CMPostENT> posts = cmPostService.findAllPosts(); // 모든 게시글 조회
+        List<FreeBoardENT> posts = cmPostService.findAllPosts(); // 모든 게시글 조회
         List<CMGetpostFrm> postForms = posts.stream().map(post -> new CMGetpostFrm(
                 post.getId(),
                 post.getUser(),
@@ -76,9 +76,9 @@ public class CMPostAPI extends SessionCheckCTL {
 
     /* 자유게시판 게시글 열람 */
     @GetMapping("/{id}")
-    public ResponseEntity<CMPostFRM> getPost(@PathVariable Long id) {
+    public ResponseEntity<FreeBoardFRM> getPost(@PathVariable Long id) {
         logger.info("Requesting post detail: Post ID {}", id);  // 로그: 게시글 상세 조회 요청
-        CMPostENT post = cmPostService.findPostById(id);  // ID로 게시글을 조회
+        FreeBoardENT post = cmPostService.findPostById(id);  // ID로 게시글을 조회
         if (post == null) {
             return ResponseEntity.notFound().build();  // 게시글을 찾지 못한 경우 404 응답 반환
         }
@@ -98,7 +98,7 @@ public class CMPostAPI extends SessionCheckCTL {
                 .collect(Collectors.toList()) : null;
 
         // 조회된 데이터를 기반으로 CMPostForm 객체 생성
-        CMPostFRM postForm = new CMPostFRM(
+        FreeBoardFRM postForm = new FreeBoardFRM(
                 post.getId(),
                 post.getUser(),
                 post.getTitle(),
@@ -119,14 +119,14 @@ public class CMPostAPI extends SessionCheckCTL {
     public ResponseEntity<Integer> likePost(@PathVariable Long id) {
         logger.info("Request to increase like count: Post ID {}", id); // 게시글 좋아요 증가 요청
         cmPostService.incrementLikeCount(id); // 게시글의 좋아요 수 증가
-        CMPostENT post = cmPostService.findPostById(id); // ID로 게시글 조회
+        FreeBoardENT post = cmPostService.findPostById(id); // ID로 게시글 조회
         return post != null ? ResponseEntity.ok(post.getLikeCount()) : ResponseEntity.notFound().build(); // 게시글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
     }
 
     // 최신 4개의 게시글을 내림차순으로 반환
     @GetMapping("/recent")
-    public List<CMPostFRM> getRecentPosts() {
-        List<CMPostENT> posts = cmPostService.findTop4PostsDesc();  // 최신 게시글 4개를 내림차순으로 조회
+    public List<FreeBoardFRM> getRecentPosts() {
+        List<FreeBoardENT> posts = cmPostService.findTop4PostsDesc();  // 최신 게시글 4개를 내림차순으로 조회
         return posts.stream().map(post -> {
             // 각 게시글의 사진을 Base64 인코딩된 문자열로 변환하여 리스트로 수집
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
@@ -134,7 +134,7 @@ public class CMPostAPI extends SessionCheckCTL {
                     .collect(Collectors.toList()) : null;
 
             // 조회된 데이터를 기반으로 CMPostForm 객체 생성
-            return new CMPostFRM(
+            return new FreeBoardFRM(
                     post.getId(),
                     post.getUser(),
                     post.getTitle(),
@@ -149,14 +149,14 @@ public class CMPostAPI extends SessionCheckCTL {
 
     // 특정 사용자가 작성한 게시글을 내림차순으로 반환
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<CMPostFRM>> getPostsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<FreeBoardFRM>> getPostsByUser(@PathVariable Long userId) {
         logger.info("Requesting posts by user: User ID {}", userId); // 사용자의 게시글 요청
-        List<CMPostENT> posts = cmPostService.findPostsByUserId(userId); // 사용자의 게시글 조회
-        List<CMPostFRM> postForms = posts.stream().map(post -> { // 각 게시글을 CMPostForm으로 변환
+        List<FreeBoardENT> posts = cmPostService.findPostsByUserId(userId); // 사용자의 게시글 조회
+        List<FreeBoardFRM> postForms = posts.stream().map(post -> { // 각 게시글을 CMPostForm으로 변환
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
                     .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환
                     .collect(Collectors.toList()) : null;
-            return new CMPostFRM(
+            return new FreeBoardFRM(
                     post.getId(),
                     post.getUser(),
                     post.getTitle(),
@@ -175,7 +175,7 @@ public class CMPostAPI extends SessionCheckCTL {
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updatePost(
             @PathVariable Long id,
-            @ModelAttribute CMPostFRM form,  // @ModelAttribute로 폼 데이터 수신
+            @ModelAttribute FreeBoardFRM form,  // @ModelAttribute로 폼 데이터 수신
             HttpSession session) {
 
         logger.info("Request to update post ID {}: {}", id, form);  // 게시글 수정 요청 로그
@@ -187,7 +187,7 @@ public class CMPostAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found");
         }
 
-        CMPostENT existingPost = cmPostService.findPostById(id);
+        FreeBoardENT existingPost = cmPostService.findPostById(id);
         if (existingPost == null || !existingPost.getUser().getId().equals(loginUser.getId())) {
             logger.error("Post not found or unauthorized update attempt.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Post not found or unauthorized");
@@ -211,8 +211,8 @@ public class CMPostAPI extends SessionCheckCTL {
                     .collect(Collectors.toList());
 
             // 새로운 사진 데이터로 사진 목록 업데이트
-            List<CMPicture> newPictures = pictureBytesList.stream()
-                    .map(bytes -> CMPicture.builder()
+            List<FreeBoardPictureENT> newPictures = pictureBytesList.stream()
+                    .map(bytes -> FreeBoardPictureENT.builder()
                             .cmPost(existingPost)
                             .pictureData(bytes)
                             .build())
@@ -240,7 +240,7 @@ public class CMPostAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found");
         }
 
-        CMPostENT existingPost = cmPostService.findPostById(id);
+        FreeBoardENT existingPost = cmPostService.findPostById(id);
         if (existingPost == null || !existingPost.getUser().getId().equals(loginUser.getId())) {
             logger.error("Post not found or unauthorized delete attempt.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Post not found or unauthorized");

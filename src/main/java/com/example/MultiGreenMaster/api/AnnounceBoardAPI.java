@@ -3,7 +3,7 @@ package com.example.MultiGreenMaster.api;
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
 import com.example.MultiGreenMaster.dto.AnnounceBoardFRM;
 import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
-import com.example.MultiGreenMaster.repository.AnnounceREP;
+import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import com.example.MultiGreenMaster.service.UserSRV;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/announces")
 public class AnnounceBoardAPI extends SessionCheckCTL {
     @Autowired
-    private AnnounceREP announceRepository;
+    private AnnounceBoardREP announceRepository;
     @Autowired
     private UserREP userRepository;
     @Autowired

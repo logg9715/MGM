@@ -7,6 +7,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "announceboard")
 @Getter
 @ToString
 @Entity

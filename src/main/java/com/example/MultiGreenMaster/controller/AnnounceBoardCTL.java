@@ -3,7 +3,7 @@ package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.dto.AnnounceBoardFRM;
 import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
-import com.example.MultiGreenMaster.repository.AnnounceREP;
+import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import com.example.MultiGreenMaster.service.UserSRV;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 public class AnnounceBoardCTL extends SessionCheckCTL {
     @Autowired
-    private AnnounceREP announceRepository;
+    private AnnounceBoardREP announceRepository;
     @Autowired
     private UserREP userRepository;
     @Autowired

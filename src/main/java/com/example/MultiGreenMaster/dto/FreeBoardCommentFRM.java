@@ -1,8 +1,8 @@
 package com.example.MultiGreenMaster.dto;
 
 
-import com.example.MultiGreenMaster.entity.CMCommentENT;
-import com.example.MultiGreenMaster.entity.CMPostENT;
+import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
+import com.example.MultiGreenMaster.entity.FreeBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString(exclude = "cmPostId") // cmPostId 필드를 toString()에서 제외하여 순환 참조를 피함
-public class CMCommentFRM {
+public class FreeBoardCommentFRM {
     private Long id; // 댓글 ID
-    private CMPostENT cmPostId; // 게시글 ID
+    private FreeBoardENT cmPostId; // 게시글 ID
     private UserENT userId; // 사용자 ID
     private String content; // 댓글 내용
     private int likeCount; // 댓글 좋아요
@@ -27,8 +27,8 @@ public class CMCommentFRM {
     private Long parentCommentId; // 부모 댓글 ID
 
     // 엔티티로 변환하는 메서드
-    public CMCommentENT toEntity() {
-        CMCommentENT comment = CMCommentENT.builder()
+    public FreeBoardCommentENT toEntity() {
+        FreeBoardCommentENT comment = FreeBoardCommentENT.builder()
                 .id(id)
                 .user(userId)
                 .cmPost(cmPostId)
@@ -39,7 +39,7 @@ public class CMCommentFRM {
                 .build();
 
         if (parentCommentId != null) {
-            CMCommentENT parent = new CMCommentENT();
+            FreeBoardCommentENT parent = new FreeBoardCommentENT();
             parent.setId(parentCommentId);
             comment.setParentComment(parent); // 부모 댓글 설정
         }

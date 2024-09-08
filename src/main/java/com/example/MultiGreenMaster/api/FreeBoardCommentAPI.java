@@ -1,12 +1,12 @@
 package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
-import com.example.MultiGreenMaster.dto.CMCommentFRM;
-import com.example.MultiGreenMaster.entity.CMCommentENT;
-import com.example.MultiGreenMaster.entity.CMPostENT;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
+import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
+import com.example.MultiGreenMaster.entity.FreeBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.CMCommentSRV;
-import com.example.MultiGreenMaster.service.CMPostSRV;
+import com.example.MultiGreenMaster.service.FreeBoardCommentSRV;
+import com.example.MultiGreenMaster.service.FreeBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -21,22 +21,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments") // "/api/comments" 경로와 매핑
-public class CMCommentAPI extends SessionCheckCTL {
+public class FreeBoardCommentAPI extends SessionCheckCTL {
 
-    private static final Logger logger = LoggerFactory.getLogger(CMCommentAPI.class); // 로그 설정
-
-    @Autowired
-    private CMCommentSRV cmCommentService; // CMCommentService 의존성 주입
+    private static final Logger logger = LoggerFactory.getLogger(FreeBoardCommentAPI.class); // 로그 설정
 
     @Autowired
-    private CMPostSRV cmPostService; // CMPostService 의존성 주입
+    private FreeBoardCommentSRV freeBoardCommentSRV; // CMCommentService 의존성 주입
+
+    @Autowired
+    private FreeBoardSRV cmPostService; // CMPostService 의존성 주입
 
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
-    public ResponseEntity<String> createComment(@ModelAttribute CMCommentFRM form, HttpSession session) {
+    public ResponseEntity<String> createComment(@ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
         logger.info("Request to create new comment: {}", form); // 새 댓글 생성 요청
 
         Long userId = (Long) session.getAttribute("userId"); // 세션에서 userId 추출
@@ -46,13 +46,13 @@ public class CMCommentAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found"); // 오류 응답 반환
         }
 
-        CMPostENT post = cmPostService.findPostById(form.getCmPostId().getId()); // 게시글 ID로 게시글 조회
+        FreeBoardENT post = cmPostService.findPostById(form.getCmPostId().getId()); // 게시글 ID로 게시글 조회
 
         if (post != null) {
-            CMCommentENT comment = form.toEntity(); // 폼 데이터를 통해 엔티티 생성
+            FreeBoardCommentENT comment = form.toEntity(); // 폼 데이터를 통해 엔티티 생성
             comment.setCmPost(post); // 댓글에 게시글 설정
             comment.setUser(loginUser); // 댓글에 사용자 설정
-            cmCommentService.saveComment(comment); // 댓글 저장
+            freeBoardCommentSRV.saveComment(comment); // 댓글 저장
             logger.info("Comment saved successfully: {}", comment); // 댓글 저장 완료 로그
             return ResponseEntity.ok("Comment created successfully"); // 성공 응답 반환
         }
@@ -61,9 +61,9 @@ public class CMCommentAPI extends SessionCheckCTL {
     }
 
     @GetMapping("/post/{postId}") // GET 요청을 "/post/{postId}" 경로와 매핑
-    public ResponseEntity<List<CMCommentENT>> listComments(@PathVariable Long postId) {
+    public ResponseEntity<List<FreeBoardCommentENT>> listComments(@PathVariable Long postId) {
         logger.info("Requesting comment list: Post ID {}", postId); // 댓글 목록 요청
-        List<CMCommentENT> comments = cmCommentService.findCommentsByPostId(postId); // 게시글의 모든 댓글 조회
+        List<FreeBoardCommentENT> comments = freeBoardCommentSRV.findCommentsByPostId(postId); // 게시글의 모든 댓글 조회
 
         // 비활성화된 댓글의 내용을 "삭제된 댓글입니다"로 수정
         comments.forEach(comment -> {
@@ -80,14 +80,14 @@ public class CMCommentAPI extends SessionCheckCTL {
     @PostMapping("/{id}/like")
     public ResponseEntity<Integer> likeComment(@PathVariable Long id) {
         logger.info("Request to increase like count: Comment ID {}", id); // 댓글 좋아요 증가 요청
-        cmCommentService.incrementLikeCount(id); // 댓글의 좋아요 수 증가
-        CMCommentENT comment = cmCommentService.findCommentById(id); // ID로 댓글 조회
+        freeBoardCommentSRV.incrementLikeCount(id); // 댓글의 좋아요 수 증가
+        FreeBoardCommentENT comment = freeBoardCommentSRV.findCommentById(id); // ID로 댓글 조회
         return comment != null ? ResponseEntity.ok(comment.getLikeCount()) : ResponseEntity.notFound().build(); // 댓글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/{id}/create")
-    public ResponseEntity<String> createReply(@PathVariable Long id, @ModelAttribute CMCommentFRM form, HttpSession session) {
+    public ResponseEntity<String> createReply(@PathVariable Long id, @ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
         logger.info("Request to create new reply to comment ID {}: {}", id, form);
 
         try {
@@ -104,12 +104,12 @@ public class CMCommentAPI extends SessionCheckCTL {
                 return ResponseEntity.badRequest().body("Post ID is required");
             }
 
-            CMPostENT post = cmPostService.findPostById(form.getCmPostId().getId());
-            CMCommentENT parentComment = cmCommentService.findCommentById(id);
+            FreeBoardENT post = cmPostService.findPostById(form.getCmPostId().getId());
+            FreeBoardCommentENT parentComment = freeBoardCommentSRV.findCommentById(id);
 
             if (post != null && parentComment != null) {
                 // 새로운 CMComment 객체 생성 (대댓글)
-                CMCommentENT newComment = new CMCommentENT();
+                FreeBoardCommentENT newComment = new FreeBoardCommentENT();
                 newComment.setCmPost(post); // 게시글 설정
                 newComment.setUser(loginUser); // 작성자 설정
                 newComment.setContent(form.getContent()); // 내용 설정
@@ -118,7 +118,7 @@ public class CMCommentAPI extends SessionCheckCTL {
                 newComment.setRegdate(LocalDateTime.now()); // 작성 시간 설정
 
                 // 대댓글을 저장
-                cmCommentService.saveComment(newComment);
+                freeBoardCommentSRV.saveComment(newComment);
                 logger.info("Reply saved successfully: {}", newComment);
                 return ResponseEntity.ok("Reply created successfully");
             }
@@ -142,7 +142,7 @@ public class CMCommentAPI extends SessionCheckCTL {
 
         // 세션에서 사용자 ID를 가져옴
         Long userId = (Long) session.getAttribute("userId");
-        CMCommentENT existingComment = cmCommentService.findCommentById(id);
+        FreeBoardCommentENT existingComment = freeBoardCommentSRV.findCommentById(id);
 
         // 댓글이 존재하지 않거나, 현재 사용자가 댓글 작성자가 아닌 경우
         if (existingComment == null || !existingComment.getUser().getId().equals(userId)) {
@@ -151,7 +151,7 @@ public class CMCommentAPI extends SessionCheckCTL {
         }
 
         // 댓글 내용 수정
-        cmCommentService.updateComment(id, content);
+        freeBoardCommentSRV.updateComment(id, content);
 
         // 성공 메시지 반환
         logger.info("Comment updated successfully for comment ID: {}", id);
@@ -164,7 +164,7 @@ public class CMCommentAPI extends SessionCheckCTL {
         logger.info("Request to delete comment ID: {}", id);
 
         Long userId = (Long) session.getAttribute("userId");
-        CMCommentENT existingComment = cmCommentService.findCommentById(id);
+        FreeBoardCommentENT existingComment = freeBoardCommentSRV.findCommentById(id);
 
         // 댓글이 존재하지 않거나, 현재 사용자가 댓글 작성자가 아닌 경우
         if (existingComment == null || !existingComment.getUser().getId().equals(userId)) {
@@ -174,7 +174,7 @@ public class CMCommentAPI extends SessionCheckCTL {
 
         // 댓글 삭제
         existingComment.setDisable(true);
-        cmCommentService.saveComment(existingComment);
+        freeBoardCommentSRV.saveComment(existingComment);
 
         logger.info("Comment deleted successfully: Comment ID: {}", id);
         return ResponseEntity.ok("Comment deleted successfully");

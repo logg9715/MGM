@@ -1,7 +1,7 @@
 package com.example.MultiGreenMaster.dto;
 
-import com.example.MultiGreenMaster.entity.CMPicture;
-import com.example.MultiGreenMaster.entity.CMPostENT;
+import com.example.MultiGreenMaster.entity.FreeBoardPictureENT;
+import com.example.MultiGreenMaster.entity.FreeBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CMPostFRM {
+public class FreeBoardFRM {
     private Long id; // 게시글 ID
     private UserENT user; // 사용자 객체
     private String title; // 게시글 제목
@@ -30,7 +30,7 @@ public class CMPostFRM {
     private int count; // 조회수
 
     // 생성자 - MultipartFile을 포함하지 않음
-    public CMPostFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, int likeCount, LocalDateTime regdate, int count) {
+    public FreeBoardFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, int likeCount, LocalDateTime regdate, int count) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -42,11 +42,11 @@ public class CMPostFRM {
     }
 
     // 엔티티로 변환하는 메서드
-    public CMPostENT toEntity() {
-        List<CMPicture> pictures = this.pictures.stream()
+    public FreeBoardENT toEntity() {
+        List<FreeBoardPictureENT> pictures = this.pictures.stream()
                 .map(multipartFile -> {
                     try {
-                        return CMPicture.builder()
+                        return FreeBoardPictureENT.builder()
                                 .pictureData(multipartFile.getBytes())
                                 .build();
                     } catch (IOException e) {
@@ -55,7 +55,7 @@ public class CMPostFRM {
                 })
                 .collect(Collectors.toList());
 
-        CMPostENT post = CMPostENT.builder()
+        FreeBoardENT post = FreeBoardENT.builder()
                 .id(this.id)
                 .user(this.user)
                 .title(this.title)

@@ -4,12 +4,10 @@ import com.example.MultiGreenMaster.dto.CommentResponseFRM;
 import com.example.MultiGreenMaster.dto.JoinRequestFRM;
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
-import com.example.MultiGreenMaster.entity.CMCommentENT;
-import com.example.MultiGreenMaster.entity.CMRecomment;
+import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.repository.CMCommentREP;
-import com.example.MultiGreenMaster.repository.CMRecommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import lombok.RequiredArgsConstructor;
@@ -154,16 +152,12 @@ public class UserSRV {
 
 
 
-    private final CMCommentREP commentRepository;
-    private final CMRecommentREP recommentRepository;
+    private final FreeBoardCommentREP commentRepository;
 
     //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
     public List<CommentResponseFRM> getUserCommentsAndRecomments(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<CMCommentENT> comments = commentRepository.findByUser_Id(userId);
-
-        // 사용자의 대댓글을 가져오기
-        List<CMRecomment> recomments = recommentRepository.findByUser_Id(userId);
+        List<FreeBoardCommentENT> comments = commentRepository.findByUser_Id(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
         List<CommentResponseFRM> responses = new ArrayList<>();
@@ -175,16 +169,6 @@ public class UserSRV {
             response.setRegdate(comment.getRegdate());
             response.setLikeCount(comment.getLikeCount());
             response.setType("comment");
-            responses.add(response);
-        });
-
-        recomments.forEach(recomment -> {
-            CommentResponseFRM response = new CommentResponseFRM();
-            response.setId(recomment.getId());
-            response.setContent(recomment.getContent());
-            response.setRegdate(recomment.getRegdate());
-            response.setLikeCount(recomment.getLikeCount());
-            response.setType("recomment");
             responses.add(response);
         });
 

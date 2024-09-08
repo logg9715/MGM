@@ -1,9 +1,9 @@
 package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
-import com.example.MultiGreenMaster.entity.CMPostENT;
-import com.example.MultiGreenMaster.repository.AnnounceREP;
-import com.example.MultiGreenMaster.repository.CMPostREP;
+import com.example.MultiGreenMaster.entity.FreeBoardENT;
+import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
+import com.example.MultiGreenMaster.repository.FreeBoardREP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -16,10 +16,10 @@ import java.util.List;
 public class MainCTL extends SessionCheckCTL {
 
     @Autowired
-    private AnnounceREP announceRepository;
+    private AnnounceBoardREP announceRepository;
 
     @Autowired
-    private CMPostREP cmPostRepository;
+    private FreeBoardREP cmPostRepository;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -31,7 +31,7 @@ public class MainCTL extends SessionCheckCTL {
         List<AnnounceBoardENT> recentAnnounces = announceList.subList(0, Math.min(announceList.size(), maxAnnounceCount));
 
         // 최신 4개의 게시글을 오름차순으로 가져오기
-        List<CMPostENT> recentPosts = cmPostRepository.findTop4ByOrderByRegdateDesc();
+        List<FreeBoardENT> recentPosts = cmPostRepository.findTop4ByOrderByRegdateDesc();
 
         // 모델에 추가
         model.addAttribute("announceList", recentAnnounces);

@@ -14,8 +14,9 @@ import java.util.List;
 @Builder
 @ToString(exclude = {"user", "comments", "pictures"}) // 순환 참조 방지
 @Entity
-@Table(name = "cm_post")
-public class CMPostENT {
+//@Table(name = "cm_post")
+@Table(name = "freeboard")
+public class FreeBoardENT {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,12 +52,12 @@ public class CMPostENT {
     // 사진과의 관계 설정
     @OneToMany(mappedBy = "cmPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference // 순환 참조 방지
-    private List<CMPicture> pictures;  // 게시글에 포함된 사진 목록
+    private List<FreeBoardPictureENT> pictures;  // 게시글에 포함된 사진 목록
 
     // 댓글과의 관계 설정
     @OneToMany(mappedBy = "cmPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference // 순환 참조 방지
-    private List<CMCommentENT> comments;  // 게시글에 달린 댓글 목록
+    private List<FreeBoardCommentENT> comments;  // 게시글에 달린 댓글 목록
 
     // 조회수 증가 메서드
     public void incrementCount() {
