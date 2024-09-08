@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CMGetpostFrm {
+public class FreeBoardGetMethodFRM {
     private Long id; // 게시글 ID
     private UserENT user; // 사용자 객체
     private String title; // 게시글 제목

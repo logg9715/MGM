@@ -1,7 +1,7 @@
 package com.example.MultiGreenMaster.dto;
 
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.entity.User_RoleENT;
+import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class JoinRequestFRM {
                 .phonenumber(this.phonenumber)
                 .email(this.email)
                 //추가
-                .role(User_RoleENT.USER)
+                .role(User_RoleENUM.USER)
                 .disable(false)
                 .build();
     }

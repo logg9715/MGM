@@ -1,10 +1,10 @@
 package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
-import com.example.MultiGreenMaster.dto.DiaryForm;
-import com.example.MultiGreenMaster.entity.Diary;
+import com.example.MultiGreenMaster.dto.DiaryBoardFRM;
+import com.example.MultiGreenMaster.entity.DiaryBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.DiaryService;
+import com.example.MultiGreenMaster.service.DiaryBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -20,19 +20,19 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/diaries")
-public class DiaryApiController extends SessionCheckCTL {
+public class DiaryBoardAPI extends SessionCheckCTL {
 
-    private static final Logger logger = LoggerFactory.getLogger(DiaryApiController.class); // 로그 설정
+    private static final Logger logger = LoggerFactory.getLogger(DiaryBoardAPI.class); // 로그 설정
 
     @Autowired
-    private DiaryService diaryService; // DiaryService 의존성 주입
+    private DiaryBoardSRV diaryService; // DiaryService 의존성 주입
 
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create")
-    public ResponseEntity<String> createDiary(@ModelAttribute DiaryForm form, HttpSession session) {
+    public ResponseEntity<String> createDiary(@ModelAttribute DiaryBoardFRM form, HttpSession session) {
         logger.info("Request to create new diary: {}", form);  // 새 다이어리 생성 요청 로그
 
         Long userId = (Long) session.getAttribute("userId");
@@ -53,7 +53,7 @@ public class DiaryApiController extends SessionCheckCTL {
         }).collect(Collectors.toList());
 
         // 다이어리 엔티티 생성
-        Diary diary = form.toEntity(pictureBytesList);  // 폼 데이터를 엔티티로 변환
+        DiaryBoardENT diary = form.toEntity(pictureBytesList);  // 폼 데이터를 엔티티로 변환
         diary.setUser(loginUser);  // 로그인한 사용자 정보를 다이어리에 설정
         diary.setIsPublic(form.getIsPublic());  // 사용자가 선택한 공개 여부 설정
 
@@ -65,7 +65,7 @@ public class DiaryApiController extends SessionCheckCTL {
 
 
     @GetMapping
-    public ResponseEntity<List<DiaryForm>> listDiaries(HttpSession session) {
+    public ResponseEntity<List<DiaryBoardFRM>> listDiaries(HttpSession session) {
         logger.info("Requesting diary list");  // 다이어리 목록 요청 로그
 
         Long userId = (Long) session.getAttribute("userId");
@@ -75,13 +75,13 @@ public class DiaryApiController extends SessionCheckCTL {
             return ResponseEntity.badRequest().body(null);
         }
 
-        List<Diary> diaries = diaryService.findDiariesForUser(userId); // 사용자에게 보여줄 다이어리 필터링
-        List<DiaryForm> diaryForms = diaries.stream().map(diary -> {
+        List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId); // 사용자에게 보여줄 다이어리 필터링
+        List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
             List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
                     .map(picture -> Base64.getEncoder().encodeToString(picture))  // byte[] 데이터를 Base64 문자열로 변환
                     .collect(Collectors.toList()) : null;
 
-            return new DiaryForm(
+            return new DiaryBoardFRM(
                     diary.getId(),
                     diary.getUser(),
                     diary.getTitle(),
@@ -99,7 +99,7 @@ public class DiaryApiController extends SessionCheckCTL {
     @GetMapping("/{id}")
     public ResponseEntity<?> getDiary(@PathVariable Long id) {
         logger.info("Requesting diary detail: Diary ID {}", id);  // 로그: 다이어리 상세 조회 요청
-        Diary diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
+        DiaryBoardENT diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
         if (diary == null) {
             return ResponseEntity.notFound().build();  // 다이어리를 찾지 못한 경우 404 응답 반환
         }
@@ -114,7 +114,7 @@ public class DiaryApiController extends SessionCheckCTL {
                 .map(picture -> Base64.getEncoder().encodeToString(picture))  // byte[] 데이터를 Base64 문자열로 변환
                 .collect(Collectors.toList()) : null;
 
-        DiaryForm diaryForm = new DiaryForm(
+        DiaryBoardFRM diaryForm = new DiaryBoardFRM(
                 diary.getId(),
                 diary.getUser(),
                 diary.getTitle(),
@@ -132,7 +132,7 @@ public class DiaryApiController extends SessionCheckCTL {
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updateDiary(
             @PathVariable Long id,
-            @ModelAttribute DiaryForm form,
+            @ModelAttribute DiaryBoardFRM form,
             HttpSession session) {
 
         logger.info("Request to update diary ID {}: {}", id, form);  // 다이어리 수정 요청 로그
@@ -144,7 +144,7 @@ public class DiaryApiController extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found");
         }
 
-        Diary existingDiary = diaryService.findDiaryById(id);
+        DiaryBoardENT existingDiary = diaryService.findDiaryById(id);
         if (existingDiary == null || !existingDiary.getUser().getId().equals(loginUser.getId())) {
             logger.error("Diary not found or unauthorized update attempt.");
             return ResponseEntity.status(403).body("Diary not found or unauthorized");
@@ -185,7 +185,7 @@ public class DiaryApiController extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found");
         }
 
-        Diary existingDiary = diaryService.findDiaryById(id);
+        DiaryBoardENT existingDiary = diaryService.findDiaryById(id);
         if (existingDiary == null || !existingDiary.getUser().getId().equals(loginUser.getId())) {
             logger.error("Diary not found or unauthorized delete attempt.");
             return ResponseEntity.status(403).body("Diary not found or unauthorized");

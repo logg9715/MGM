@@ -1,7 +1,7 @@
 package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
-import com.example.MultiGreenMaster.dto.CMGetpostFrm;
+import com.example.MultiGreenMaster.dto.FreeBoardGetMethodFRM;
 import com.example.MultiGreenMaster.dto.FreeBoardFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardPictureENT;
 import com.example.MultiGreenMaster.entity.FreeBoardENT;
@@ -59,10 +59,10 @@ public class FreeBoardAPI extends SessionCheckCTL {
 
     /* 자유게시판 목록 */
     @GetMapping // GET 요청을 기본 경로와 매핑
-    public ResponseEntity<List<CMGetpostFrm>> listPosts() {
+    public ResponseEntity<List<FreeBoardGetMethodFRM>> listPosts() {
         logger.info("Requesting post list"); // 게시글 목록 요청
         List<FreeBoardENT> posts = cmPostService.findAllPosts(); // 모든 게시글 조회
-        List<CMGetpostFrm> postForms = posts.stream().map(post -> new CMGetpostFrm(
+        List<FreeBoardGetMethodFRM> postForms = posts.stream().map(post -> new FreeBoardGetMethodFRM(
                 post.getId(),
                 post.getUser(),
                 post.getTitle(),

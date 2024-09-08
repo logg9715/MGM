@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Friend")
+@Table(name = "friend")
 @Builder
 @Getter
 @Setter

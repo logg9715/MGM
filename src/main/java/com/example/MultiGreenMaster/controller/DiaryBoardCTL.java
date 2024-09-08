@@ -1,7 +1,7 @@
 package com.example.MultiGreenMaster.controller;
 
-import com.example.MultiGreenMaster.entity.Diary;
-import com.example.MultiGreenMaster.service.DiaryService;
+import com.example.MultiGreenMaster.entity.DiaryBoardENT;
+import com.example.MultiGreenMaster.service.DiaryBoardSRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class DiaryController extends SessionCheckCTL
+public class DiaryBoardCTL extends SessionCheckCTL
 {
 
     @Autowired
-    private DiaryService diaryService;
+    private DiaryBoardSRV diaryService;
 
     // 일기장 목록 페이지 매핑
     @GetMapping("/diaries")
@@ -32,7 +32,7 @@ public class DiaryController extends SessionCheckCTL
     // 일기장 상세 조회 페이지 매핑
     @GetMapping("/diaries/{id}")
     public String diaryDetail(@PathVariable Long id, Model model) {
-        Diary diary = diaryService.findDiaryById(id);
+        DiaryBoardENT diary = diaryService.findDiaryById(id);
         if (diary == null) {
             return "error/404"; // 다이어리를 찾지 못한 경우
         }

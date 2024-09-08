@@ -31,7 +31,7 @@ public class MakeInitData {
                 .name("김동현")
                 .phonenumber("010-5656-1541")
                 .email("hayasdan@naver.com")
-                .role(User_RoleENT.ADMIN)
+                .role(User_RoleENUM.ADMIN)
                 .disable(false)
                 .build();
         userRepository.save(admin1);
@@ -43,7 +43,7 @@ public class MakeInitData {
                 .name("박덕수")
                 .phonenumber("010-1234-1234")
                 .email("user1@naver.com")
-                .role(User_RoleENT.USER)
+                .role(User_RoleENUM.USER)
                 .disable(false)
                 .build();
         userRepository.save(user1);
@@ -55,7 +55,7 @@ public class MakeInitData {
                 .name("이중섭")
                 .phonenumber("010-5432-1234")
                 .email("user2@naver.com")
-                .role(User_RoleENT.USER)
+                .role(User_RoleENUM.USER)
                 .disable(false)
                 .build();
         userRepository.save(user2);
@@ -67,7 +67,7 @@ public class MakeInitData {
                 .name("황진이")
                 .phonenumber("016-1432-1234")
                 .email("hwang2@naver.com")
-                .role(User_RoleENT.USER)
+                .role(User_RoleENUM.USER)
                 .disable(false)
                 .build();
         userRepository.save(user3);

@@ -3,7 +3,7 @@ package com.example.MultiGreenMaster.controller;
 import com.example.MultiGreenMaster.dto.CommentResponseFRM;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.entity.User_RoleENT;
+import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import com.example.MultiGreenMaster.service.UserSRV;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class UserCTL extends SessionCheckCTL {
             UserENT loginUser = userService.findUserById(userId);
             if (loginUser != null) {
                 model.addAttribute("nickname", loginUser.getNickname());
-                model.addAttribute("isAdmin", loginUser.getRole().equals(User_RoleENT.ADMIN));
+                model.addAttribute("isAdmin", loginUser.getRole().equals(User_RoleENUM.ADMIN));
             }
         }
     }

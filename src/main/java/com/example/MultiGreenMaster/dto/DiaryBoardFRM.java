@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.dto;
 
-import com.example.MultiGreenMaster.entity.Diary;
+import com.example.MultiGreenMaster.entity.DiaryBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DiaryForm {
+public class DiaryBoardFRM {
     private Long id; // 다이어리 ID
     private UserENT user; // 사용자 객체
     private String title; // 다이어리 제목
@@ -26,7 +26,7 @@ public class DiaryForm {
     private Long isPublic; // 공개 여부
 
     // 기본 생성자 이외에 특정 필드들을 초기화하는 생성자
-    public DiaryForm(Long id, UserENT user, String title, String content, List<String> pictureBase64List, LocalDateTime regdate, boolean isPublic) {
+    public DiaryBoardFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, LocalDateTime regdate, boolean isPublic) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -36,8 +36,8 @@ public class DiaryForm {
     }
 
     // 엔티티로 변환하는 메서드, pictureBytesList는 List<byte[]> 형식의 이미지 데이터를 받음
-    public Diary toEntity(List<byte[]> pictureBytesList) {
-        return Diary.builder()
+    public DiaryBoardENT toEntity(List<byte[]> pictureBytesList) {
+        return DiaryBoardENT.builder()
                 .id(this.id)
                 .user(this.user)
                 .title(this.title)

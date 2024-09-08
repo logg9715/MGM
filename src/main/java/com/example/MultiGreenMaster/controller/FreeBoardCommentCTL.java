@@ -20,9 +20,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/comments") // "/comments" 경로와 매핑
-public class FreeBoardCommentCtl {
+public class FreeBoardCommentCTL {
 
-    private static final Logger logger = LoggerFactory.getLogger(FreeBoardCommentCtl.class); // 로그 설정
+    private static final Logger logger = LoggerFactory.getLogger(FreeBoardCommentCTL.class); // 로그 설정
 
     @Autowired
     private FreeBoardCommentSRV cmCommentService;

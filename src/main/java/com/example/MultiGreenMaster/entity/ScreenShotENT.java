@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "screenshot")
 public class ScreenShotENT {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,12 +8,13 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "diaryboard")
 @Getter
 @Setter
 @Builder
 @ToString(exclude = "user") // user 필드를 toString()에서 제외하여 순환 참조를 피함
 @Entity
-public class Diary {
+public class DiaryBoardENT {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 다이어리 고유 번호

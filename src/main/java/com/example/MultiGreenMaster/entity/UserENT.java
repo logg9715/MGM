@@ -34,7 +34,7 @@ public class UserENT {
 
     private String phonenumber;
     private String email;
-    private User_RoleENT role;
+    private User_RoleENUM role;
     private boolean disable;
 
     @OneToMany(mappedBy = "user")

@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.dto;
 
-import com.example.MultiGreenMaster.entity.User_RoleENT;
+import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import com.example.MultiGreenMaster.entity.UserENT;
 import lombok.*;
 
@@ -17,7 +17,7 @@ public class UserFRM {
     private String name;
     private String phonenumber;
     private String email;
-    private User_RoleENT role; // role 필드 추가
+    private User_RoleENUM role; // role 필드 추가
     private int active;
 
     public UserENT toEntity() {
@@ -29,7 +29,7 @@ public class UserFRM {
                 .name(this.name)
                 .phonenumber(this.phonenumber)
                 .email(this.email)
-                .role(this.role != null ? this.role : User_RoleENT.USER) // 기본값 설정
+                .role(this.role != null ? this.role : User_RoleENUM.USER) // 기본값 설정
                 .disable(false)
                 .build();
     }

@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.controller;
 
-import com.example.MultiGreenMaster.entity.User_RoleENT;
+import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.service.UserSRV;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class SessionCheckCTL {
             UserENT loginUser = userService.getLoginUserById(userId);
             if (loginUser != null) {
                 model.addAttribute("nickname", loginUser.getNickname());
-                if (loginUser.getRole().equals(User_RoleENT.ADMIN)) {
+                if (loginUser.getRole().equals(User_RoleENUM.ADMIN)) {
                     model.addAttribute("isAdmin", true);
                 } else {
                     model.addAttribute("isAdmin", false);

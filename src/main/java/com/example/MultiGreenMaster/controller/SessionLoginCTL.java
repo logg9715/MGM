@@ -2,7 +2,7 @@ package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.entity.User_RoleENT;
+import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -93,7 +93,7 @@ public class SessionLoginCTL extends SessionCheckCTL {
             return "redirect:/session-login/login";
         }
         // case 2. 일반 사용자 계정
-        if (!loginUser.getRole().equals(User_RoleENT.ADMIN)) {
+        if (!loginUser.getRole().equals(User_RoleENUM.ADMIN)) {
             return "redirect:/session-login/mypage";
         }
         // case 3. 관리자 계정
