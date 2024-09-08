@@ -9,7 +9,7 @@
 	DiaryBoardAPI = 일기장 관련 api
 	FreeBoardAPI = 자유게시판 관련 api
 		> FreeBoardCommentAPI = 자유게시판 댓글 api
-	ScreenshotAPI = [모름]
+	ScreenshotAPI = [삭제함]
 	SessionLoginAPI = 로그인&로그아웃 처리 api
 	UdpAPI = 라즈베리파이 udp 통신 관련 api
 	UserAPI = 유저 관련 api (회원가입&수정&방영록, 비활성화는 아직 미구현인듯)
@@ -22,7 +22,7 @@
 	MainCTL = 메인페이지
 	PlantsCTL = [구현 보류]
 	SessionCheckCTL = "테스트 서버용" 사용자 로그인 상태 확인하는 메소드
-	SessionCTL = [모름]
+	SessionCTL = [삭제함]
   	SessionLoginCTL = 테섭용 로그인페이지 이동 컨트롤러 
  	UserCTL = 회원 관리 페이지인데 방영록이상 관리자 기능이랑 섞여있음, 이거 분리해야함 [수정필요]
 	
