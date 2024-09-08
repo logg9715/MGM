@@ -51,6 +51,7 @@ public class UserCTL extends SessionCheckCTL {
 
     @GetMapping("/user")
     public String userIndex(Model model) {
+        System.out.println("@@@ : 회원 관리 페이지 접속");
         List<UserENT> userEntityList = userService.findAllUsers(); // 모든 사용자 목록을 모델에 추가
         model.addAttribute("userList", userEntityList);
         return "users/index"; // 사용자 인덱스 페이지로 이동
@@ -91,7 +92,7 @@ public class UserCTL extends SessionCheckCTL {
         model.addAttribute("allUsers", availableFriends);
         model.addAttribute("friends", friends);
 
-        if (userEntity.getActive() == 1) {
+        if (!userEntity.isDisable()) {
             return "users/show"; // 활성화된 사용자 페이지로 이동
         } else {
             return "users/inactive_show"; // 비활성화된 사용자 페이지로 이동

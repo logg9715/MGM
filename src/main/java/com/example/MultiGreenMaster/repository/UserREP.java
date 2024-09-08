@@ -12,9 +12,7 @@ public interface UserREP extends JpaRepository<UserENT, Long> {
     Optional<UserENT> findByLoginId(String loginId);
     Optional<UserENT> findByNickname(String nickname);
 
-    @Query(value = "SELECT u FROM usermember u WHERE u.active = 1", nativeQuery = true)
-    List<UserENT> findAllActiveUsers(); // 활성화된 사용자만 조회
+    List<UserENT> findByDisableFalse();
 
     // 비활성화된 사용자 조회
-    List<UserENT> findByActive(int active);
 }

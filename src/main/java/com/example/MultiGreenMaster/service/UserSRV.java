@@ -50,7 +50,7 @@ public class UserSRV {
          UserENT user = optionalUser.get();
 
          // 계정이 비활성화 상태인지 확인
-         if (user.getActive() == 0) {
+         if (user.isDisable()) {
              log.info("User account is deactivated: " + user.getLoginId());
              return null; // 계정이 비활성화 상태이면 null 반환
          }
@@ -69,14 +69,14 @@ public class UserSRV {
 
     //활성화된 사용자만 조회
     public List<UserENT> findAllUsers() {
-        return userRepository.findAllActiveUsers();
+        return userRepository.findByDisableFalse();
     }
 
     //비활성화된 사용자만 조회
     @Transactional
     public List<UserENT> findInactiveUsers() {
         // 활성화 상태(active가 0인) 사용자를 조회
-        return userRepository.findByActive(0);
+        return userRepository.findByDisableFalse();
     }
 
     public UserENT findUserById(Long id) {
@@ -125,7 +125,7 @@ public class UserSRV {
     public void deactivateUser(Long id) {
         UserENT target = userRepository.findById(id).orElse(null);
         if (target != null) {
-            target.setActive(0); // 비활성화
+            target.setDisable(true); // 비활성화
             userRepository.save(target); // 변경된 사용자 정보를 저장
         }
     }
@@ -135,9 +135,9 @@ public class UserSRV {
     public UserENT activateUser(Long id) {
         // 특정 ID의 사용자 정보를 조회
         UserENT userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null && userEntity.getActive() == 0) {
+        if (userEntity != null && userEntity.isDisable()) {
             // 사용자가 비활성화 상태일 때만 활성화
-            userEntity.setActive(1);
+            userEntity.setDisable(false);
             return userRepository.save(userEntity); // 사용자 정보를 업데이트하여 저장
         }
         return null; // 사용자가 없거나 이미 활성화된 상태일 경우 null 반환

@@ -32,7 +32,7 @@ public class MakeInitData {
                 .phonenumber("010-5656-1541")
                 .email("hayasdan@naver.com")
                 .role(User_RoleENT.ADMIN)
-                .active(1)
+                .disable(false)
                 .build();
         userRepository.save(admin1);
 
@@ -44,7 +44,7 @@ public class MakeInitData {
                 .phonenumber("010-1234-1234")
                 .email("user1@naver.com")
                 .role(User_RoleENT.USER)
-                .active(1)
+                .disable(false)
                 .build();
         userRepository.save(user1);
 
@@ -56,7 +56,7 @@ public class MakeInitData {
                 .phonenumber("010-5432-1234")
                 .email("user2@naver.com")
                 .role(User_RoleENT.USER)
-                .active(1)
+                .disable(false)
                 .build();
         userRepository.save(user2);
 
@@ -68,7 +68,7 @@ public class MakeInitData {
                 .phonenumber("016-1432-1234")
                 .email("hwang2@naver.com")
                 .role(User_RoleENT.USER)
-                .active(1)
+                .disable(false)
                 .build();
         userRepository.save(user3);
 

@@ -30,7 +30,7 @@ public class UserFRM {
                 .phonenumber(this.phonenumber)
                 .email(this.email)
                 .role(this.role != null ? this.role : User_RoleENT.USER) // 기본값 설정
-                .active(1)
+                .disable(false)
                 .build();
     }
 }

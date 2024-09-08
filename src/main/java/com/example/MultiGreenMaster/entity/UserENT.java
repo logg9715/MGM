@@ -35,7 +35,7 @@ public class UserENT {
     private String phonenumber;
     private String email;
     private User_RoleENT role;
-    private int active;
+    private boolean disable;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")

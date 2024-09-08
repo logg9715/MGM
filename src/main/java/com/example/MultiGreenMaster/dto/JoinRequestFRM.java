@@ -34,7 +34,7 @@ public class JoinRequestFRM {
                 .email(this.email)
                 //추가
                 .role(User_RoleENT.USER)
-                .active(1)
+                .disable(false)
                 .build();
     }
 
