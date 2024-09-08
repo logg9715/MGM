@@ -1,0 +1,77 @@
+백엔트 클래스 정리
+
+== 이름규칙
+	1. 게시판 이름 : ㅇㅇBoard로 생성, ex) AnnounceBoardCTL
+	2. 게시판 하위항목(댓글, 첨부파일 등) : 게시판 이름 뒤에 추가, ex) FreeBoardCommentCTL
+
+- api (api요청 컨트롤러) : ~API (이름 정하는 규칙)
+	AnnounceBoardAPI = 공지사항 관련 api
+	DiaryBoardAPI = 일기장 관련 api
+	FreeBoardAPI = 자유게시판 관련 api
+		> FreeBoardCommentAPI = 자유게시판 댓글 api
+	ScreenshotAPI = [모름]
+	SessionLoginAPI = 로그인&로그아웃 처리 api
+	UdpAPI = 라즈베리파이 udp 통신 관련 api
+	UserAPI = 유저 관련 api (회원가입&수정&방영록, 비활성화는 아직 미구현인듯)
+
+- controller (머스태치 시험서버 컨트롤러) : ~CTL
+	AnnounceBoardCTL = 공지사항
+	DiaryBoardCTL = 일기장
+	FreeBoardCTL = 자유게시판
+		> FreeBoardCommentCTL = 댓글
+	MainCTL = 메인페이지
+	PlantsCTL = [구현 보류]
+	SessionCheckCTL = "테스트 서버용" 사용자 로그인 상태 확인하는 메소드
+	SessionCTL = [모름]
+  	SessionLoginCTL = 테섭용 로그인페이지 이동 컨트롤러 
+ 	UserCTL = 회원 관리 페이지인데 방영록이상 관리자 기능이랑 섞여있음, 이거 분리해야함 [수정필요]
+	
+- device : 라즈베리 파이 관련 클래스, 신경 안써도 됨
+
+- dto : ~FRM
+	AnnounceBoardFRM = 공지사항 폼
+	CommentResponceFRM = [이거 왜 쓰는지 물어봐야함] [중요]
+	DiaryBoardFRM = 일기장 폼
+	FreeBoardFRM = 자유게시판 폼
+		> FreeBoardCommentFRM = 댓글폼
+	JoinRequestFRM = 회원가입 요청폼 << 이거 왜 유저 정보폼이랑 2개로 나눴는지 모르겠음 물어봐야함 [중요]
+	LoginRequestFRM = 로그인 요청폼
+	PlantsFRM = [구현 보류]
+	ScreenShotFRM = [몰루]
+	UserFRM = 유저 정보 폼
+	UserPlantFRM = [구현 보류]
+
+- entity : ~ENT(엔티티), ~ENUM(넘버링)
+	AnnounceBoardENT = 공지사항 엔티티
+	DiaryBoardENT = 일기장 엔티티
+	FreeBoardENT = 자유게시판 엔티티
+		> FreeBoardCommentENT = 댓글 엔티티
+		> FreeBoardPictureENT = 첨부 사진 엔티티
+	FriendENT > 친구 엔티티
+	PlantsENT = [구현 보류]
+	ScreenShotENT = [모름 물어봐야함 왜 만들었는지]
+	User_PlantENT = [구현 보류]
+	UserRoleENUM = 유저 권한 라벨링
+	UserENT =  유저 정보 엔티티
+
+- repository : ~REP
+	AnnounceBoardREP = 공지사항
+	DiaryBoardREP = 일기장
+	FreeBoardREP = 자유게시판
+		> FreeBoardCommentREP = 댓글
+		> FreeBoardPictureREP = 첨부 사진
+	FriendREP > 친구
+	PlantsREP = [구현 보류]
+	ScreenShotREP = [모름 물어봐야함 왜 만들었는지]
+	Users_PlantENT = [구현 보류]
+	UserREP =  유저 정보
+
+- service : ~SRV
+	DiaryBoardSRV = 일기장
+	FreeBoardSRV = 자유게시판
+		> FreeBoardCommentSRV = 댓글
+	PlantsSRV = [구현 보류]
+	UserSRV =  유저 정보
+
+- session : 세션 로그인 관련
+	
