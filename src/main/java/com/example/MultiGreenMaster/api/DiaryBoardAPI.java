@@ -33,12 +33,9 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create")
     public ResponseEntity<String> createDiary(@ModelAttribute DiaryBoardFRM form, HttpSession session) {
-        logger.info("Request to create new diary: {}", form);  // 새 다이어리 생성 요청 로그
-
         Long userId = (Long) session.getAttribute("userId");
         UserENT loginUser = userService.getLoginUserById(userId);
         if (loginUser == null) {
-            logger.error("Logged in user not found.");
             return ResponseEntity.badRequest().body("User not found");
         }
 
@@ -47,38 +44,31 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             try {
                 return picture.getBytes();
             } catch (IOException e) {
-                logger.error("Error reading picture bytes: {}", e.getMessage());
                 return null;
             }
         }).collect(Collectors.toList());
 
         // 다이어리 엔티티 생성
-        DiaryBoardENT diary = form.toEntity(pictureBytesList);  // 폼 데이터를 엔티티로 변환
-        diary.setUser(loginUser);  // 로그인한 사용자 정보를 다이어리에 설정
+        DiaryBoardENT diary = form.toEntity(pictureBytesList);
+        diary.setUser(loginUser);
         diary.setIsPublic(form.getIsPublic());  // 사용자가 선택한 공개 여부 설정
 
-        diaryService.saveDiary(diary);  // 다이어리 저장
-        logger.info("Diary saved successfully: {}", diary);  // 다이어리 저장 완료 로그
-
+        diaryService.saveDiary(diary);
         return ResponseEntity.ok("Diary created successfully");
     }
 
-
     @GetMapping
     public ResponseEntity<List<DiaryBoardFRM>> listDiaries(HttpSession session) {
-        logger.info("Requesting diary list");  // 다이어리 목록 요청 로그
-
         Long userId = (Long) session.getAttribute("userId");
         UserENT loginUser = userService.getLoginUserById(userId);
         if (loginUser == null) {
-            logger.error("Logged in user not found.");
             return ResponseEntity.badRequest().body(null);
         }
 
-        List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId); // 사용자에게 보여줄 다이어리 필터링
+        List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
             List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
-                    .map(picture -> Base64.getEncoder().encodeToString(picture))  // byte[] 데이터를 Base64 문자열로 변환
+                    .map(picture -> Base64.getEncoder().encodeToString(picture))
                     .collect(Collectors.toList()) : null;
 
             return new DiaryBoardFRM(
@@ -88,11 +78,10 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                     diary.getContent(),
                     pictureBase64List,
                     diary.getRegdate(),
-                    diary.getIsPublic() == 1L
+                    diary.getIsPublic()
             );
         }).collect(Collectors.toList());
 
-        logger.info("Diary list retrieved successfully");  // 다이어리 목록 조회 완료 로그 출력
         return ResponseEntity.ok(diaryForms);
     }
 
@@ -121,7 +110,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                 diary.getContent(),
                 pictureBase64List,
                 diary.getRegdate(),
-                diary.getIsPublic() == 1L
+                diary.getIsPublic()
         );
 
         logger.info("Diary detail retrieved successfully: Diary ID {}", id);  // 로그: 다이어리 상세 조회 성공

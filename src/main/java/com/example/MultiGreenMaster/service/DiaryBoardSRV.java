@@ -46,10 +46,12 @@ public class DiaryBoardSRV {
         return diaryRepository.findByDisableFalse(); // 비활성화되지 않은 게시글 조회
     }
 
-    // 사용자의 다이어리와 공개 여부에 따른 다이어리 조회 메서드 추가
+    // 사용자의 다이어리와 공개 여부에 따른 다이어리 조회 메서드 (친구 관련 기능 없음)
     public List<DiaryBoardENT> findDiariesForUser(Long userId) {
         return diaryRepository.findAll().stream()
-                .filter(diary -> diary.getIsPublic() == 1L || diary.getUser().getId().equals(userId))  // 공개된 다이어리거나 사용자 본인의 다이어리만 필터링
+                .filter(diary ->
+                        diary.getIsPublic() == 1L ||  // 전체 공개
+                                diary.getUser().getId().equals(userId))  // 사용자 본인의 다이어리만 필터링
                 .collect(Collectors.toList());
     }
 

@@ -40,7 +40,7 @@ public class DiaryBoardENT {
     private boolean disable; // 비활성화 여부
 
     @Column(nullable = false)
-    private Long isPublic; // 공개 여부
+    private Long isPublic; // 0 = 비공개, 1 = 전체 공개, 2 = 친구에게만 공개
 
     @PrePersist
     protected void onCreate() {

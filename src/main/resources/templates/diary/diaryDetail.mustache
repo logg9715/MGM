@@ -1,83 +1,100 @@
 {{> layouts/header}}
 
-<h1 id="diaryTitle"></h1>
-<p id="diaryAuthor"></p>
-<p id="diaryContent"></p>
-<div id="diaryImages"></div>
-<p id="diaryRegdate"></p>
+<div class="container">
+    <h1 id="diaryTitle"></h1>
+    <p id="diaryAuthor"></p>
+    <p id="diaryContent"></p>
+    <div id="diaryImages"></div>
+    <p id="diaryRegdate"></p>
 
-<button id="editDiaryButton" onclick="editDiary()">수정</button>
-<button id="deleteDiaryButton" onclick="deleteDiary()">삭제</button>
+    <button id="editDiaryButton" class="btn btn-primary">수정</button>
+    <button id="deleteDiaryButton" class="btn btn-danger">삭제</button>
 
-<form id="editDiaryForm" style="display:none;">
-    <input type="text" id="editDiaryTitle" required>
-    <textarea id="editDiaryContent" required></textarea>
-    <input type="file" id="editDiaryImages" multiple>
-    <button type="submit">수정 완료</button>
-</form>
+    <form id="editDiaryForm" style="display:none;" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="editDiaryTitle">제목</label>
+            <input type="text" class="form-control" id="editDiaryTitle" required>
+        </div>
+        <div class="form-group">
+            <label for="editDiaryContent">내용</label>
+            <textarea class="form-control" id="editDiaryContent" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="editDiaryImages">사진 추가</label>
+            <input type="file" id="editDiaryImages" class="form-control" multiple>
+        </div>
+        <button type="submit" class="btn btn-success">수정 완료</button>
+    </form>
+</div>
 
 {{> layouts/footer}}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var diaryId = {{diary.id}}; // diaryId를 서버에서 전달
+        // URL 경로에서 diaryId를 추출 (예: /diaries/detail/123)
+        const pathSegments = window.location.pathname.split('/');
+        const diaryId = pathSegments[pathSegments.length - 1];  // 마지막 경로 값을 diaryId로 설정
 
-    // 다이어리 상세 정보를 불러오기
-    fetch('/api/diaries/' + diaryId)
-        .then(response => response.text()) // 응답을 텍스트 형식으로 변환
-        .then(data => {
-            if (data === "This diary has been disabled.") {
-                alert("비활성화된 일기장입니다.");
-                document.getElementById('diaryTitle').textContent = "비활성화된 일기장입니다.";
-                document.getElementById('diaryAuthor').textContent = "";
-                document.getElementById('diaryContent').textContent = "이 일기장은 더 이상 볼 수 없습니다.";
-                return;
-            }
+        if (!diaryId) {
+            alert('일기 ID가 존재하지 않습니다.');
+            return;
+        }
 
-            var diary = JSON.parse(data);  // JSON 문자열을 JavaScript 객체로 변환
-            // 다이어리 정보 설정
-            document.getElementById('diaryTitle').textContent = diary.title;
-            document.getElementById('diaryAuthor').innerHTML = '작성자: <a href="/user/' + diary.user.id + '/guestbook">' + diary.user.nickname + '</a>';
-            document.getElementById('diaryContent').textContent = diary.content;
-            document.getElementById('diaryRegdate').textContent = '작성시간: ' + diary.regdate;
+        // 다이어리 상세 정보를 불러오기
+        fetch('/api/diaries/' + diaryId)
+            .then(response => response.json())  // 응답을 JSON 형식으로 변환
+            .then(data => {
+                if (data === "This diary has been disabled.") {
+                    alert("비활성화된 일기장입니다.");
+                    document.getElementById('diaryTitle').textContent = "비활성화된 일기장입니다.";
+                    document.getElementById('diaryAuthor').textContent = "";
+                    document.getElementById('diaryContent').textContent = "이 일기장은 더 이상 볼 수 없습니다.";
+                    return;
+                }
 
-            // 다이어리 이미지 설정
-            var diaryImages = document.getElementById('diaryImages');
-            if (diary.pictureBase64List && diary.pictureBase64List.length > 0) {
-                diary.pictureBase64List.forEach(image => {
-                    var img = document.createElement('img');
-                    img.src = 'data:image/jpeg;base64,' + image;
-                    img.alt = 'Diary Image';
-                    diaryImages.appendChild(img);
-                });
-            } else {
-                diaryImages.textContent = '이미지가 없습니다.';
-            }
+                // 다이어리 데이터 설정
+                document.getElementById('diaryTitle').textContent = data.title;
+                document.getElementById('diaryAuthor').innerHTML = '작성자: <a href="/user/' + data.user.id + '/guestbook">' + data.user.nickname + '</a>';
+                document.getElementById('diaryContent').textContent = data.content;
+                document.getElementById('diaryRegdate').textContent = '작성시간: ' + data.regdate;
 
-            // 수정 폼에 기존 값 설정
-            document.getElementById('editDiaryTitle').value = diary.title;
-            document.getElementById('editDiaryContent').value = diary.content;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
+                // 다이어리 이미지 설정
+                const diaryImages = document.getElementById('diaryImages');
+                if (data.pictureBase64List && data.pictureBase64List.length > 0) {
+                    data.pictureBase64List.forEach(image => {
+                        const img = document.createElement('img');
+                        img.src = 'data:image/jpeg;base64,' + image;
+                        img.alt = 'Diary Image';
+                        img.classList.add('img-fluid', 'img-thumbnail', 'mb-3'); // 스타일 추가
+                        diaryImages.appendChild(img);
+                    });
+                } else {
+                    diaryImages.textContent = '이미지가 없습니다.';
+                }
 
+                // 수정 폼에 기존 제목과 내용 설정
+                document.getElementById('editDiaryTitle').value = data.title;
+                document.getElementById('editDiaryContent').value = data.content;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
-        // 다이어리 수정 버튼 클릭 이벤트
+        // 수정 버튼 클릭 시 수정 폼 표시
         document.getElementById('editDiaryButton').addEventListener('click', function() {
             document.getElementById('editDiaryForm').style.display = 'block';
         });
 
-        // 다이어리 수정 폼 제출 이벤트
+        // 수정 폼 제출 처리
         document.getElementById('editDiaryForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            var formData = new FormData();
+            const formData = new FormData();
             formData.append('title', document.getElementById('editDiaryTitle').value);
             formData.append('content', document.getElementById('editDiaryContent').value);
-            var images = document.getElementById('editDiaryImages').files;
-            for (var i = 0; i < images.length; i++) {
+
+            const images = document.getElementById('editDiaryImages').files;
+            for (let i = 0; i < images.length; i++) {
                 formData.append('pictures', images[i]);
             }
 
@@ -88,14 +105,14 @@
             .then(response => response.text())
             .then(result => {
                 alert(result);
-                window.location.reload(); // 수정 후 페이지 새로고침
+                window.location.reload();  // 수정 후 페이지 새로고침
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         });
 
-        // 다이어리 삭제 버튼 클릭 이벤트
+        // 삭제 버튼 처리
         document.getElementById('deleteDiaryButton').addEventListener('click', function() {
             if (confirm('이 다이어리를 삭제하시겠습니까?')) {
                 fetch('/api/diaries/' + diaryId + '/delete', {
@@ -104,7 +121,7 @@
                 .then(response => response.text())
                 .then(result => {
                     alert(result);
-                    window.location.href = '/diaries'; // 삭제 후 목록 페이지로 이동
+                    window.location.href = '/diaries';  // 삭제 후 목록 페이지로 이동
                 })
                 .catch(error => {
                     console.error('Error:', error);
