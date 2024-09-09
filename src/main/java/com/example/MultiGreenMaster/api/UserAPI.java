@@ -32,8 +32,10 @@ public class UserAPI {
         UserENT user = form.toEntity();
         log.info(user.toString());
 
-        // 아이디 중복체크
+        // 중복체크
+        if (form.getId() != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         if (userService.isLoginIdDuplicate(user.getLoginId())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (userService.isNicknameDuplicate(user.getNickname())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         return ResponseEntity.ok(userService.saveUser(user));
     }
