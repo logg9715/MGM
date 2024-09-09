@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 양식 검토
         if(hasFormError(data)) return;
 
-        fetch('/api/users/join', {
+        fetch('/api/users/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

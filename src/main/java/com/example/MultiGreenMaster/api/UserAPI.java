@@ -40,6 +40,7 @@ public class UserAPI {
         return ResponseEntity.ok(userService.saveUser(user));
     }
 
+    /*
     //회원가입할 때
     @PostMapping("/join")
     public UserENT joinUser(@RequestBody UserFRM form) {
@@ -49,6 +50,7 @@ public class UserAPI {
         log.info(user.toString());
         return userService.saveUser(user);
     }
+    */
 
     @PostMapping("/update")
     public ResponseEntity<UserENT> updateUser(@RequestParam Long id, @RequestBody UserFRM form, HttpServletRequest request) {
@@ -85,19 +87,19 @@ public class UserAPI {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/{id}/guestbook")
-    public ResponseEntity<?> getUserGuestbook(@PathVariable Long id) {
+    @GetMapping("/{id}/last3comment")
+    public ResponseEntity<?> getUserLastComment(@PathVariable Long id) {
         UserENT user = userService.findUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build(); // 유저가 없으면 404 Not Found 반환
         }
 
-        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecomments(id);
+        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecommentsLast2(id);
 
         return ResponseEntity.ok().body(comments); // 댓글과 대댓글 리스트를 JSON 형식으로 반환
     }
 
-    /* 테스트용 메소드 */
+    /* 테스트용 메소드 지울예정 */
     @GetMapping("/tmp/{id}")
     public ResponseEntity<UserENT> tmp(@PathVariable Long id) {
         UserENT target = userService.getLoginUserById(id);

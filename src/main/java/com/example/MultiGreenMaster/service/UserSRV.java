@@ -177,6 +177,31 @@ public class UserSRV {
                 .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
                 .collect(Collectors.toList());
     }
+
+    public List<CommentResponseFRM> getUserCommentsAndRecommentsLast2(Long userId) {
+        // 사용자의 댓글을 가져오기
+        List<FreeBoardCommentENT> comments = commentRepository.findRecentCommentsByUserId(userId);
+
+        // 댓글과 대댓글을 하나의 리스트로 병합
+        List<CommentResponseFRM> responses = new ArrayList<>();
+
+        comments.forEach(comment -> {
+            CommentResponseFRM response = new CommentResponseFRM();
+            response.setId(comment.getId());
+            response.setContent(comment.getContent());
+            response.setRegdate(comment.getRegdate());
+            response.setLikeCount(comment.getLikeCount());
+            response.setType("comment");
+            responses.add(response);
+        });
+
+        // regdate 기준으로 내림차순 정렬
+        return responses.stream()
+                .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
+                .collect(Collectors.toList());
+    }
+
+
     @Autowired
     private FriendREP friendRepository;
 
