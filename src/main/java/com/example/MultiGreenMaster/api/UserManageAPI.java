@@ -18,8 +18,8 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/users") // 기본 경로 설정
-public class UserAPI {
+@RequestMapping("/api/usermanage") // 기본 경로 설정
+public class UserManageAPI {
 
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
