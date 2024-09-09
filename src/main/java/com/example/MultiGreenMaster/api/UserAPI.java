@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,16 @@ public class UserAPI {
 
     //admin페이지에서 직접 사용자 추가할 때
     @PostMapping("/create")
-    public UserENT createUser(@RequestBody UserFRM form) {
+    public ResponseEntity<UserENT> createUser(@RequestBody UserFRM form) {
         // 새로운 사용자를 생성
         log.info(form.toString());
         UserENT user = form.toEntity();
         log.info(user.toString());
-        return userService.saveUser(user);
+
+        // 아이디 중복체크
+        if (userService.isLoginIdDuplicate(user.getLoginId())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
     //회원가입할 때
@@ -88,5 +93,12 @@ public class UserAPI {
         List<CommentResponseFRM> comments = userService.getUserCommentsAndRecomments(id);
 
         return ResponseEntity.ok().body(comments); // 댓글과 대댓글 리스트를 JSON 형식으로 반환
+    }
+
+    /* 테스트용 메소드 */
+    @GetMapping("/tmp/{id}")
+    public ResponseEntity<UserENT> tmp(@PathVariable Long id) {
+        UserENT target = userService.getLoginUserById(id);
+        return ResponseEntity.ok(target);
     }
 }
