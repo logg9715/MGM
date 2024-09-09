@@ -74,4 +74,6 @@
 	UserSRV =  유저 정보
 
 - session : 세션 로그인 관련
+
+- config : 프론트 cros 관련 패키지
 	

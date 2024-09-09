@@ -1,4 +1,4 @@
-package com.example.Flower.config;
+package com.example.MultiGreenMaster.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
