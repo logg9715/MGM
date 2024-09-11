@@ -95,8 +95,8 @@ public class DiaryBoardAPI extends SessionCheckCTL {
 
         if (diary.isDisable()) {
             logger.warn("Attempted access to disabled diary: Diary ID {}", id);  // 비활성화된 다이어리 접근 시 로그 출력
-            // 비활성화된 다이어리에 대한 메시지를 반환
-            return ResponseEntity.ok("This diary has been disabled.");
+            // 비활성화된 다이어리 접근 시 일기장 리스트로 리다이렉트
+            return ResponseEntity.status(302).header("Location", "/diaries").build();
         }
 
         List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
