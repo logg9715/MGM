@@ -7,6 +7,7 @@ import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import com.example.MultiGreenMaster.service.UserSRV;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class AnnounceBoardAPI extends SessionCheckCTL {
     /* 새 공지사항 제출 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create")
-    public ResponseEntity<AnnounceBoardENT> createAnnounce(AnnounceBoardFRM form, Model model) {  //DTO AnnounceForm
+    public ResponseEntity<AnnounceBoardENT> createAnnounce(@RequestBody AnnounceBoardFRM form, Model model) {  //DTO AnnounceForm
         AnnounceBoardENT announce = form.toEntity();
         AnnounceBoardENT saved = announceRepository.save(announce);
         return ResponseEntity.ok(saved);
@@ -45,7 +46,23 @@ public class AnnounceBoardAPI extends SessionCheckCTL {
     @GetMapping("/{id}")
     public ResponseEntity<AnnounceBoardENT> show(@PathVariable("id") Long id) {
         AnnounceBoardENT announceEntity = announceRepository.findById(id).orElse(null);
+        if(announceEntity == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return ResponseEntity.ok(announceEntity);
+    }
+
+    /* 공지사항 수정 제출 */
+    @PatchMapping("/edit")
+    public ResponseEntity<AnnounceBoardENT> edit(@RequestBody AnnounceBoardFRM form) {
+        AnnounceBoardENT newData = form.toEntity();
+        System.out.println("@@@@ : 폼 id " + newData.getContent());
+        AnnounceBoardENT target = announceRepository.findById(newData.getId()).orElse(null);
+
+        if(target == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();    // 코드가 없거나 존재하지 않는 글일 경우 튕겨냄
+        else
+            target.patch(newData);
+
+        return ResponseEntity.ok( announceRepository.save(target));
     }
 
     /* 공지사항 삭제(비활성화) */

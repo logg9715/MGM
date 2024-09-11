@@ -1,11 +1,14 @@
 package com.example.MultiGreenMaster.dto;
 
 import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@Getter
+@Setter
 public class AnnounceBoardFRM {
     private Long id;
     private String title; // 제목을 받을 필드
