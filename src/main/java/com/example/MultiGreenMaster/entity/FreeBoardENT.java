@@ -32,8 +32,8 @@ public class FreeBoardENT {
     @Column(name = "content", nullable = true) // "content"라는 이름의 열을 정의하고 null 값을 허용
     private String content; // 게시글 내용
 
-    @Column(name = "like_count")
-    private int likeCount; // 좋아요 갯수
+    /*@Column(name = "like_count")
+    private int likeCount; // 좋아요 갯수 */
 
     @Column
     private LocalDateTime regdate; // 글 작성시간
@@ -65,9 +65,9 @@ public class FreeBoardENT {
     }
 
     // 좋아요 수 증가 메서드
-    public void incrementLikeCount() {
+    /*public void incrementLikeCount() {
         this.likeCount++;
-    }
+    }*/
 }
 
 

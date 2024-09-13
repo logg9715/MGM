@@ -25,18 +25,18 @@ public class FreeBoardFRM {
     private String content; // 게시글 내용
     private List<MultipartFile> pictures; // 사진 리스트 (파일 형식)
     private List<String> pictureBase64List; // 사진 리스트 (Base64 인코딩 형식)
-    private int likeCount; // 좋아요 갯수
+    //private int likeCount; // 좋아요 갯수
     private LocalDateTime regdate; // 작성 시간
     private int count; // 조회수
 
     // 생성자 - MultipartFile을 포함하지 않음
-    public FreeBoardFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, int likeCount, LocalDateTime regdate, int count) {
+    public FreeBoardFRM(Long id, UserENT user, String title, String content, List<String> pictureBase64List, LocalDateTime regdate, int count) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
         this.pictureBase64List = pictureBase64List;
-        this.likeCount = likeCount;
+        //this.likeCount = likeCount;
         this.regdate = regdate;
         this.count = count;
     }
@@ -61,7 +61,7 @@ public class FreeBoardFRM {
                 .title(this.title)
                 .content(this.content)
                 .pictures(pictures)
-                .likeCount(this.likeCount)
+                //.likeCount(this.likeCount)
                 .regdate(this.regdate != null ? this.regdate : LocalDateTime.now())
                 .count(this.count)
                 .disable(false)

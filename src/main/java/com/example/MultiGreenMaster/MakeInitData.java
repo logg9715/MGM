@@ -76,7 +76,7 @@ public class MakeInitData {
                 .title("게시글 1")
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 12, 10, 30))
                 .user(user1)
                 .build();
@@ -86,7 +86,7 @@ public class MakeInitData {
                 .title("게시글 2")
                 .content("이 글은 게시글 2입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 12, 10, 30))
                 .user(user1)
                 .build();
@@ -96,7 +96,7 @@ public class MakeInitData {
                 .title("게시글 3")
                 .content("이 글은 게시글 3입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 13, 10, 30))
                 .user(user3)
                 .build();
@@ -106,7 +106,7 @@ public class MakeInitData {
                 .title("게시글 4")
                 .content("이 글은 게시글 4입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 13, 12, 40))
                 .user(user2)
                 .build();
@@ -116,7 +116,7 @@ public class MakeInitData {
                 .title("게시글 5")
                 .content("이 글은 게시글 5입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 8, 15, 11, 36))
                 .user(user1)
                 .build();
@@ -126,7 +126,7 @@ public class MakeInitData {
                 .title("게시글 6")
                 .content("이 글은 게시글 6입니다.")
                 .count(0)
-                .likeCount(0)
+                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 8, 22, 5, 20))
                 .user(user3)
                 .build();
