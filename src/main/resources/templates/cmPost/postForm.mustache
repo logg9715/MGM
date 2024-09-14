@@ -36,7 +36,7 @@
         event.preventDefault();
         var formData = new FormData(this);
 
-        fetch('/api/posts/create', {
+        fetch('/api/freeboard/create', {
             method: 'POST',
             body: formData
         })

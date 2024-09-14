@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/posts") // "/posts" 경로와 매핑
+@RequestMapping("/freeboard") // "/posts" 경로와 매핑
 public class FreeBoardCTL extends SessionCheckCTL {
 
     private static final Logger logger = LoggerFactory.getLogger(FreeBoardCTL.class); // 로그 설정
@@ -61,7 +61,7 @@ public class FreeBoardCTL extends SessionCheckCTL {
                     post.getTitle(),
                     post.getContent(),
                     pictureBase64List,
-                    post.getLikeCount(),
+                    //post.getLikeCount(),
                     post.getRegdate(),
                     post.getCount()
             );
@@ -86,7 +86,7 @@ public class FreeBoardCTL extends SessionCheckCTL {
                     post.getTitle(),
                     post.getContent(),
                     pictureBase64List,
-                    post.getLikeCount(),
+                    //post.getLikeCount(),
                     post.getRegdate(),
                     post.getCount()
             );
@@ -98,7 +98,7 @@ public class FreeBoardCTL extends SessionCheckCTL {
         }
         return "cmPost/postDetail"; // "postDetail" 뷰를 반환
     }
-
+/*
     @PostMapping("/{id}/like")
     @ResponseBody
     public int likePost(@PathVariable Long id) {
@@ -107,4 +107,6 @@ public class FreeBoardCTL extends SessionCheckCTL {
         FreeBoardENT post = cmPostService.findPostById(id);
         return post != null ? post.getLikeCount() : 0;
     }
+
+ */
 }

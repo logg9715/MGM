@@ -4,7 +4,7 @@
 <p id="postAuthor"></p>
 <p id="postContent"></p>
 <div id="postImages"></div>
-<p id="postLikeCount"></p>
+<!--<p id="postLikeCount"></p>-->
 <button id="likePost">좋아요</button>
 <p id="postCount"></p>
 <p id="postRegdate"></p>
@@ -36,7 +36,7 @@
         var postId = {{post.id}}; // postId는 서버 사이드에서 렌더링하여 전달
 
         // 게시글 상세 정보를 불러오기
-        fetch('/api/posts/' + postId)
+        fetch('/api/freeboard/' + postId)
             .then(response => {
                 if (response.status === 302) {  // 리다이렉트 응답 처리
                     alert('이 게시글은 삭제되었습니다.');
@@ -51,7 +51,7 @@
                 document.getElementById('postTitle').textContent = post.title;
                 document.getElementById('postAuthor').innerHTML = '작성자: <a href="/user/' + post.user.id + '/guestbook">' + post.user.nickname + '</a>';
                 document.getElementById('postContent').textContent = post.content;
-                document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + post.likeCount;
+                //document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + post.likeCount;
                 document.getElementById('postCount').textContent = '조회수: ' + post.count;
                 document.getElementById('postRegdate').textContent = '작성시간: ' + post.regdate;
 
@@ -89,7 +89,7 @@
                 formData.append('pictures', images[i]);
             }
 
-            fetch('/api/posts/' + postId + '/update', {
+            fetch('/api/freeboard/' + postId + '/update', {
                 method: 'PUT',
                 body: formData
             })
@@ -106,7 +106,7 @@
         // 게시글 삭제 버튼 클릭 이벤트
         document.getElementById('deletePost').addEventListener('click', function() {
             if (confirm('이 게시글을 삭제하시겠습니까?')) {
-                fetch('/api/posts/' + postId + '/delete', {
+                fetch('/api/freeboard/' + postId + '/delete', {
                     method: 'PUT'
                 })
                 .then(response => response.text())
@@ -121,7 +121,7 @@
         });
 
         // 댓글 목록을 불러오기
-        fetch('/api/comments/post/' + postId)
+        fetch('/api/freeboardcomment/post/' + postId)
             .then(response => response.json())
             .then(comments => {
                 const commentList = document.getElementById('commentList');
@@ -176,12 +176,12 @@
 
         // 게시글 좋아요 버튼 클릭 이벤트
         document.getElementById('likePost').addEventListener('click', function() {
-            fetch('/api/posts/' + postId + '/like', {
+            fetch('/api/freeboard/' + postId + '/like', {
                 method: 'POST'
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + data;
+                //document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + data;
             });
         });
 
@@ -191,7 +191,7 @@
             var formData = new FormData(this);
             formData.append('cmPostId', postId);
 
-            fetch('/api/comments/create', {  // 댓글 작성 경로 수정
+            fetch('/api/freeboardcomment/create', {  // 댓글 작성 경로 수정
                 method: 'POST',
                 body: formData
             })
@@ -209,7 +209,7 @@
         document.body.addEventListener('click', function(event) {
             if (event.target.classList.contains('likeComment')) {
                 var commentId = event.target.getAttribute('data-comment-id');
-                fetch('/api/comments/' + commentId + '/like', {
+                fetch('/api/freeboardcomment/' + commentId + '/like', {
                     method: 'POST'
                 })
                 .then(response => response.json())
@@ -227,7 +227,7 @@
             if (event.target.classList.contains('deleteComment')) {
                 var commentId = event.target.getAttribute('data-comment-id');
                 if (confirm('이 댓글을 삭제하시겠습니까?')) {
-                    fetch('/api/comments/' + commentId + '/delete', {
+                    fetch('/api/freeboardcomment/' + commentId + '/delete', {
                         method: 'PUT'
                     })
                     .then(response => response.text())
@@ -249,7 +249,7 @@
                 var commentId = form.getAttribute('data-comment-id');
                 var formData = new FormData(form);
 
-                fetch('/api/comments/' + commentId + '/update', {  // 댓글 수정
+                fetch('/api/freeboardcomment/' + commentId + '/update', {  // 댓글 수정
                     method: 'PUT',
                     body: formData
                 })
@@ -272,7 +272,7 @@
                 formData.append('cmPostId', postId); // 대댓글 작성 시 cmPostId를 추가
                 formData.append('cmCommentId', commentId); // 대댓글 작성 시 cmCommentId를 추가
 
-                fetch('/api/comments/' + commentId + '/create', {  // 대댓글 작성 경로 수정
+                fetch('/api/freeboardcomment/' + commentId + '/create', {  // 대댓글 작성 경로 수정
                     method: 'POST',
                     body: formData
                 })

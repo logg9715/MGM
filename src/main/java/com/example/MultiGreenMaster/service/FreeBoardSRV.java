@@ -42,7 +42,7 @@ public class FreeBoardSRV {
             savePost(post);  // 업데이트된 게시글 저장
         }
     }
-
+/*
     public void incrementLikeCount(Long id) {
         FreeBoardENT post = findPostById(id);
         if (post != null) {
@@ -50,7 +50,7 @@ public class FreeBoardSRV {
             savePost(post);  // 업데이트된 게시글 저장
         }
     }
-
+*/
     public List<FreeBoardENT> findTop4PostsDesc() {
         return freeBoardREP.findTop4ByOrderByRegdateDesc();  // 최신 게시글 4개 조회
     }

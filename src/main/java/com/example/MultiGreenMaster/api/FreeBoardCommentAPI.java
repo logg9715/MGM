@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments") // "/api/comments" 경로와 매핑
+@RequestMapping("/api/freeboardcomment") // "/api/comments" 경로와 매핑
 public class FreeBoardCommentAPI extends SessionCheckCTL {
 
     private static final Logger logger = LoggerFactory.getLogger(FreeBoardCommentAPI.class); // 로그 설정
