@@ -55,7 +55,7 @@ public class FreeBoardSRV {
         return freeBoardREP.findTop4ByOrderByRegdateDesc();  // 최신 게시글 4개 조회
     }
 
-    public List<FreeBoardENT> findPostsByUserId(Long userId) {
-        return freeBoardREP.findByUserIdOrderByRegdateDesc(userId);  // 사용자의 게시글 조회
+    public List<FreeBoardENT> findLast3FreeboardByUserId(Long userId) {
+        return freeBoardREP.findTop3ByUserIdOrderByRegdateDesc(userId);  // 사용자의 게시글 조회
     }
 }

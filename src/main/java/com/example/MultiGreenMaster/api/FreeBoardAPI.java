@@ -160,10 +160,10 @@ public class FreeBoardAPI extends SessionCheckCTL {
     }
 
     // 특정 사용자가 작성한 게시글을 내림차순으로 반환
-    @GetMapping("/user/{userId}/posts")
+    @GetMapping("/{userId}/last3freeboard")
     public ResponseEntity<List<FreeBoardFRM>> getPostsByUser(@PathVariable Long userId) {
         logger.info("Requesting posts by user: User ID {}", userId); // 사용자의 게시글 요청
-        List<FreeBoardENT> posts = freeBoardSRV.findPostsByUserId(userId); // 사용자의 게시글 조회
+        List<FreeBoardENT> posts = freeBoardSRV.findLast3FreeboardByUserId(userId); // 사용자의 게시글 조회
         List<FreeBoardFRM> postForms = posts.stream().map(post -> { // 각 게시글을 CMPostForm으로 변환
             List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
                     .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환

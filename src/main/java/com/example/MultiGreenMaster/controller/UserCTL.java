@@ -124,7 +124,7 @@ public class UserCTL extends SessionCheckCTL {
             return "redirect:/"; // 유저가 없으면 홈으로 리다이렉트
         }
 
-        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecomments(id);
+        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecommentsLast2(id);
 
         model.addAttribute("user", user);
         model.addAttribute("comments", comments);
