@@ -1,13 +1,13 @@
 package com.example.MultiGreenMaster.service;
 
-import com.example.MultiGreenMaster.dto.CommentResponseFRM;
-import com.example.MultiGreenMaster.dto.JoinRequestFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoardREP;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 public class UserSRV {
     @Autowired
     private UserREP userRepository; // UserRepository 의존성 주입
+
+    @Autowired
+    private FreeBoardCommentREP freeBoardCommentREP;
 
     public UserENT getLoginUserById(Long userId) {
         if (userId == null) return null; // userId가 null인 경우 null 반환
@@ -60,11 +63,6 @@ public class UserSRV {
          return user; // 로그인 성공 시 User 객체 반환
      }
 
-    //회원 가입 메서드
-    public void join(JoinRequestFRM req) {
-        userRepository.save(req.toEntity()); // JoinRequest 객체를 엔티티로 변환하여 저장
-    }
-
     //활성화된 사용자만 조회
     public List<UserENT> findAllUsers() {
         return userRepository.findByDisableFalse();
@@ -82,9 +80,9 @@ public class UserSRV {
         return userRepository.findById(id).orElse(null);
     }
 
+    /* 회원가입 */
     @Transactional
     public UserENT saveUser(UserENT user) {
-        // 새로운 사용자를 저장
         return userRepository.save(user);
     }
 
@@ -150,24 +148,19 @@ public class UserSRV {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
-
-
-    private final FreeBoardCommentREP commentRepository;
-
     //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
-    public List<CommentResponseFRM> getUserCommentsAndRecomments(Long userId) {
+    public List<FreeBoardCommentFRM> getUserCommentsAndRecomments(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<FreeBoardCommentENT> comments = commentRepository.findByUser_Id(userId);
+        List<FreeBoardCommentENT> comments = freeBoardCommentREP.findByUser_Id(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
-        List<CommentResponseFRM> responses = new ArrayList<>();
+        List<FreeBoardCommentFRM> responses = new ArrayList<>();
 
         comments.forEach(comment -> {
-            CommentResponseFRM response = new CommentResponseFRM();
+            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setType("comment");
             responses.add(response);
         });
 
@@ -177,19 +170,18 @@ public class UserSRV {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResponseFRM> getUserCommentsAndRecommentsLast2(Long userId) {
+    public List<FreeBoardCommentFRM> getUserCommentsAndRecommentsLast3(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<FreeBoardCommentENT> comments = commentRepository.findRecentCommentsByUserId(userId);
+        List<FreeBoardCommentENT> comments = freeBoardCommentREP.findRecentCommentsByUserId(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
-        List<CommentResponseFRM> responses = new ArrayList<>();
+        List<FreeBoardCommentFRM> responses = new ArrayList<>();
 
         comments.forEach(comment -> {
-            CommentResponseFRM response = new CommentResponseFRM();
+            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setType("comment");
             responses.add(response);
         });
 

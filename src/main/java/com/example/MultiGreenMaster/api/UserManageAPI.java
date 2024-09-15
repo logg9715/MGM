@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.api;
 
-import com.example.MultiGreenMaster.dto.CommentResponseFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -85,18 +85,6 @@ public class UserManageAPI {
         Map<String, Boolean> response = new HashMap<>();
         response.put("isDuplicate", isDuplicate);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{id}/last3comment")
-    public ResponseEntity<?> getUserLastComment(@PathVariable Long id) {
-        UserENT user = userService.findUserById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build(); // 유저가 없으면 404 Not Found 반환
-        }
-
-        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecommentsLast2(id);
-
-        return ResponseEntity.ok().body(comments); // 댓글과 대댓글 리스트를 JSON 형식으로 반환
     }
 
     /* 테스트용 메소드 지울예정 */

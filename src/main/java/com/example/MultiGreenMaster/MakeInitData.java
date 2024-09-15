@@ -163,6 +163,22 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment4);
 
+        FreeBoardCommentENT cmcomment5 = FreeBoardCommentENT.builder()
+                .content("이 글은 5번 댓글입니다.")
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 56))
+                .user(user1)
+                .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
+                .build();
+        cmCommentRepository.save(cmcomment5);
+
+        FreeBoardCommentENT cmcomment6 = FreeBoardCommentENT.builder()
+                .content("이 글은 6번 댓글입니다.")
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 57))
+                .user(user1)
+                .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
+                .build();
+        cmCommentRepository.save(cmcomment6);
+
         // 일기장
 
         DiaryBoardENT diary1 = DiaryBoardENT.builder()
