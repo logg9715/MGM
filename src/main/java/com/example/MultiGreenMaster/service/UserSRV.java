@@ -167,7 +167,6 @@ public class UserSRV {
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setLikeCount(comment.getLikeCount());
             response.setType("comment");
             responses.add(response);
         });
@@ -190,7 +189,6 @@ public class UserSRV {
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setLikeCount(comment.getLikeCount());
             response.setType("comment");
             responses.add(response);
         });

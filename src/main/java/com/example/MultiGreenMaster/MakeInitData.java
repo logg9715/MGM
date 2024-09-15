@@ -133,7 +133,6 @@ public class MakeInitData {
         //댓글
         FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.")
-                .likeCount(1)
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
                 .user(user1)
                 .cmPost(cmpost6)
@@ -142,7 +141,6 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment2 = FreeBoardCommentENT.builder()
                 .content("이 글은 2번 댓글입니다.")
-                .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 2, 5, 45))
                 .user(user3)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
@@ -151,7 +149,6 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment3 = FreeBoardCommentENT.builder()
                 .content("이 글은 3번 댓글입니다.")
-                .likeCount(4)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 45))
                 .user(user2)
                 .cmPost(cmpost1) // 댓글이 달릴 게시글을 설정
@@ -160,7 +157,6 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment4 = FreeBoardCommentENT.builder()
                 .content("이 글은 4번 댓글입니다.")
-                .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 55))
                 .user(user1)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정

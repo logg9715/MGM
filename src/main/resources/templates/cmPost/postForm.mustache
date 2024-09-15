@@ -43,7 +43,7 @@
         .then(response => response.text())
         .then(result => {
             alert(result);
-            window.location.href = '/posts'; // 작성 후 게시글 목록으로 이동
+            window.location.href = '/freeboard'; // 작성 후 게시글 목록으로 이동
         })
         .catch(error => {
             console.error('Error:', error);

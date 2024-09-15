@@ -22,7 +22,6 @@ public class FreeBoardCommentFRM {
     private FreeBoardENT cmPostId; // 게시글 ID
     private UserENT userId; // 사용자 ID
     private String content; // 댓글 내용
-    private int likeCount; // 댓글 좋아요
     private LocalDateTime regdate; // 작성 시간
     private Long parentCommentId; // 부모 댓글 ID
 
@@ -33,7 +32,6 @@ public class FreeBoardCommentFRM {
                 .user(userId)
                 .cmPost(cmPostId)
                 .content(content)
-                .likeCount(likeCount)
                 .regdate(regdate)
                 .disable(false)
                 .build();
