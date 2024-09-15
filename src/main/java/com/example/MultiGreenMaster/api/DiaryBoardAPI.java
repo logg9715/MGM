@@ -4,6 +4,8 @@ import com.example.MultiGreenMaster.controller.SessionCheckCTL;
 import com.example.MultiGreenMaster.dto.DiaryBoardFRM;
 import com.example.MultiGreenMaster.entity.DiaryBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
+import com.example.MultiGreenMaster.exeption.DiaryDeleteExcption;
+import com.example.MultiGreenMaster.exeption.DiaryNotFoundException;
 import com.example.MultiGreenMaster.service.DiaryBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
@@ -78,6 +80,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                     diary.getContent(),
                     pictureBase64List,
                     diary.getRegdate(),
+                    diary.isDisable(),
                     diary.getIsPublic()
             );
         }).collect(Collectors.toList());
@@ -88,15 +91,16 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     @GetMapping("/{id}")
     public ResponseEntity<?> getDiary(@PathVariable Long id) {
         logger.info("Requesting diary detail: Diary ID {}", id);  // 로그: 다이어리 상세 조회 요청
+
         DiaryBoardENT diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
         if (diary == null) {
-            return ResponseEntity.notFound().build();  // 다이어리를 찾지 못한 경우 404 응답 반환
+            logger.error("Diary not found: Diary ID {}", id);  // 존재하지 않는 게시글에 접근 시 오류 로그
+            return ResponseEntity.status(404).body("Diary not found.");  // 404 오류 반환
         }
 
         if (diary.isDisable()) {
-            logger.warn("Attempted access to disabled diary: Diary ID {}", id);  // 비활성화된 다이어리 접근 시 로그 출력
-            // 비활성화된 다이어리에 대한 메시지를 반환
-            return ResponseEntity.ok("This diary has been disabled.");
+            logger.error("Attempt to access a deleted diary. Diary ID {}", id);  // 삭제된 게시글에 접근 시 오류 로그
+            return ResponseEntity.status(410).body("This diary has been deleted.");  // 410 Gone 오류 반환
         }
 
         List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
@@ -110,6 +114,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                 diary.getContent(),
                 pictureBase64List,
                 diary.getRegdate(),
+                diary.isDisable(),
                 diary.getIsPublic()
         );
 

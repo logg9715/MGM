@@ -1,6 +1,8 @@
 package com.example.MultiGreenMaster.controller;
 
 import com.example.MultiGreenMaster.entity.DiaryBoardENT;
+import com.example.MultiGreenMaster.exeption.DiaryDeleteExcption;
+import com.example.MultiGreenMaster.exeption.DiaryNotFoundException;
 import com.example.MultiGreenMaster.service.DiaryBoardSRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,12 +34,14 @@ public class DiaryBoardCTL extends SessionCheckCTL
     // 일기장 상세 조회 페이지 매핑
     @GetMapping("/diaries/{id}")
     public String diaryDetail(@PathVariable Long id, Model model) {
-        DiaryBoardENT diary = diaryService.findDiaryById(id);
-        if (diary == null) {
-            return "error/404"; // 다이어리를 찾지 못한 경우
+        try {
+            DiaryBoardENT diary = diaryService.findDiaryById(id);
+            model.addAttribute("diary", diary);
+            return "diary/diaryDetail"; // Mustache 템플릿 이름
+        } catch (DiaryDeleteExcption | DiaryNotFoundException e) {
+            return "redirect:/diaries"; // 오류 발생 시 리스트 페이지로 리다이렉트
         }
-        model.addAttribute("diary", diary);
-        return "diary/diaryDetail"; // Mustache 템플릿 이름
     }
+
 
 }

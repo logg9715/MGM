@@ -1,10 +1,7 @@
 package com.example.MultiGreenMaster;
 
 import com.example.MultiGreenMaster.entity.*;
-import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
-import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
-import com.example.MultiGreenMaster.repository.FreeBoardREP;
-import com.example.MultiGreenMaster.repository.UserREP;
+import com.example.MultiGreenMaster.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +17,7 @@ public class MakeInitData {
     private final AnnounceBoardREP announceRepository;
     private final FreeBoardREP cmPostRepository;
     private final FreeBoardCommentREP cmCommentRepository;
+    private final DiaryBoardREP diaryRepository;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
@@ -168,6 +166,30 @@ public class MakeInitData {
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
         cmCommentRepository.save(cmcomment4);
+
+        // 일기장
+
+        DiaryBoardENT diary1 = DiaryBoardENT.builder()
+                .title("비활성화 일기장")
+                .content("비활성화 일기장")
+                .regdate(LocalDateTime.now())
+                .disable(true)  // disable 값을 true로 설정
+                .isPublic(1)   // 전체 공개로 설정
+                .user(user1)     // 해당 유저로 설정
+                .build();
+
+        diaryRepository.save(diary1);
+
+        DiaryBoardENT diary2 = DiaryBoardENT.builder()
+                .title("활성화 일기장")
+                .content("활성화 일기장")
+                .regdate(LocalDateTime.now())
+                .disable(false)  // disable 값을 true로 설정
+                .isPublic(1)   // 전체 공개로 설정
+                .user(user1)     // 해당 유저로 설정
+                .build();
+
+        diaryRepository.save(diary2);
 
     }
 
