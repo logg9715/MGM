@@ -135,7 +135,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updateComment(
             @PathVariable Long id,
-            @ModelAttribute("content") String content,  // 클라이언트로부터 content 직접 받음
+            @RequestBody String content,  // 클라이언트로부터 JSON 형식의 content를 직접 받음
             HttpSession session) {
 
         logger.info("Update comment request received for comment ID: {}", id);
