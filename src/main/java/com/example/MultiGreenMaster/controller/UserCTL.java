@@ -23,6 +23,7 @@ public class UserCTL extends SessionCheckCTL {
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
+/*
     @ModelAttribute
     public void addAttributes(Model model, @SessionAttribute(name = "userId", required = false) Long userId) {
         if (userId != null) {
@@ -43,6 +44,7 @@ public class UserCTL extends SessionCheckCTL {
             }
         }
     }
+*/
 
     @GetMapping("/user/new")
     public String newUserForm() {

@@ -87,52 +87,44 @@ public class UserSRV {
     }
 
     @Transactional
-    public UserENT updateUser(Long id, UserFRM form) {
-        log.info("Updating user with ID: " + id);  // 로그 추가
-        // 특정 ID의 사용자 정보를 업데이트
-        UserENT userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null) {
-            userEntity.setLoginId(form.getLoginId());
-            userEntity.setPassword(form.getPassword());
-            userEntity.setNickname(form.getNickname());
-            userEntity.setName(form.getName());
-            userEntity.setPhonenumber(form.getPhonenumber());
-            userEntity.setEmail(form.getEmail());
-            userEntity.setRole(form.getRole());
-            log.info("User updated: " + userEntity);  // 로그 추가
-            return userRepository.save(userEntity);
-        }
-        log.info("User not found with ID: " + id);  // 로그 추가
-        return null;
+    public UserENT updateUser(UserFRM form) {
+        UserENT newData = form.toEntity();
+        UserENT target = userRepository.findById(newData.getId()).orElse(null);
+
+        /* 업데이트 대상이 없으면 null 반환 */
+        if (target == null) return null;
+
+        /* 중복 아이디 혹은 닉네임이면 null 반환 */
+        String _loginId = newData.getLoginId();
+        if(_loginId != null && !_loginId.equals(target.getLoginId()) &&userRepository.findByLoginId(_loginId).isPresent())
+            return null;
+
+        String _nickname = newData.getNickname();
+        if(_nickname != null && !_nickname.equals(target.getNickname()) && userRepository.findByNickname(_nickname).isPresent())
+            return null;
+
+        /* 패치 & 저장 */
+        target.patch(newData);
+        return userRepository.save(target);
     }
 
-    //사용자 삭제
-//    @Transactional
-//    public void deleteUser(Long id) {
-//        // 특정 ID의 사용자를 삭제
-//        User target = userRepository.findById(id).orElse(null);
-//        if (target != null) {
-//            userRepository.delete(target);
-//        }
-//    }
-
-    //사용자 비활성화
+    /* 사용자 비활성화 */
     @Transactional
-    public void deactivateUser(Long id) {
+    public UserENT deactivateUser(Long id) {
         UserENT target = userRepository.findById(id).orElse(null);
         if (target != null) {
             target.setDisable(true); // 비활성화
-            userRepository.save(target); // 변경된 사용자 정보를 저장
+            return userRepository.save(target); // 변경된 사용자 정보를 저장
         }
+        return null;
     }
 
-    //사용자 활성화
+    /* 사용자 활성화 */
     @Transactional
     public UserENT activateUser(Long id) {
         // 특정 ID의 사용자 정보를 조회
         UserENT userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null && userEntity.isDisable()) {
-            // 사용자가 비활성화 상태일 때만 활성화
+        if (userEntity != null) {
             userEntity.setDisable(false);
             return userRepository.save(userEntity); // 사용자 정보를 업데이트하여 저장
         }
