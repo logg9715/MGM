@@ -17,6 +17,7 @@ public class FreeBoardCommentSRV {
         return cmCommentRepository.findByCmPostId(postId);
     }
 
+    /*
     // 댓글 좋아요 수를 증가시키는 메서드
     public void incrementLikeCount(Long id) {
         FreeBoardCommentENT comment = findCommentById(id);
@@ -25,7 +26,7 @@ public class FreeBoardCommentSRV {
             cmCommentRepository.save(comment);
         }
     }
-
+*/
     // ID로 댓글을 조회하는 메서드
     public FreeBoardCommentENT findCommentById(Long id) {
         return cmCommentRepository.findById(id).orElse(null);

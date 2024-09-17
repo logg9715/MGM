@@ -60,7 +60,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         return ResponseEntity.badRequest().body("Post not found"); // 게시글을 찾을 수 없는 경우 오류 응답 반환
     }
 
-    @GetMapping("/post/{postId}") // GET 요청을 "/post/{postId}" 경로와 매핑
+    @GetMapping("/{postId}") // GET 요청을 "/post/{postId}" 경로와 매핑
     public ResponseEntity<List<FreeBoardCommentENT>> listComments(@PathVariable Long postId) {
         logger.info("Requesting comment list: Post ID {}", postId); // 댓글 목록 요청
         List<FreeBoardCommentENT> comments = freeBoardCommentSRV.findCommentsByPostId(postId); // 게시글의 모든 댓글 조회
@@ -76,6 +76,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         return ResponseEntity.ok(comments); // 조회된 댓글 목록 반환
     }
 
+    /*
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/{id}/like")
     public ResponseEntity<Integer> likeComment(@PathVariable Long id) {
@@ -84,6 +85,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         FreeBoardCommentENT comment = freeBoardCommentSRV.findCommentById(id); // ID로 댓글 조회
         return comment != null ? ResponseEntity.ok(comment.getLikeCount()) : ResponseEntity.notFound().build(); // 댓글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
     }
+*/
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/{id}/create")
@@ -113,7 +115,6 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
                 newComment.setCmPost(post); // 게시글 설정
                 newComment.setUser(loginUser); // 작성자 설정
                 newComment.setContent(form.getContent()); // 내용 설정
-                newComment.setLikeCount(0); // 기본 좋아요 수 설정
                 newComment.setParentComment(parentComment); // 부모 댓글 설정
                 newComment.setRegdate(LocalDateTime.now()); // 작성 시간 설정
 
@@ -134,7 +135,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updateComment(
             @PathVariable Long id,
-            @ModelAttribute("content") String content,  // 클라이언트로부터 content 직접 받음
+            @RequestBody String content,  // 클라이언트로부터 JSON 형식의 content를 직접 받음
             HttpSession session) {
 
         logger.info("Update comment request received for comment ID: {}", id);

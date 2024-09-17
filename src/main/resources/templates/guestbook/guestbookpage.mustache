@@ -9,7 +9,7 @@
     <ul class="posts-list">
         {{#posts}}
             <li class="post-item">
-                <h3><a href="/posts/{{id}}" class="post-title">{{title}}</a></h3>
+                <h3><a href="/freeboard/{{id}}" class="post-title">{{title}}</a></h3>
                 <div class="post-meta">
 
                     <span class="post-info">작성 시간: {{regdate}}</span>
@@ -31,9 +31,8 @@
 <div class="comments-container">
     <ul class="comments-list">
         {{#comments}}
-            <li class="comment-item {{type}}">
+            <li class="comment-item">
                 <div class="comment-meta">
-                    <span class="comment-info">좋아요: {{likeCount}}</span> |
                     <span class="comment-info">작성 시간: {{regdate}}</span>
                 </div>
                 <p class="comment-content">{{content}}</p>
@@ -123,7 +122,7 @@
         var userId = {{user.id}};
 
         // 사용자의 게시글 목록을 가져오기
-        fetch('/api/posts/user/' + userId + '/posts')
+        fetch('/api/freeboard/' + userId + '/last3freeboard')
             .then(response => response.json())
             .then(posts => {
                 const postsList = document.querySelector('.posts-list');
@@ -131,9 +130,8 @@
                     const listItem = document.createElement('li');
                     listItem.className = 'post-item';
                     listItem.innerHTML = `
-                        <h3><a href="/posts/${post.id}" class="post-title">${post.title}</a></h3>
+                        <h3><a href="/freeboard/${post.id}" class="post-title">${post.title}</a></h3>
                         <div class="post-meta">
-                            <span class="post-info">좋아요: ${post.likeCount}</span> |
                             <span class="post-info">작성 시간: ${post.regdate}</span>
                         </div>
                         <p class="post-content">${post.content}</p>

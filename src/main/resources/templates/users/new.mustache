@@ -73,7 +73,7 @@
         // 회원 아이디 중복 체크 버튼 이벤트 핸들러
         document.getElementById('checkDuplicateButton').addEventListener('click', function () {
             const loginId = document.getElementById('loginId').value;
-            fetch('/api/users/check-duplicate?loginId=' + encodeURIComponent(loginId))
+            fetch('/api/usermanage/check-duplicate?loginId=' + encodeURIComponent(loginId))
             .then(response => response.json())
             .then(data => {
                 const resultElement = document.getElementById('duplicateCheckResult');
@@ -94,7 +94,7 @@
         // 닉네임 중복 체크 버튼 이벤트 핸들러
         document.getElementById('checkNicknameDuplicateButton').addEventListener('click', function () {
             const nickname = document.getElementById('nickname').value;
-            fetch('/api/users/check-nickname-duplicate?nickname=' + encodeURIComponent(nickname))
+            fetch('/api/usermanage/check-nickname-duplicate?nickname=' + encodeURIComponent(nickname))
             .then(response => response.json())
             .then(data => {
                 const resultElement = document.getElementById('nicknameDuplicateCheckResult');
@@ -125,7 +125,7 @@
                 data.role = 'USER'; // 기본적으로 'USER' 등급으로 설정
             }
 
-            fetch('/api/users/create', {
+            fetch('/api/usermanage/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

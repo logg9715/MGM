@@ -34,9 +34,6 @@ public class FreeBoardCommentENT {
     private String content; // 댓글 내용
 
     @Column
-    private int likeCount; // 댓글 좋아요
-
-    @Column
     private LocalDateTime regdate; // 댓글 작성 시간
 
     @Column
@@ -45,11 +42,6 @@ public class FreeBoardCommentENT {
     @PrePersist
     protected void onCreate() {
         this.regdate = LocalDateTime.now(); // 현재 시간을 regdate에 설정
-    }
-
-    // 좋아요 수 증가 메서드
-    public void incrementLikeCount() {
-        this.likeCount++;
     }
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -55,7 +55,6 @@ public class FreeBoardCommentCTL {
             FreeBoardCommentENT comment = new FreeBoardCommentENT();
             comment.setCmPost(post);
             comment.setContent(form.getContent());
-            comment.setLikeCount(0);
             comment.setUser(loginUser); // Set the logged-in user to the comment
             cmCommentService.saveComment(comment);
             logger.info("Comment saved successfully: {}", comment);
@@ -71,14 +70,5 @@ public class FreeBoardCommentCTL {
         model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가
         logger.info("Comment list retrieved successfully: Post ID {}", postId); // 댓글 목록 조회 완료
         return "commentList"; // "commentList" 뷰를 반환
-    }
-
-    @PostMapping("/{id}/like")
-    @ResponseBody
-    public int likeComment(@PathVariable Long id) {
-        logger.info("Request to increase like count: Comment ID {}", id); // 댓글 좋아요 증가 요청
-        FreeBoardCommentENT comment = cmCommentService.findCommentById(id);
-        cmCommentService.incrementLikeCount(id);
-        return comment != null ? comment.getLikeCount() : 0;
     }
 }

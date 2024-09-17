@@ -1,6 +1,6 @@
 package com.example.MultiGreenMaster.controller;
 
-import com.example.MultiGreenMaster.dto.CommentResponseFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.entity.User_RoleENUM;
@@ -23,6 +23,7 @@ public class UserCTL extends SessionCheckCTL {
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
+/*
     @ModelAttribute
     public void addAttributes(Model model, @SessionAttribute(name = "userId", required = false) Long userId) {
         if (userId != null) {
@@ -43,6 +44,7 @@ public class UserCTL extends SessionCheckCTL {
             }
         }
     }
+*/
 
     @GetMapping("/user/new")
     public String newUserForm() {
@@ -124,7 +126,7 @@ public class UserCTL extends SessionCheckCTL {
             return "redirect:/"; // 유저가 없으면 홈으로 리다이렉트
         }
 
-        List<CommentResponseFRM> comments = userService.getUserCommentsAndRecomments(id);
+        List<FreeBoardCommentFRM> comments = userService.getUserCommentsAndRecommentsLast3(id);
 
         model.addAttribute("user", user);
         model.addAttribute("comments", comments);

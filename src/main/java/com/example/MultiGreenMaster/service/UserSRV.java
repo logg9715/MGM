@@ -1,13 +1,13 @@
 package com.example.MultiGreenMaster.service;
 
-import com.example.MultiGreenMaster.dto.CommentResponseFRM;
-import com.example.MultiGreenMaster.dto.JoinRequestFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
+import com.example.MultiGreenMaster.repository.FreeBoardREP;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 public class UserSRV {
     @Autowired
     private UserREP userRepository; // UserRepository 의존성 주입
+
+    @Autowired
+    private FreeBoardCommentREP freeBoardCommentREP;
 
     public UserENT getLoginUserById(Long userId) {
         if (userId == null) return null; // userId가 null인 경우 null 반환
@@ -60,11 +63,6 @@ public class UserSRV {
          return user; // 로그인 성공 시 User 객체 반환
      }
 
-    //회원 가입 메서드
-    public void join(JoinRequestFRM req) {
-        userRepository.save(req.toEntity()); // JoinRequest 객체를 엔티티로 변환하여 저장
-    }
-
     //활성화된 사용자만 조회
     public List<UserENT> findAllUsers() {
         return userRepository.findByDisableFalse();
@@ -82,59 +80,51 @@ public class UserSRV {
         return userRepository.findById(id).orElse(null);
     }
 
+    /* 회원가입 */
     @Transactional
     public UserENT saveUser(UserENT user) {
-        // 새로운 사용자를 저장
         return userRepository.save(user);
     }
 
     @Transactional
-    public UserENT updateUser(Long id, UserFRM form) {
-        log.info("Updating user with ID: " + id);  // 로그 추가
-        // 특정 ID의 사용자 정보를 업데이트
-        UserENT userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null) {
-            userEntity.setLoginId(form.getLoginId());
-            userEntity.setPassword(form.getPassword());
-            userEntity.setNickname(form.getNickname());
-            userEntity.setName(form.getName());
-            userEntity.setPhonenumber(form.getPhonenumber());
-            userEntity.setEmail(form.getEmail());
-            userEntity.setRole(form.getRole());
-            log.info("User updated: " + userEntity);  // 로그 추가
-            return userRepository.save(userEntity);
-        }
-        log.info("User not found with ID: " + id);  // 로그 추가
-        return null;
+    public UserENT updateUser(UserFRM form) {
+        UserENT newData = form.toEntity();
+        UserENT target = userRepository.findById(newData.getId()).orElse(null);
+
+        /* 업데이트 대상이 없으면 null 반환 */
+        if (target == null) return null;
+
+        /* 중복 아이디 혹은 닉네임이면 null 반환 */
+        String _loginId = newData.getLoginId();
+        if(_loginId != null && !_loginId.equals(target.getLoginId()) &&userRepository.findByLoginId(_loginId).isPresent())
+            return null;
+
+        String _nickname = newData.getNickname();
+        if(_nickname != null && !_nickname.equals(target.getNickname()) && userRepository.findByNickname(_nickname).isPresent())
+            return null;
+
+        /* 패치 & 저장 */
+        target.patch(newData);
+        return userRepository.save(target);
     }
 
-    //사용자 삭제
-//    @Transactional
-//    public void deleteUser(Long id) {
-//        // 특정 ID의 사용자를 삭제
-//        User target = userRepository.findById(id).orElse(null);
-//        if (target != null) {
-//            userRepository.delete(target);
-//        }
-//    }
-
-    //사용자 비활성화
+    /* 사용자 비활성화 */
     @Transactional
-    public void deactivateUser(Long id) {
+    public UserENT deactivateUser(Long id) {
         UserENT target = userRepository.findById(id).orElse(null);
         if (target != null) {
             target.setDisable(true); // 비활성화
-            userRepository.save(target); // 변경된 사용자 정보를 저장
+            return userRepository.save(target); // 변경된 사용자 정보를 저장
         }
+        return null;
     }
 
-    //사용자 활성화
+    /* 사용자 활성화 */
     @Transactional
     public UserENT activateUser(Long id) {
         // 특정 ID의 사용자 정보를 조회
         UserENT userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null && userEntity.isDisable()) {
-            // 사용자가 비활성화 상태일 때만 활성화
+        if (userEntity != null) {
             userEntity.setDisable(false);
             return userRepository.save(userEntity); // 사용자 정보를 업데이트하여 저장
         }
@@ -150,25 +140,19 @@ public class UserSRV {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
-
-
-    private final FreeBoardCommentREP commentRepository;
-
     //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
-    public List<CommentResponseFRM> getUserCommentsAndRecomments(Long userId) {
+    public List<FreeBoardCommentFRM> getUserCommentsAndRecomments(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<FreeBoardCommentENT> comments = commentRepository.findByUser_Id(userId);
+        List<FreeBoardCommentENT> comments = freeBoardCommentREP.findByUser_Id(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
-        List<CommentResponseFRM> responses = new ArrayList<>();
+        List<FreeBoardCommentFRM> responses = new ArrayList<>();
 
         comments.forEach(comment -> {
-            CommentResponseFRM response = new CommentResponseFRM();
+            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setLikeCount(comment.getLikeCount());
-            response.setType("comment");
             responses.add(response);
         });
 
@@ -178,20 +162,18 @@ public class UserSRV {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResponseFRM> getUserCommentsAndRecommentsLast2(Long userId) {
+    public List<FreeBoardCommentFRM> getUserCommentsAndRecommentsLast3(Long userId) {
         // 사용자의 댓글을 가져오기
-        List<FreeBoardCommentENT> comments = commentRepository.findRecentCommentsByUserId(userId);
+        List<FreeBoardCommentENT> comments = freeBoardCommentREP.findRecentCommentsByUserId(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
-        List<CommentResponseFRM> responses = new ArrayList<>();
+        List<FreeBoardCommentFRM> responses = new ArrayList<>();
 
         comments.forEach(comment -> {
-            CommentResponseFRM response = new CommentResponseFRM();
+            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
-            response.setLikeCount(comment.getLikeCount());
-            response.setType("comment");
             responses.add(response);
         });
 

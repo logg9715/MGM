@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 닉네임 중복 체크 버튼 이벤트 핸들러
     document.getElementById('checkNicknameDuplicateButton').addEventListener('click', function () {
         const nickname = document.getElementById('nickname').value;
-        fetch('/api/users/check-nickname-duplicate?nickname=' + encodeURIComponent(nickname))
+        fetch('/api/usermanage/check-nickname-duplicate?nickname=' + encodeURIComponent(nickname))
         .then(response => response.json())
         .then(data => {
             const resultElement = document.getElementById('nicknameDuplicateCheckResult');
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 양식 검토
         if(hasFormError(data)) return;
 
-        fetch('/api/users/create', {
+        fetch('/api/usermanage/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

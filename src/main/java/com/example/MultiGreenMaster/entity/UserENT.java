@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString
 public class UserENT {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +42,14 @@ public class UserENT {
     @JsonIgnoreProperties("user")
     @Builder.Default
     private Set<FriendENT> friends = new HashSet<>();
+
+    public void patch(UserENT newData) {
+        if (newData.loginId != null) this.loginId = newData.loginId;
+        if (newData.password != null) this.password = newData.password;
+        if (newData.nickname != null) this.nickname = newData.nickname;
+        if (newData.name != null) this.name = newData.name;
+        if (newData.phonenumber != null) this.phonenumber = newData.phonenumber;
+        if (newData.email != null) this.email = newData.email;
+        if (newData.role != null) this.role = newData.role;
+    }
 }

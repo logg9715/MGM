@@ -120,8 +120,10 @@
             }
         });
 
+// =============================================== 댓글 ======================================================
+
         // 댓글 목록을 불러오기
-        fetch('/api/freeboardcomment/post/' + postId)
+        fetch('/api/freeboardcomment/' + postId)
             .then(response => response.json())
             .then(comments => {
                 const commentList = document.getElementById('commentList');
@@ -140,19 +142,8 @@
             listItem.innerHTML = `
                 <p>작성자: <a href="/user/${comment.user.id}/guestbook">${comment.user.nickname}</a></p>
                 <p>${comment.content}</p>
-                <p id="commentLikeCount${comment.id}">추천: ${comment.likeCount}</p>
-                <button class="likeComment" data-comment-id="${comment.id}">추천</button>
                 <button class="deleteComment" data-comment-id="${comment.id}">삭제</button> <!-- 삭제 버튼 추가 -->
                 <p>작성 시간: ${comment.regdate}</p>
-                ${comment.canEdit ? `
-                <!-- 댓글 수정 -->
-                <button class="editComment" data-comment-id="${comment.id}">수정</button>
-                <form class="editCommentForm" data-comment-id="${comment.id}" style="display: none;">
-                    <textarea name="content" required>${comment.content}</textarea>
-                    <br>
-                    <button type="submit">수정 완료</button>
-                </form>
-                ` : ''}
                 <!-- 대댓글 작성 form -->
                 <h4>대댓글 달기</h4>
                 <form class="recommentForm" data-comment-id="${comment.id}">
@@ -174,6 +165,7 @@
             });
         }
 
+/*
         // 게시글 좋아요 버튼 클릭 이벤트
         document.getElementById('likePost').addEventListener('click', function() {
             fetch('/api/freeboard/' + postId + '/like', {
@@ -184,7 +176,7 @@
                 //document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + data;
             });
         });
-
+*/
         // 댓글 작성 폼 제출 이벤트
         document.getElementById('commentForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -207,6 +199,7 @@
 
         // 댓글과 대댓글 수정 및 좋아요, 삭제 이벤트 처리
         document.body.addEventListener('click', function(event) {
+        /*
             if (event.target.classList.contains('likeComment')) {
                 var commentId = event.target.getAttribute('data-comment-id');
                 fetch('/api/freeboardcomment/' + commentId + '/like', {
@@ -217,7 +210,7 @@
                     document.getElementById('commentLikeCount' + commentId).textContent = '추천: ' + data;
                 });
             }
-
+*/
             if (event.target.classList.contains('editComment')) {
                 var commentId = event.target.getAttribute('data-comment-id');
                 var form = document.querySelector(`form.editCommentForm[data-comment-id="${commentId}"]`);
@@ -241,7 +234,6 @@
                 }
             }
         });
-
         document.body.addEventListener('submit', function(event) {
             if (event.target.classList.contains('editCommentForm')) {
                 event.preventDefault();

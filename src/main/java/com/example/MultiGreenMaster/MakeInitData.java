@@ -1,10 +1,7 @@
 package com.example.MultiGreenMaster;
 
 import com.example.MultiGreenMaster.entity.*;
-import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
-import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
-import com.example.MultiGreenMaster.repository.FreeBoardREP;
-import com.example.MultiGreenMaster.repository.UserREP;
+import com.example.MultiGreenMaster.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +17,7 @@ public class MakeInitData {
     private final AnnounceBoardREP announceRepository;
     private final FreeBoardREP cmPostRepository;
     private final FreeBoardCommentREP cmCommentRepository;
+    private final DiaryBoardREP diaryRepository;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
@@ -135,7 +133,6 @@ public class MakeInitData {
         //댓글
         FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.")
-                .likeCount(1)
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
                 .user(user1)
                 .cmPost(cmpost6)
@@ -144,7 +141,6 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment2 = FreeBoardCommentENT.builder()
                 .content("이 글은 2번 댓글입니다.")
-                .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 2, 5, 45))
                 .user(user3)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
@@ -153,7 +149,6 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment3 = FreeBoardCommentENT.builder()
                 .content("이 글은 3번 댓글입니다.")
-                .likeCount(4)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 45))
                 .user(user2)
                 .cmPost(cmpost1) // 댓글이 달릴 게시글을 설정
@@ -162,12 +157,51 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment4 = FreeBoardCommentENT.builder()
                 .content("이 글은 4번 댓글입니다.")
-                .likeCount(2)
                 .regdate(LocalDateTime.of(2024, 8, 3, 15, 55))
                 .user(user1)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
         cmCommentRepository.save(cmcomment4);
+
+        FreeBoardCommentENT cmcomment5 = FreeBoardCommentENT.builder()
+                .content("이 글은 5번 댓글입니다.")
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 56))
+                .user(user1)
+                .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
+                .build();
+        cmCommentRepository.save(cmcomment5);
+
+        FreeBoardCommentENT cmcomment6 = FreeBoardCommentENT.builder()
+                .content("이 글은 6번 댓글입니다.")
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 57))
+                .user(user1)
+                .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
+                .build();
+        cmCommentRepository.save(cmcomment6);
+
+        // 일기장
+
+        DiaryBoardENT diary1 = DiaryBoardENT.builder()
+                .title("비활성화 일기장")
+                .content("비활성화 일기장")
+                .regdate(LocalDateTime.now())
+                .disable(true)  // disable 값을 true로 설정
+                .isPublic(1)   // 전체 공개로 설정
+                .user(user1)     // 해당 유저로 설정
+                .build();
+
+        diaryRepository.save(diary1);
+
+        DiaryBoardENT diary2 = DiaryBoardENT.builder()
+                .title("활성화 일기장")
+                .content("활성화 일기장")
+                .regdate(LocalDateTime.now())
+                .disable(false)  // disable 값을 true로 설정
+                .isPublic(1)   // 전체 공개로 설정
+                .user(user1)     // 해당 유저로 설정
+                .build();
+
+        diaryRepository.save(diary2);
 
     }
 
