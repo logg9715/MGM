@@ -11,7 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -43,7 +46,9 @@ public class FreeBoardFRM {
 
     // 엔티티로 변환하는 메서드
     public FreeBoardENT toEntity() {
-        List<FreeBoardPictureENT> pictures = this.pictures.stream()
+
+        List<FreeBoardPictureENT> pictures = Optional.ofNullable(this.pictures)
+                .orElse(Collections.emptyList()).stream()
                 .map(multipartFile -> {
                     try {
                         return FreeBoardPictureENT.builder()
