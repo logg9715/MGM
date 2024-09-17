@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 회원 아이디 중복 체크 버튼 이벤트 핸들러
     document.getElementById('checkDuplicateButton').addEventListener('click', function () {
         const loginId = document.getElementById('loginId').value;
-        fetch('/api/users/check-duplicate?loginId=' + encodeURIComponent(loginId))
+        fetch('/api/usermanage/check-duplicate?loginId=' + encodeURIComponent(loginId))
         .then(response => response.json())
         .then(data => {
             const resultElement = document.getElementById('duplicateCheckResult');

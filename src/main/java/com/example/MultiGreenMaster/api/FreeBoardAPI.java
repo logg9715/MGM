@@ -240,7 +240,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PutMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deletePost(@PathVariable Long id, HttpSession session) {
 
         logger.info("Request to delete post ID {}", id);  // 게시글 삭제 요청 로그
