@@ -40,7 +40,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
     private UserSRV userSRV; // UserService 의존성 주입
 
     /* 자유게시판 글 작성 */
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
     public ResponseEntity<String> createPost(@ModelAttribute FreeBoardFRM form, HttpSession session) {
 
@@ -118,7 +117,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
     }
 
     /* 자유게시판 좋아요 가져오기 */
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/{id}/getlike") // POST 요청을 "/{id}/like" 경로와 매핑
     public ResponseEntity<Long> getRecommend(@PathVariable Long id) {
         Long target = freeBoardGoodSRV.getRecommend(freeBoardSRV.findPostById(id));
@@ -127,7 +125,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
 
 
     /* 자유게시판 좋아요 추가 */
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/{id}/like") // POST 요청을 "/{id}/like" 경로와 매핑
     public ResponseEntity<Integer> recommend(@PathVariable Long id, HttpSession httpSession) {
         Long userId = (Long) httpSession.getAttribute("userId");
@@ -164,7 +161,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
         }).collect(Collectors.toList());  // 변환된 CMPostForm 객체 리스트를 반환
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updatePost(
             @PathVariable Long id,
@@ -220,7 +216,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok("Post updated successfully");
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deletePost(@PathVariable Long id, HttpSession session) {
 

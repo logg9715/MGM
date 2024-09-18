@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedHeaders("*")
                 .allowedOrigins("http://localhost:3000") // 허용할 출처 : 특정 도메인만 받을 수 있음
-                .allowedMethods("GET", "POST", "UPDATE", "DELETE") // 허용할 HTTP method
+                .allowedMethods("GET", "POST", "UPDATE", "PUT", "PATCH", "DELETE") // 허용할 HTTP method
                 .allowCredentials(true); // 쿠키 인증 요청 허용
     }
 }
