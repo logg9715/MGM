@@ -117,15 +117,19 @@ public class FreeBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok(postForm);  // CMPostForm 객체를 응답으로 반환
     }
 
+    /* 자유게시판 좋아요 가져오기 */
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    @GetMapping("/{id}/getlike") // POST 요청을 "/{id}/like" 경로와 매핑
+    public ResponseEntity<Long> getRecommend(@PathVariable Long id) {
+        Long target = freeBoardGoodSRV.getRecommend(freeBoardSRV.findPostById(id));
+        return ResponseEntity.ok(target);
+    }
+
+
     /* 자유게시판 좋아요 추가 */
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/{id}/like") // POST 요청을 "/{id}/like" 경로와 매핑
+    @GetMapping("/{id}/like") // POST 요청을 "/{id}/like" 경로와 매핑
     public ResponseEntity<Integer> recommend(@PathVariable Long id, HttpSession httpSession) {
-        /*logger.info("Request to increase like count: Post ID {}", id); // 게시글 좋아요 증가 요청
-        cmPostService.incrementLikeCount(id); // 게시글의 좋아요 수 증가
-        FreeBoardENT post = cmPostService.findPostById(id); // ID로 게시글 조회
-        return post != null ? ResponseEntity.ok(post.getLikeCount()) : ResponseEntity.notFound().build(); // 게시글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
-        */
         Long userId = (Long) httpSession.getAttribute("userId");
         /* 처음 추천하는 경우 반영 & 정상 응답 */
         if (freeBoardGoodSRV.recommend(freeBoardSRV.findPostById(id), userSRV.findUserById(userId)))

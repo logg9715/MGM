@@ -28,4 +28,8 @@ public class FreeBoardGoodSRV {
 
         return (target == null) ? false : true;
     }
+
+    public Long getRecommend(FreeBoardENT freeBoardENT) {
+        return freeBoardGoodREP.countByFreeboardId(freeBoardENT.getId());
+    }
 }

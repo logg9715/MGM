@@ -4,7 +4,6 @@
 <p id="postAuthor"></p>
 <p id="postContent"></p>
 <div id="postImages"></div>
-<!--<p id="postLikeCount"></p>-->
 <button id="likePost">좋아요</button>
 <p id="postCount"></p>
 <p id="postRegdate"></p>
@@ -51,7 +50,6 @@
                 document.getElementById('postTitle').textContent = post.title;
                 document.getElementById('postAuthor').innerHTML = '작성자: <a href="/user/' + post.user.id + '/guestbook">' + post.user.nickname + '</a>';
                 document.getElementById('postContent').textContent = post.content;
-                //document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + post.likeCount;
                 document.getElementById('postCount').textContent = '조회수: ' + post.count;
                 document.getElementById('postRegdate').textContent = '작성시간: ' + post.regdate;
 
@@ -165,18 +163,19 @@
             });
         }
 
-/*
+
         // 게시글 좋아요 버튼 클릭 이벤트
         document.getElementById('likePost').addEventListener('click', function() {
+
             fetch('/api/freeboard/' + postId + '/like', {
-                method: 'POST'
+                method: 'GET'
             })
             .then(response => response.json())
             .then(data => {
-                //document.getElementById('postLikeCount').textContent = '좋아요 갯수: ' + data;
+                alert("dd");
             });
         });
-*/
+
         // 댓글 작성 폼 제출 이벤트
         document.getElementById('commentForm').addEventListener('submit', function(event) {
             event.preventDefault();

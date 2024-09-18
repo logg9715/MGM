@@ -35,27 +35,19 @@ public class FreeBoardSRV {
         return post.orElse(null);  // 결과 반환
     }
 
+    /* 조회수 증가 */
     public void incrementCount(Long id) {
         FreeBoardENT post = findPostById(id);
         if (post != null) {
-            post.incrementCount();  // 조회수 증가
-            savePost(post);  // 업데이트된 게시글 저장
+            post.incrementCount();
+            savePost(post);
         }
     }
-/*
-    public void incrementLikeCount(Long id) {
-        FreeBoardENT post = findPostById(id);
-        if (post != null) {
-            post.incrementLikeCount();  // 좋아요 수 증가
-            savePost(post);  // 업데이트된 게시글 저장
-        }
-    }
-*/
     public List<FreeBoardENT> findTop4PostsDesc() {
         return freeBoardREP.findTop4ByOrderByRegdateDesc();  // 최신 게시글 4개 조회
     }
 
     public List<FreeBoardENT> findLast3FreeboardByUserId(Long userId) {
-        return freeBoardREP.findTop3ByUserIdOrderByRegdateDesc(userId);  // 사용자의 게시글 조회
+        return freeBoardREP.findTop3ByUserIdOrderByRegdateDesc(userId);  // 사용자의 게시글 최신 3개 조회
     }
 }
