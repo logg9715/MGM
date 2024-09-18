@@ -122,7 +122,7 @@
         var userId = {{user.id}};
 
         // 사용자의 게시글 목록을 가져오기
-        fetch('/api/freeboard/' + userId + '/last3freeboard')
+        fetch('/api/mypage/' + userId + '/recentfreeboard')
             .then(response => response.json())
             .then(posts => {
                 const postsList = document.querySelector('.posts-list');

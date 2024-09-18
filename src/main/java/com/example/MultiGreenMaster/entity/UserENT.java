@@ -52,4 +52,11 @@ public class UserENT {
         if (newData.email != null) this.email = newData.email;
         if (newData.role != null) this.role = newData.role;
     }
+
+    public void guestBookPatch() {
+        this.password = null;
+        this.name = null;
+        this.phonenumber = null;
+        this.email = null;
+    }
 }

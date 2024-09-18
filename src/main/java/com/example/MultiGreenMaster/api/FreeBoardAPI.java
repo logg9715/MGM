@@ -140,6 +140,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
     }
 
     // 최신 4개의 게시글을 내림차순으로 반환
+    /* 이거 씀???????????????? */
     @GetMapping("/recent")
     public List<FreeBoardFRM> getRecentPosts() {
         List<FreeBoardENT> posts = freeBoardSRV.findTop4PostsDesc();  // 최신 게시글 4개를 내림차순으로 조회
@@ -161,30 +162,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
                     post.getCount()
             );
         }).collect(Collectors.toList());  // 변환된 CMPostForm 객체 리스트를 반환
-    }
-
-    // 특정 사용자가 작성한 게시글을 내림차순으로 반환
-    @GetMapping("/{userId}/last3freeboard")
-    public ResponseEntity<List<FreeBoardFRM>> getPostsByUser(@PathVariable Long userId) {
-        logger.info("Requesting posts by user: User ID {}", userId); // 사용자의 게시글 요청
-        List<FreeBoardENT> posts = freeBoardSRV.findLast3FreeboardByUserId(userId); // 사용자의 게시글 조회
-        List<FreeBoardFRM> postForms = posts.stream().map(post -> { // 각 게시글을 CMPostForm으로 변환
-            List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
-                    .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환
-                    .collect(Collectors.toList()) : null;
-            return new FreeBoardFRM(
-                    post.getId(),
-                    post.getUser(),
-                    post.getTitle(),
-                    post.getContent(),
-                    pictureBase64List,
-                    //post.getLikeCount(),
-                    post.getRegdate(),
-                    post.getCount()
-            );
-        }).collect(Collectors.toList()); // 변환된 게시글 리스트로 수집
-        logger.info("Posts by user retrieved successfully: User ID {}", userId); // 사용자의 게시글 조회 완료
-        return ResponseEntity.ok(postForms); // 조회된 게시글 목록 반환
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")

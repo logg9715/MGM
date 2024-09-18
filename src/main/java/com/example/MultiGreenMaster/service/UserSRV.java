@@ -140,6 +140,7 @@ public class UserSRV {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
+    /*
     //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
     public List<FreeBoardCommentFRM> getUserCommentsAndRecomments(Long userId) {
         // 사용자의 댓글을 가져오기
@@ -161,7 +162,7 @@ public class UserSRV {
                 .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
                 .collect(Collectors.toList());
     }
-
+*/
     public List<FreeBoardCommentFRM> getUserCommentsAndRecommentsLast3(Long userId) {
         // 사용자의 댓글을 가져오기
         List<FreeBoardCommentENT> comments = freeBoardCommentREP.findRecentCommentsByUserId(userId);
