@@ -20,7 +20,6 @@ public class AdminAPI {
     UserSRV userSRV;
 
     /* 모든 유저 정보를 가져온다 (비활성화 된 유저 포함) */
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/getuserlist")
     public ResponseEntity<List<UserENT>> getUserList(HttpSession httpSession) {
         AccessAuthority accessAuthority = new AccessAuthority(httpSession, userSRV);

@@ -34,7 +34,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
     public ResponseEntity<String> createComment(@ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
         logger.info("Request to create new comment: {}", form); // 새 댓글 생성 요청
@@ -77,7 +77,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
     }
 
     /*
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PostMapping("/{id}/like")
     public ResponseEntity<Integer> likeComment(@PathVariable Long id) {
         logger.info("Request to increase like count: Comment ID {}", id); // 댓글 좋아요 증가 요청
@@ -87,7 +87,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
     }
 */
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PostMapping("/{id}/create")
     public ResponseEntity<String> createReply(@PathVariable Long id, @ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
         logger.info("Request to create new reply to comment ID {}: {}", id, form);
@@ -131,7 +131,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updateComment(
             @PathVariable Long id,
@@ -159,7 +159,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         return ResponseEntity.ok("Comment updated successfully");
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PutMapping("/{id}/delete")
     public ResponseEntity<String> deleteComment(@PathVariable Long id, HttpSession session) {
         logger.info("Request to delete comment ID: {}", id);

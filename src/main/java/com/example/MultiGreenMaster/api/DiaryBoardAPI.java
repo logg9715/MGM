@@ -32,7 +32,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+
     @PostMapping("/create")
     public ResponseEntity<String> createDiary(@ModelAttribute DiaryBoardFRM form, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
