@@ -48,6 +48,13 @@ public class AnnounceBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok(announceEntity);
     }
 
+    /* 최근 4개 공지사항 리스트 전송 */
+    @GetMapping("/recent")
+    public ResponseEntity<List<AnnounceBoardENT>> recent4AnnounceBoard() {
+        List<AnnounceBoardENT> targetList = announceRepository.findTop4ByDisableFalseOrderByCreatedDateDesc();
+        return ResponseEntity.ok(targetList);
+    }
+
     /* 공지사항 수정 제출 */
     @PatchMapping("/{id}/edit")
     public ResponseEntity<AnnounceBoardENT> edit(@PathVariable Long id, @RequestBody AnnounceBoardFRM form) {

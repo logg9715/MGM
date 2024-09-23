@@ -229,6 +229,7 @@ public class MakeInitData {
         AnnounceBoardENT announce4 = AnnounceBoardENT.builder()
                 .title("공지사항 4")
                 .content("이 글은 공지사항 4번입니다.")
+                .disable(true)
                 .build();
         announceRepository.save(announce4);
 
@@ -237,6 +238,12 @@ public class MakeInitData {
                 .content("이 글은 공지사항 5번입니다.")
                 .build();
         announceRepository.save(announce5);
+
+        AnnounceBoardENT announce6 = AnnounceBoardENT.builder()
+                .title("공지사항 6")
+                .content("이 글은 공지사항 6번입니다.")
+                .build();
+        announceRepository.save(announce6);
     }
 
 }

@@ -137,23 +137,18 @@ public class FreeBoardAPI extends SessionCheckCTL {
     }
 
     // 최신 4개의 게시글을 내림차순으로 반환
-    /* 이거 씀???????????????? */
     @GetMapping("/recent")
     public List<FreeBoardFRM> getRecentPosts() {
         List<FreeBoardENT> posts = freeBoardSRV.findTop4PostsDesc();  // 최신 게시글 4개를 내림차순으로 조회
         return posts.stream().map(post -> {
-            // 각 게시글의 사진을 Base64 인코딩된 문자열로 변환하여 리스트로 수집
-            List<String> pictureBase64List = post.getPictures() != null ? post.getPictures().stream()
-                    .map(picture -> Base64.getEncoder().encodeToString(picture.getPictureData()))  // CMPicture의 byte[] 데이터를 Base64 문자열로 변환
-                    .collect(Collectors.toList()) : null;
 
             // 조회된 데이터를 기반으로 CMPostForm 객체 생성
             return new FreeBoardFRM(
                     post.getId(),
                     post.getUser(),
                     post.getTitle(),
-                    post.getContent(),
-                    pictureBase64List,  // Base64 인코딩된 사진 리스트를 CMPostForm에 설정
+                    null,
+                    null,
                     //post.getLikeCount(),
                     post.getRegdate().withNano(0),
                     post.getCount()

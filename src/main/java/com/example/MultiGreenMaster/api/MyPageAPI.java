@@ -43,7 +43,6 @@ public class MyPageAPI {
 
     /* 특정 사용자가 작성한 최신 게시글 3개 반환 */
     // 필요 없는 정보(작성자, 사진)은 보내지 않음
-
     @GetMapping("/{userId}/recentfreeboard")
     public ResponseEntity<List<FreeBoardFRM>> getRecentFreeBroad(@PathVariable Long userId) {
         List<FreeBoardENT> posts = freeBoardSRV.findLast3FreeboardByUserId(userId); // 사용자의 게시글 조회
@@ -62,7 +61,6 @@ public class MyPageAPI {
     }
 
     /* 특정 사용자의 최신 댓글 3개 반환 */
-
     @GetMapping("/{userId}/recentfreeboardcomment")
     public ResponseEntity<List<FreeBoardCommentFRM_V2>> getRecentFreeBoardComment(@PathVariable Long userId) {
         List<FreeBoardCommentFRM_V2> freeBoardCommentFRMS = userSRV.getUserCommentsAndRecommentsLast3(userId);
