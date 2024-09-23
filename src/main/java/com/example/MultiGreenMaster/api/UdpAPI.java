@@ -2,6 +2,7 @@ package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.device.ScFrm;
 import com.example.MultiGreenMaster.device.UdpCon;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

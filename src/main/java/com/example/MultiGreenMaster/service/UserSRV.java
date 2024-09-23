@@ -172,6 +172,7 @@ public class UserSRV {
 
         comments.forEach(comment -> {
             FreeBoardCommentFRM response = new FreeBoardCommentFRM();
+            response.setCmPostId(comment.getCmPost());
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate());
@@ -198,23 +199,21 @@ public class UserSRV {
         return user;
     }
 
-    public void addFriend(Long userId, Long friendId) {
-        UserENT user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    /* 친구 추가 메소드 */
+    // 0 : 정상작동, 1 : 이미 친구인 상태, 2 : 기타 오류 발생
+    public Integer addFriend(Long userId, Long friendId) {
+        UserENT user = userRepository.findById(userId).orElse(null);
+        UserENT friend = userRepository.findById(friendId).orElse(null);
+        if (user == null || friend == null) /* 자신 혹은 상대방 계정 정보를 못 찾으면 2 반환 */
+            return 2;
 
-        UserENT friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new RuntimeException("Friend not found"));
-
-        // 이미 친구인지 확인
-        if (friendRepository.existsByUserAndFriend(user, friend)) {
-            throw new RuntimeException("Already friends");
-        }
+        if (friendRepository.existsByUserAndFriend(user, friend)) /* 이미 친구인 경우 1 반환 */
+            return 1;
 
         // 친구 추가
-        FriendENT newFriend = new FriendENT();
-        newFriend.setUser(user); // 로그인한 사용자
-        newFriend.setFriend(friend); // 추가할 친구
-        friendRepository.save(newFriend);
+        FriendENT newFriend = new FriendENT().builder().id(null).user(user).friend(friend).build();
+        FriendENT target = friendRepository.save(newFriend);
+        return target != null ? 0 : 2;
     }
 
     public void removeFriend(Long userId, Long friendId) {

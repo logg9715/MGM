@@ -29,11 +29,7 @@ public class FriendENT {
     @JsonIgnoreProperties("friends")
     private UserENT friend;
 
-    // Getter for friend
-    public UserENT getFriend() {
-        return friend;
-    }
-
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,4 +42,6 @@ public class FriendENT {
     public int hashCode() {
         return Objects.hash(user, friend);
     }
+
+     */
 }
