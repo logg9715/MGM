@@ -1,6 +1,7 @@
 package com.example.MultiGreenMaster.service;
 
 import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM_V2;
 import com.example.MultiGreenMaster.dto.LoginRequestFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
@@ -163,16 +164,16 @@ public class UserSRV {
                 .collect(Collectors.toList());
     }
 */
-    public List<FreeBoardCommentFRM> getUserCommentsAndRecommentsLast3(Long userId) {
+    public List<FreeBoardCommentFRM_V2> getUserCommentsAndRecommentsLast3(Long userId) {
         // 사용자의 댓글을 가져오기
         List<FreeBoardCommentENT> comments = freeBoardCommentREP.findRecentCommentsByUserId(userId);
 
         // 댓글과 대댓글을 하나의 리스트로 병합
-        List<FreeBoardCommentFRM> responses = new ArrayList<>();
+        List<FreeBoardCommentFRM_V2> responses = new ArrayList<>();
 
         comments.forEach(comment -> {
-            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
-            response.setCmPostId(comment.getCmPost());
+            FreeBoardCommentFRM_V2 response = new FreeBoardCommentFRM_V2();
+            response.setCmPostId(comment.getCmPost().getId());
             response.setId(comment.getId());
             response.setContent(comment.getContent());
             response.setRegdate(comment.getRegdate().withNano(0));

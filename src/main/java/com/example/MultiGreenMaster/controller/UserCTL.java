@@ -119,7 +119,7 @@ public class UserCTL extends SessionCheckCTL {
         return "redirect:/user"; // 사용자 목록 페이지로 리다이렉트
     }
 
-    @GetMapping("/user/{id}/guestbook")
+/*    @GetMapping("/user/{id}/guestbook")
     public String getUserGuestbook(@PathVariable Long id, Model model) {
         UserENT user = userService.findUserById(id);
         if (user == null) {
@@ -132,6 +132,8 @@ public class UserCTL extends SessionCheckCTL {
         model.addAttribute("comments", comments);
         return "guestbook/guestbookpage"; // 게스트북 페이지로 이동
     }
+
+ */
 
     @PostMapping("/user/{id}/add-friend")
     public String addFriend(@PathVariable Long id, @RequestParam Long friendId, RedirectAttributes redirectAttributes) {

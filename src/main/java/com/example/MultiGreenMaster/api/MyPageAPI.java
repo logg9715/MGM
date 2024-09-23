@@ -2,6 +2,7 @@ package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.Util.AccessAuthority;
 import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
+import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM_V2;
 import com.example.MultiGreenMaster.dto.FreeBoardFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardENT;
@@ -63,8 +64,8 @@ public class MyPageAPI {
     /* 특정 사용자의 최신 댓글 3개 반환 */
 
     @GetMapping("/{userId}/recentfreeboardcomment")
-    public ResponseEntity<List<FreeBoardCommentFRM>> getRecentFreeBoardComment(@PathVariable Long userId) {
-        List<FreeBoardCommentFRM> freeBoardCommentFRMS = userSRV.getUserCommentsAndRecommentsLast3(userId);
+    public ResponseEntity<List<FreeBoardCommentFRM_V2>> getRecentFreeBoardComment(@PathVariable Long userId) {
+        List<FreeBoardCommentFRM_V2> freeBoardCommentFRMS = userSRV.getUserCommentsAndRecommentsLast3(userId);
         return ResponseEntity.ok(freeBoardCommentFRMS);
     }
 
