@@ -37,7 +37,6 @@ public class FreeBoardENT {
     private int likeCount; // 좋아요 갯수 */
 
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime regdate; // 글 작성시간
 
     @PrePersist

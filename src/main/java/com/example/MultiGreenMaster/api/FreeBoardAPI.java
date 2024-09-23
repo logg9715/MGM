@@ -108,7 +108,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
                 post.getContent(),
                 pictureBase64List,  // Base64 인코딩된 사진 리스트를 CMPostForm에 설정
                 //post.getLikeCount(),
-                post.getRegdate(),
+                post.getRegdate().withNano(0),
                 post.getCount()
         );
 
@@ -155,7 +155,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
                     post.getContent(),
                     pictureBase64List,  // Base64 인코딩된 사진 리스트를 CMPostForm에 설정
                     //post.getLikeCount(),
-                    post.getRegdate(),
+                    post.getRegdate().withNano(0),
                     post.getCount()
             );
         }).collect(Collectors.toList());  // 변환된 CMPostForm 객체 리스트를 반환

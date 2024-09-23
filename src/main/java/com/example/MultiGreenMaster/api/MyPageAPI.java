@@ -53,7 +53,7 @@ public class MyPageAPI {
                     post.getTitle(),
                     post.getContent(),
                     null,
-                    post.getRegdate(),
+                    post.getRegdate().withNano(0),
                     post.getCount()
             );
         }).collect(Collectors.toList()); // 변환된 게시글 리스트로 수집

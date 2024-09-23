@@ -34,7 +34,6 @@ public class DiaryBoardENT {
     @Column(name = "pictures", columnDefinition = "LONGBLOB")
     private List<byte[]> pictures; // 사진 리스트
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(nullable = false)
     private LocalDateTime regdate; // 작성 시간
 

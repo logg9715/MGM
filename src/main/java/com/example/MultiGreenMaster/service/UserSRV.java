@@ -175,7 +175,7 @@ public class UserSRV {
             response.setCmPostId(comment.getCmPost());
             response.setId(comment.getId());
             response.setContent(comment.getContent());
-            response.setRegdate(comment.getRegdate());
+            response.setRegdate(comment.getRegdate().withNano(0));
             responses.add(response);
         });
 

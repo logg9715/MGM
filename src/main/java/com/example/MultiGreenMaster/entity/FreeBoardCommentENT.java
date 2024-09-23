@@ -35,7 +35,6 @@ public class FreeBoardCommentENT {
     private String content; // 댓글 내용
 
     @Column
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime regdate; // 댓글 작성 시간
 
     @Column
