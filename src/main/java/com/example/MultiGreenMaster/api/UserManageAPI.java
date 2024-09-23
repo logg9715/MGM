@@ -56,15 +56,6 @@ public class UserManageAPI {
         return ResponseEntity.ok(response);
     }
 
-    /* 테스트서버 관리자 콘솔 필요 없어서 얘도 주석처리함.
-    // 비활성화 유저 목록 불러오기
-    @GetMapping("/inactive-list")
-    public ResponseEntity<List<UserENT>> inactiveUserIndex() {
-        List<UserENT> inactiveUserList = userService.findInactiveUsers(); // 비활성화된 사용자 목록을 모델에 추가
-        return ResponseEntity.ok(inactiveUserList);
-    }
-    */
-
     /* 테스트용 메소드 지울예정 */
     @GetMapping("/tmp/{id}")
     public ResponseEntity<UserENT> tmp(@PathVariable Long id) {

@@ -1,18 +1,18 @@
 package com.example.MultiGreenMaster.api;
 
+import com.example.MultiGreenMaster.Util.AccessAuthority;
 import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
 import com.example.MultiGreenMaster.dto.FreeBoardFRM;
-import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
+import com.example.MultiGreenMaster.dto.UserFRM;
 import com.example.MultiGreenMaster.entity.FreeBoardENT;
 import com.example.MultiGreenMaster.entity.UserENT;
-import com.example.MultiGreenMaster.service.FreeBoardCommentSRV;
 import com.example.MultiGreenMaster.service.FreeBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,5 +68,28 @@ public class MyPageAPI {
         return ResponseEntity.ok(freeBoardCommentFRMS);
     }
 
+    // ========================================= 계정 정보 수정 ===========================================
+
+    /* 개인정보 수정용 form 받아오는 api */
+    // 세션 정보를 읽어 자동으로 본인의 정보를 가져온다.
+    @GetMapping("/editinfo/getuserform")
+    public ResponseEntity<UserENT> editInfo_getUserForm(HttpSession session) {
+        // 본인의 정보를 자동으로 가져온다.
+        UserENT target = this.userSRV.findUserById((Long)session.getAttribute("userId"));
+        return ResponseEntity.ok(target);
+    }
+    /* form을 전달받으면 업데이트하는 api */
+    @PostMapping("/editinfo/update")
+    public ResponseEntity<UserENT> editInfo_update(@RequestBody UserFRM form, HttpSession session) {
+        // 본인의 경우만 허용, 아니면 badRequest 반환
+        AccessAuthority accessAuthority = new AccessAuthority(session, this.userSRV);
+        if (accessAuthority.forOwner(form.getId()).isOk())
+        {
+            UserENT updatedUser = userSRV.updateUser(form);
+            return (updatedUser == null) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(updatedUser);
+        }
+        else
+            return ResponseEntity.badRequest().build();
+    }
 
 }
