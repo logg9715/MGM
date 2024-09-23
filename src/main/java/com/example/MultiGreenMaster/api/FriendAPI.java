@@ -1,12 +1,10 @@
 package com.example.MultiGreenMaster.api;
 
-import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +35,6 @@ public class FriendAPI {
 
         Integer userServiceResult = userSRV.addFriend(userENT_my.getId(), friendId); // 친구 추가 메서드 호출
         result.put("friendresult", userServiceResult);
-
         return ResponseEntity.ok(result);
     }
 /*

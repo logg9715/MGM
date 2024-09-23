@@ -1,6 +1,7 @@
 package com.example.MultiGreenMaster.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,6 +35,7 @@ public class FreeBoardCommentENT {
     private String content; // 댓글 내용
 
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime regdate; // 댓글 작성 시간
 
     @Column

@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,6 +34,7 @@ public class DiaryBoardENT {
     @Column(name = "pictures", columnDefinition = "LONGBLOB")
     private List<byte[]> pictures; // 사진 리스트
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(nullable = false)
     private LocalDateTime regdate; // 작성 시간
 
