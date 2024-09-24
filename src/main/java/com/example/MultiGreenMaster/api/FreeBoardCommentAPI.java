@@ -37,14 +37,10 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
 
     @PostMapping("/create") // POST 요청을 "/new" 경로와 매핑
     public ResponseEntity<String> createComment(@ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
-        logger.info("Request to create new comment: {}", form); // 새 댓글 생성 요청
-
         Long userId = (Long) session.getAttribute("userId"); // 세션에서 userId 추출
         UserENT loginUser = userService.getLoginUserById(userId); // 로그인된 사용자 조회
-        if (loginUser == null) {
-            logger.error("Logged in user not found."); // 사용자 조회 실패 시 로그 출력
+        if (loginUser == null)
             return ResponseEntity.badRequest().body("User not found"); // 오류 응답 반환
-        }
 
         FreeBoardENT post = cmPostService.findPostById(form.getCmPostId().getId()); // 게시글 ID로 게시글 조회
 
@@ -52,8 +48,8 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
             FreeBoardCommentENT comment = form.toEntity(); // 폼 데이터를 통해 엔티티 생성
             comment.setCmPost(post); // 댓글에 게시글 설정
             comment.setUser(loginUser); // 댓글에 사용자 설정
+            comment.setTimeNow();
             freeBoardCommentSRV.saveComment(comment); // 댓글 저장
-            logger.info("Comment saved successfully: {}", comment); // 댓글 저장 완료 로그
             return ResponseEntity.ok("Comment created successfully"); // 성공 응답 반환
         }
 
@@ -76,33 +72,17 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         return ResponseEntity.ok(comments); // 조회된 댓글 목록 반환
     }
 
-    /*
-
-    @PostMapping("/{id}/like")
-    public ResponseEntity<Integer> likeComment(@PathVariable Long id) {
-        logger.info("Request to increase like count: Comment ID {}", id); // 댓글 좋아요 증가 요청
-        freeBoardCommentSRV.incrementLikeCount(id); // 댓글의 좋아요 수 증가
-        FreeBoardCommentENT comment = freeBoardCommentSRV.findCommentById(id); // ID로 댓글 조회
-        return comment != null ? ResponseEntity.ok(comment.getLikeCount()) : ResponseEntity.notFound().build(); // 댓글이 존재할 경우 좋아요 수 반환, 그렇지 않으면 404 응답
-    }
-*/
-
-
     @PostMapping("/{id}/create")
     public ResponseEntity<String> createReply(@PathVariable Long id, @ModelAttribute FreeBoardCommentFRM form, HttpSession session) {
-        logger.info("Request to create new reply to comment ID {}: {}", id, form);
-
         try {
             Long userId = (Long) session.getAttribute("userId");
             UserENT loginUser = userService.getLoginUserById(userId);
             if (loginUser == null) {
-                logger.error("Logged in user not found.");
                 return ResponseEntity.badRequest().body("User not found");
             }
 
             // cmPostId가 null인지 확인하고 방어 처리
             if (form.getCmPostId() == null || form.getCmPostId().getId() == null) {
-                logger.error("Post ID is missing.");
                 return ResponseEntity.badRequest().body("Post ID is required");
             }
 
@@ -116,17 +96,15 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
                 newComment.setUser(loginUser); // 작성자 설정
                 newComment.setContent(form.getContent()); // 내용 설정
                 newComment.setParentComment(parentComment); // 부모 댓글 설정
-                newComment.setRegdate(LocalDateTime.now()); // 작성 시간 설정
+                newComment.setTimeNow();
 
                 // 대댓글을 저장
                 freeBoardCommentSRV.saveComment(newComment);
-                logger.info("Reply saved successfully: {}", newComment);
                 return ResponseEntity.ok("Reply created successfully");
             }
 
             return ResponseEntity.badRequest().body("Post or Parent Comment not found");
         } catch (Exception e) {
-            logger.error("Error occurred while creating reply", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request.");
         }
     }

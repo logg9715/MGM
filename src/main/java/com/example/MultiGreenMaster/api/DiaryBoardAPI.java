@@ -54,6 +54,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         DiaryBoardENT diary = form.toEntity(pictureBytesList);
         diary.setUser(loginUser);
         diary.setIsPublic(form.getIsPublic());  // 사용자가 선택한 공개 여부 설정
+        diary.setTimeNow();
 
         diaryService.saveDiary(diary);
         return ResponseEntity.ok("Diary created successfully");
@@ -79,7 +80,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                     diary.getTitle(),
                     diary.getContent(),
                     pictureBase64List,
-                    diary.getRegdate(),
+                    diary.getRegdate().withNano(0),
                     diary.isDisable(),
                     diary.getIsPublic()
             );
@@ -113,7 +114,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                 diary.getTitle(),
                 diary.getContent(),
                 pictureBase64List,
-                diary.getRegdate(),
+                diary.getRegdate().withNano(0),
                 diary.isDisable(),
                 diary.getIsPublic()
         );

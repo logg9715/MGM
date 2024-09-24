@@ -33,16 +33,18 @@ public class FreeBoardENT {
     @Column(name = "content", nullable = true) // "content"라는 이름의 열을 정의하고 null 값을 허용
     private String content; // 게시글 내용
 
-    /*@Column(name = "like_count")
+    /* @Column(name = "like_count")
     private int likeCount; // 좋아요 갯수 */
 
     @Column
     private LocalDateTime regdate; // 글 작성시간
 
+    /*
     @PrePersist
     protected void onCreate() {
         this.regdate = LocalDateTime.now(); // 현재 시간을 regdate에 설정
     }
+     */
 
     @Column
     private int count; // 조회수
@@ -69,6 +71,10 @@ public class FreeBoardENT {
     /*public void incrementLikeCount() {
         this.likeCount++;
     }*/
+
+    public void setTimeNow() {
+        this.regdate = LocalDateTime.now().withNano(0);
+    }
 }
 
 

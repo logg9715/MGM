@@ -75,7 +75,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 7, 12, 10, 30))
+                .regdate(LocalDateTime.of(2024, 7, 14, 10, 30))
                 .user(user1)
                 .build();
         cmPostRepository.save(cmpost1);
@@ -132,11 +132,12 @@ public class MakeInitData {
 
         //댓글
         FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
-                .content("이 글은 1번 댓글입니다.")
+                .content("이 글은 1번 댓글입니다.11")
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
                 .user(user1)
                 .cmPost(cmpost6)
                 .build();
+        cmcomment1.setRegdate(LocalDateTime.of(2024, 8, 1, 4, 30));
         cmCommentRepository.save(cmcomment1);
 
         FreeBoardCommentENT cmcomment2 = FreeBoardCommentENT.builder()

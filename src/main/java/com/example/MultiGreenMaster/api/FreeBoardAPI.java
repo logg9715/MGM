@@ -54,6 +54,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
 
         FreeBoardENT post = form.toEntity(); // CMPostForm을 CMPost 엔티티로 변환
         post.setUser(loginUser); // 로그인한 사용자 설정
+        post.setTimeNow();
         freeBoardSRV.savePost(post); // 게시글 저장
         logger.info("Post saved successfully: {}", post); // 게시글 저장 완료 로그 출력
 
@@ -162,20 +163,14 @@ public class FreeBoardAPI extends SessionCheckCTL {
             @ModelAttribute FreeBoardFRM form,  // @ModelAttribute로 폼 데이터 수신
             HttpSession session) {
 
-        logger.info("Request to update post ID {}: {}", id, form);  // 게시글 수정 요청 로그
-
         Long userId = (Long) session.getAttribute("userId");
         UserENT loginUser = userSRV.getLoginUserById(userId);
-        if (loginUser == null) {
-            logger.error("Logged in user not found.");
+        if (loginUser == null)
             return ResponseEntity.badRequest().body("User not found");
-        }
 
         FreeBoardENT existingPost = freeBoardSRV.findPostById(id);
-        if (existingPost == null || !existingPost.getUser().getId().equals(loginUser.getId())) {
-            logger.error("Post not found or unauthorized update attempt.");
+        if (existingPost == null || !existingPost.getUser().getId().equals(loginUser.getId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Post not found or unauthorized");
-        }
 
         // 게시글 제목과 내용을 업데이트
         existingPost.setTitle(form.getTitle());
@@ -188,7 +183,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
                         try {
                             return picture.getBytes();
                         } catch (IOException e) {
-                            logger.error("Error reading picture bytes: {}", e.getMessage());
                             return null;
                         }
                     })
@@ -207,7 +201,6 @@ public class FreeBoardAPI extends SessionCheckCTL {
         }
 
         freeBoardSRV.savePost(existingPost);  // 수정된 게시글 저장
-        logger.info("Post updated successfully: {}", existingPost);  // 게시글 수정 완료 로그
         return ResponseEntity.ok("Post updated successfully");
     }
 

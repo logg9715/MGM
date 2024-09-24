@@ -44,13 +44,19 @@ public class DiaryBoardENT {
     @Column(nullable = false)
     private int isPublic = 0; // 0 = 비공개, 1 = 전체 공개, 2 = 친구에게만 공개
 
+    /*
     @PrePersist
     protected void onCreate() {
         this.regdate = LocalDateTime.now(); // 작성 시간을 현재 시간으로 설정
     }
+     */
 
     // 다이어리 공개 여부를 설정하는 메서드
     public void setPublic(int isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public void setTimeNow() {
+        this.regdate = LocalDateTime.now().withNano(0);
     }
 }

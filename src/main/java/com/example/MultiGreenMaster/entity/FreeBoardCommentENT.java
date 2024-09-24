@@ -41,10 +41,12 @@ public class FreeBoardCommentENT {
     @Column
     private boolean disable; // 비활성화 여부
 
+    /*
     @PrePersist
     protected void onCreate() {
         this.regdate = LocalDateTime.now(); // 현재 시간을 regdate에 설정
     }
+     */
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference // 순환 참조를 방지하기 위해 사용
@@ -69,4 +71,8 @@ public class FreeBoardCommentENT {
     @Getter
     @Transient
     private boolean canEdit;  // 수정 가능 여부
+
+    public void setTimeNow() {
+        this.regdate = LocalDateTime.now().withNano(0);
+    }
 }
