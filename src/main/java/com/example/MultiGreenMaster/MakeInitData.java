@@ -180,6 +180,16 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment6);
 
+        // 대댓글
+        FreeBoardCommentENT recmcomment1 = FreeBoardCommentENT.builder()
+                .content("대댓글 1번")
+                .regdate(LocalDateTime.now().withNano(0))
+                .user(user1)
+                .cmPost(cmpost6)
+                .parentComment(cmcomment6)
+                .build();
+        cmCommentRepository.save(recmcomment1);
+
         // 일기장
 
         DiaryBoardENT diary1 = DiaryBoardENT.builder()

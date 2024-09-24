@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.Util;
 
+import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.entity.User_RoleENUM;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -9,8 +10,8 @@ import lombok.Getter;
 @Getter
 public class AccessAuthority {
     private UserSRV userSRV;
-
     private UserENT userENT;
+    private FriendENT friendENT;
     private boolean ok;
 
     /* 생성자는 (session=api세션, UserSRV=컨트롤러에서 주입된 UserSRV) 를 필수로 가진다. */

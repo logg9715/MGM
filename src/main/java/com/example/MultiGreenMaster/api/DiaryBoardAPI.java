@@ -59,6 +59,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok("Diary created successfully");
     }
 
+    /* 일기장 목록 가져오기 */
     @GetMapping
     public ResponseEntity<List<DiaryBoardFRM>> listDiaries(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
@@ -66,6 +67,8 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         if (loginUser == null) {
             return ResponseEntity.badRequest().body(null);
         }
+
+
 
         List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
