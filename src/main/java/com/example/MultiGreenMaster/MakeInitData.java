@@ -75,7 +75,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 7, 14, 10, 30))
+                .regdate(LocalDateTime.of(2024, 7, 14, 10, 30, 12))
                 .user(user1)
                 .build();
         cmPostRepository.save(cmpost1);
@@ -85,7 +85,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 2입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 7, 12, 10, 30))
+                .regdate(LocalDateTime.of(2024, 7, 12, 10, 30, 12))
                 .user(user1)
                 .build();
         cmPostRepository.save(cmpost2);
@@ -95,7 +95,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 3입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 7, 13, 10, 30))
+                .regdate(LocalDateTime.of(2024, 7, 13, 10, 30, 15))
                 .user(user3)
                 .build();
         cmPostRepository.save(cmpost3);
@@ -105,7 +105,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 4입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 7, 13, 12, 40))
+                .regdate(LocalDateTime.of(2024, 7, 13, 12, 40, 16))
                 .user(user2)
                 .build();
         cmPostRepository.save(cmpost4);
@@ -115,7 +115,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 5입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 8, 15, 11, 36))
+                .regdate(LocalDateTime.of(2024, 8, 15, 11, 36, 20))
                 .user(user1)
                 .build();
         cmPostRepository.save(cmpost5);
@@ -125,7 +125,7 @@ public class MakeInitData {
                 .content("이 글은 게시글 6입니다.")
                 .count(0)
                 //.likeCount(0)
-                .regdate(LocalDateTime.of(2024, 8, 22, 5, 20))
+                .regdate(LocalDateTime.of(2024, 8, 22, 5, 20, 21))
                 .user(user3)
                 .build();
         cmPostRepository.save(cmpost6);
@@ -133,16 +133,16 @@ public class MakeInitData {
         //댓글
         FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.11")
-                .regdate(LocalDateTime.of(2024, 8, 1, 4, 30))
+                .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
                 .user(user1)
                 .cmPost(cmpost6)
                 .build();
-        cmcomment1.setRegdate(LocalDateTime.of(2024, 8, 1, 4, 30));
+        cmcomment1.setRegdate(LocalDateTime.of(2024, 8, 1, 4, 30, 25));
         cmCommentRepository.save(cmcomment1);
 
         FreeBoardCommentENT cmcomment2 = FreeBoardCommentENT.builder()
                 .content("이 글은 2번 댓글입니다.")
-                .regdate(LocalDateTime.of(2024, 8, 2, 5, 45))
+                .regdate(LocalDateTime.of(2024, 8, 2, 5, 45, 34))
                 .user(user3)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
@@ -150,7 +150,7 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment3 = FreeBoardCommentENT.builder()
                 .content("이 글은 3번 댓글입니다.")
-                .regdate(LocalDateTime.of(2024, 8, 3, 15, 45))
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 45, 35))
                 .user(user2)
                 .cmPost(cmpost1) // 댓글이 달릴 게시글을 설정
                 .build();
@@ -158,7 +158,7 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment4 = FreeBoardCommentENT.builder()
                 .content("이 글은 4번 댓글입니다.")
-                .regdate(LocalDateTime.of(2024, 8, 3, 15, 55))
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 55, 36))
                 .user(user1)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
@@ -166,7 +166,7 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment5 = FreeBoardCommentENT.builder()
                 .content("이 글은 5번 댓글입니다.")
-                .regdate(LocalDateTime.of(2024, 8, 3, 15, 56))
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 56, 37))
                 .user(user1)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
@@ -174,7 +174,7 @@ public class MakeInitData {
 
         FreeBoardCommentENT cmcomment6 = FreeBoardCommentENT.builder()
                 .content("이 글은 6번 댓글입니다.")
-                .regdate(LocalDateTime.of(2024, 8, 3, 15, 57))
+                .regdate(LocalDateTime.of(2024, 8, 3, 15, 57, 40))
                 .user(user1)
                 .cmPost(cmpost6) // 댓글이 달릴 게시글을 설정
                 .build();
@@ -196,7 +196,7 @@ public class MakeInitData {
         DiaryBoardENT diary2 = DiaryBoardENT.builder()
                 .title("활성화 일기장")
                 .content("활성화 일기장")
-                .regdate(LocalDateTime.now())
+                .regdate(LocalDateTime.of(2024, 8, 5, 15, 57, 40))
                 .disable(false)  // disable 값을 true로 설정
                 .isPublic(1)   // 전체 공개로 설정
                 .user(user1)     // 해당 유저로 설정

@@ -56,7 +56,7 @@ public class FreeBoardCommentAPI extends SessionCheckCTL {
         return ResponseEntity.badRequest().body("Post not found"); // 게시글을 찾을 수 없는 경우 오류 응답 반환
     }
 
-    @GetMapping("/{postId}") // GET 요청을 "/post/{postId}" 경로와 매핑
+    @GetMapping("/{postId}") // GET 요청을
     public ResponseEntity<List<FreeBoardCommentENT>> listComments(@PathVariable Long postId) {
         logger.info("Requesting comment list: Post ID {}", postId); // 댓글 목록 요청
         List<FreeBoardCommentENT> comments = freeBoardCommentSRV.findCommentsByPostId(postId); // 게시글의 모든 댓글 조회
