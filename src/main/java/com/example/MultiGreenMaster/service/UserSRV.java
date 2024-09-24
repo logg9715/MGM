@@ -141,29 +141,6 @@ public class UserSRV {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
-    /*
-    //사용자의 댓글과 대댓글을 가져와 하나의 리스트로 변환
-    public List<FreeBoardCommentFRM> getUserCommentsAndRecomments(Long userId) {
-        // 사용자의 댓글을 가져오기
-        List<FreeBoardCommentENT> comments = freeBoardCommentREP.findByUser_Id(userId);
-
-        // 댓글과 대댓글을 하나의 리스트로 병합
-        List<FreeBoardCommentFRM> responses = new ArrayList<>();
-
-        comments.forEach(comment -> {
-            FreeBoardCommentFRM response = new FreeBoardCommentFRM();
-            response.setId(comment.getId());
-            response.setContent(comment.getContent());
-            response.setRegdate(comment.getRegdate());
-            responses.add(response);
-        });
-
-        // regdate 기준으로 내림차순 정렬
-        return responses.stream()
-                .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
-                .collect(Collectors.toList());
-    }
-*/
     public List<FreeBoardCommentFRM_V2> getUserCommentsAndRecommentsLast3(Long userId) {
         // 사용자의 댓글을 가져오기
         List<FreeBoardCommentENT> comments = freeBoardCommentREP.findRecentCommentsByUserId(userId);
@@ -185,7 +162,6 @@ public class UserSRV {
                 .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
                 .collect(Collectors.toList());
     }
-
 
     @Autowired
     private FriendREP friendRepository;
@@ -217,20 +193,24 @@ public class UserSRV {
         return target != null ? 0 : 2;
     }
 
-    public void removeFriend(Long userId, Long friendId) {
-        UserENT user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    /* 친구 삭제 메소드 */
+    // 0 : 정상작동, 1 : 이미 친구 아닌 상태, 2 : 기타 오류 발생
+    @Transactional
+    public Integer removeFriend(Long userId, Long friendId) {
+        UserENT user = userRepository.findById(userId).orElse(null);
+        UserENT friend = userRepository.findById(friendId).orElse(null);
 
-        UserENT friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new RuntimeException("Friend not found"));
+        if (user == null || friend == null)
+            return 2;
+
+        /* 이미 친구가 아닌 경우 1 반환 */
+        if(!friendRepository.existsByUserAndFriend(user,friend))
+            return 1;
 
         // 친구 삭제
-        Optional<FriendENT> existingFriendOpt = Optional.ofNullable(friendRepository.findByUserAndFriend(user, friend));
-        if (!existingFriendOpt.isPresent()) {
-            throw new RuntimeException("Friend relationship not found");
-        }
-
-        friendRepository.delete(existingFriendOpt.get());
+        FriendENT target = friendRepository.findByUser(user);
+        friendRepository.delete(target);
+        return 0;
     }
 
 }
