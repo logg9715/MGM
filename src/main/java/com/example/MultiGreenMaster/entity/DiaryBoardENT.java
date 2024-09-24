@@ -40,9 +40,11 @@ public class DiaryBoardENT {
     @Column(nullable = false)
     private boolean disable; // 비활성화 여부
 
+    /*
     @Builder.Default
     @Column(nullable = false)
     private int isPublic = 0; // 0 = 비공개, 1 = 전체 공개, 2 = 친구에게만 공개
+    */
 
     /*
     @PrePersist
@@ -51,10 +53,12 @@ public class DiaryBoardENT {
     }
      */
 
+    /*
     // 다이어리 공개 여부를 설정하는 메서드
     public void setPublic(int isPublic) {
         this.isPublic = isPublic;
     }
+*/
 
     public void setTimeNow() {
         this.regdate = LocalDateTime.now().withNano(0);

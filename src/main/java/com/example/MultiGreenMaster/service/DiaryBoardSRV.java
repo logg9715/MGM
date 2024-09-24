@@ -32,10 +32,7 @@ public class DiaryBoardSRV {
     // 사용자의 다이어리와 공개 여부, 비활성화 여부에 따른 다이어리 조회 메서드 (친구 관련 기능 없음)
     public List<DiaryBoardENT> findDiariesForUser(Long userId) {
         return diaryRepository.findAll().stream()
-                .filter(diary ->
-                        !diary.isDisable() &&  // 비활성화되지 않은 다이어리만 필터링
-                                (diary.getIsPublic() == 1 ||  // 전체 공개
-                                        diary.getUser().getId().equals(userId)))  // 사용자 본인의 다이어리만 필터링
+                .filter(diary -> !diary.isDisable())
                 .collect(Collectors.toList());
     }
 

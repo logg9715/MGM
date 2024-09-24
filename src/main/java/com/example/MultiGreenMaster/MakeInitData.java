@@ -187,7 +187,6 @@ public class MakeInitData {
                 .content("비활성화 일기장")
                 .regdate(LocalDateTime.now())
                 .disable(true)  // disable 값을 true로 설정
-                .isPublic(1)   // 전체 공개로 설정
                 .user(user1)     // 해당 유저로 설정
                 .build();
 
@@ -198,7 +197,6 @@ public class MakeInitData {
                 .content("활성화 일기장")
                 .regdate(LocalDateTime.of(2024, 8, 5, 15, 57, 40))
                 .disable(false)  // disable 값을 true로 설정
-                .isPublic(1)   // 전체 공개로 설정
                 .user(user1)     // 해당 유저로 설정
                 .build();
 

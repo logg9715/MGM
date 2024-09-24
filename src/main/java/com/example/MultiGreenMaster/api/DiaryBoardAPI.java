@@ -53,7 +53,6 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         // 다이어리 엔티티 생성
         DiaryBoardENT diary = form.toEntity(pictureBytesList);
         diary.setUser(loginUser);
-        diary.setIsPublic(form.getIsPublic());  // 사용자가 선택한 공개 여부 설정
         diary.setTimeNow();
 
         diaryService.saveDiary(diary);
@@ -79,10 +78,9 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                     diary.getUser(),
                     diary.getTitle(),
                     diary.getContent(),
-                    pictureBase64List,
+                    null,
                     diary.getRegdate().withNano(0),
-                    diary.isDisable(),
-                    diary.getIsPublic()
+                    diary.isDisable()
             );
         }).collect(Collectors.toList());
 
@@ -115,8 +113,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                 diary.getContent(),
                 pictureBase64List,
                 diary.getRegdate().withNano(0),
-                diary.isDisable(),
-                diary.getIsPublic()
+                diary.isDisable()
         );
 
         logger.info("Diary detail retrieved successfully: Diary ID {}", id);  // 로그: 다이어리 상세 조회 성공
