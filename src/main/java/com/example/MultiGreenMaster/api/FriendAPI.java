@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.api;
 
+import com.example.MultiGreenMaster.dto.UserDTO_id_nickname;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.service.FriendSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
@@ -33,15 +34,15 @@ public class FriendAPI {
     }
 
     @GetMapping("/getallfriend")
-    public ResponseEntity<List<UserENT>> getAllFriendList(HttpSession session) {
-        List<UserENT> targetList = friendSRV.findUsersFriends(session);
+    public ResponseEntity<List<UserDTO_id_nickname>> getAllFriendList(HttpSession session) {
+        List<UserDTO_id_nickname> targetList = friendSRV.findUsersFriends(session);
         if(targetList == null)
             return ResponseEntity.badRequest().build();
         else
             return ResponseEntity.ok(targetList);
     }
 
-    @GetMapping("/isfriendwith/{friendID}")
+    @GetMapping("/isfriendwith/{friendId}")
     public ResponseEntity<Boolean> isFriendWith(@PathVariable Long friendId, HttpSession session) {
         Boolean result = friendSRV.isFriend(session, friendId);
         if (result == null)

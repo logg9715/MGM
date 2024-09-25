@@ -1,10 +1,12 @@
 package com.example.MultiGreenMaster.service;
 
+import com.example.MultiGreenMaster.dto.UserDTO_id_nickname;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Service
 public class FriendSRV {
@@ -114,10 +117,13 @@ public class FriendSRV {
 
     //사용자와 친구 데이터를 미리 로드하여 컨트롤러로 전달
     @Transactional
-    public List<UserENT> findUsersFriends(HttpSession session) {
+    public List<UserDTO_id_nickname> findUsersFriends(HttpSession session) {
+        System.out.println("@@@@ : 1");
         Object userId = session.getAttribute("userId");
         if(userId == null)
             return null;
+
+        System.out.println("@@@@ : 2");
         return friendREP.findAllFriendByUserId((Long) userId);
     }
 

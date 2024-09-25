@@ -28,20 +28,4 @@ public class FriendENT {
     @JoinColumn(name = "friend_id")
     @JsonIgnoreProperties("friends")
     private UserENT friend;
-
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FriendENT that = (FriendENT) o;
-        return user.equals(that.user) && friend.equals(that.friend);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, friend);
-    }
-
-     */
 }
