@@ -134,7 +134,7 @@ public class UserCTL extends SessionCheckCTL {
     }
 
  */
-
+/*
     @PostMapping("/user/{id}/add-friend")
     public String addFriend(@PathVariable Long id, @RequestParam Long friendId, RedirectAttributes redirectAttributes) {
         try {
@@ -158,4 +158,6 @@ public class UserCTL extends SessionCheckCTL {
         }
         return "redirect:/user/" + id; // 유저 페이지로 리다이렉트
     }
+
+ */
 }

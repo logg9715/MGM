@@ -110,4 +110,14 @@ public class FriendSRV {
         result.put("friendresult", 0);
         return result;
     }
+
+    //사용자와 친구 데이터를 미리 로드하여 컨트롤러로 전달
+    @Transactional
+    public UserENT findUserWithFriends(Long id) {
+        UserENT user = userREP.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        // friends를 초기화하여 지연 로딩을 방지
+        user.getFriends().size();
+        return user;
+    }
 }

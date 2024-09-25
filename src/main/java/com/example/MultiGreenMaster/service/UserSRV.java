@@ -162,14 +162,4 @@ public class UserSRV {
                 .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
                 .collect(Collectors.toList());
     }
-
-    //사용자와 친구 데이터를 미리 로드하여 컨트롤러로 전달
-    @Transactional
-    public UserENT findUserWithFriends(Long id) {
-        UserENT user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        // friends를 초기화하여 지연 로딩을 방지
-        user.getFriends().size();
-        return user;
-    }
 }
