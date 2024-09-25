@@ -5,6 +5,7 @@ import com.example.MultiGreenMaster.dto.AnnounceBoardFRM;
 import com.example.MultiGreenMaster.entity.AnnounceBoardENT;
 import com.example.MultiGreenMaster.repository.AnnounceBoardREP;
 import com.example.MultiGreenMaster.repository.UserREP;
+import com.example.MultiGreenMaster.service.AnnounceBoardSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,25 +26,25 @@ public class AnnounceBoardAPI extends SessionCheckCTL {
     @Autowired
     private UserSRV userService;
 
+    @Autowired
+    private AnnounceBoardSRV announceBoardSRV;
+
     /* 공지사항 목록 */
     @GetMapping
     public ResponseEntity<List<AnnounceBoardENT>> index() {
-        List<AnnounceBoardENT> announceEntityList = (List<AnnounceBoardENT>) announceRepository.findByDisableFalse();
-        return ResponseEntity.ok(announceEntityList);
+        return ResponseEntity.ok(announceBoardSRV.getAllEnableAnnounces());
     }
 
     /* 새 공지사항 제출 */
     @PostMapping("/create")
-    public ResponseEntity<AnnounceBoardENT> createAnnounce(@RequestBody AnnounceBoardFRM form, Model model) {  //DTO AnnounceForm
-        AnnounceBoardENT announce = form.toEntity();
-        AnnounceBoardENT saved = announceRepository.save(announce);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<AnnounceBoardENT> createAnnounce(@RequestBody AnnounceBoardFRM form, Model model) {
+        return ResponseEntity.ok(announceBoardSRV.saveNewAnnounce(form));
     }
 
     /* 공지사항 열람 */
     @GetMapping("/{id}")
     public ResponseEntity<AnnounceBoardENT> show(@PathVariable("id") Long id) {
-        AnnounceBoardENT announceEntity = announceRepository.findById(id).orElse(null);
+        AnnounceBoardENT announceEntity = announceBoardSRV.findAnnounceById(id);
         if(announceEntity == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return ResponseEntity.ok(announceEntity);
     }
