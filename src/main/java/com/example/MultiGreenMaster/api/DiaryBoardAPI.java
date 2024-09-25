@@ -62,7 +62,12 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     /* 일기장 목록 가져오기 */
     @GetMapping
     public ResponseEntity<List<DiaryBoardFRM>> listDiaries(HttpSession session) {
+        /* 세션 로그인 오류 */
         Long userId = (Long) session.getAttribute("userId");
+        if(userId == null)
+            return ResponseEntity.badRequest().build();
+
+        /* 접근제한 */
         UserENT loginUser = userService.getLoginUserById(userId);
         if (loginUser == null) {
             return ResponseEntity.badRequest().body(null);

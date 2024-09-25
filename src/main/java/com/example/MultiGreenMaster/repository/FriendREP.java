@@ -17,5 +17,4 @@ public interface FriendREP extends JpaRepository<FriendENT, Long> {
             "WHERE f.user.id = :userId")
     List<UserDTO_id_nickname> findAllFriendByUserId(@Param("userId") Long userId);
 
-
 }

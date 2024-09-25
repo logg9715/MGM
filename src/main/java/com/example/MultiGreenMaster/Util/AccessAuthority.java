@@ -3,6 +3,7 @@ package com.example.MultiGreenMaster.Util;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.entity.User_RoleENUM;
+import com.example.MultiGreenMaster.service.FriendSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Getter;
 public class AccessAuthority {
     private UserSRV userSRV;
     private UserENT userENT;
-    private FriendENT friendENT;
+    private FriendSRV friendSRV;
     private boolean ok;
 
     /* 생성자는 (session=api세션, UserSRV=컨트롤러에서 주입된 UserSRV) 를 필수로 가진다. */
@@ -24,6 +25,18 @@ public class AccessAuthority {
         else
             this.userENT = this.userSRV.findUserById((Long)session.getAttribute("userId"));
     }
+
+    public AccessAuthority(HttpSession session, UserSRV userSRV, FriendSRV friendSRV) {
+        this.userSRV = userSRV;
+        this.friendSRV = friendSRV;
+        this.ok = false;
+
+        if (session.getAttribute("userId") == null)
+            this.userENT = null;
+        else
+            this.userENT = this.userSRV.findUserById((Long)session.getAttribute("userId"));
+    }
+
 
     public AccessAuthority forAdmin() {
         if (this.userENT == null) return this;

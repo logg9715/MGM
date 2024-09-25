@@ -62,4 +62,8 @@ public class UserManageAPI {
         UserENT target = userService.getLoginUserById(id);
         return ResponseEntity.ok(target);
     }
+    
+    //@GetMapping("/diary/{code}")
+    // code에 0 1 2 넣어서 요청하면 세션에서 계정 읽고 그 계정에 diaryispublic에 코드 반영
+    // 성공하면 그냥 ok 실패시 bad 리턴
 }
