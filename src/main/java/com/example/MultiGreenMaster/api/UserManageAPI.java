@@ -33,8 +33,10 @@ public class UserManageAPI {
 
         // 중복체크
         if (form.getId() != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        if (userService.isLoginIdDuplicate(user.getLoginId())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        if (userService.isNicknameDuplicate(user.getNickname())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (userService.isLoginIdDuplicate(user.getLoginId()))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (userService.isNicknameDuplicate(user.getNickname()))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         return ResponseEntity.ok(userService.saveUser(user));
     }
@@ -47,6 +49,7 @@ public class UserManageAPI {
         response.put("isDuplicate", isDuplicate);
         return ResponseEntity.ok(response);
     }
+
     /* 사용자 닉네임 중복체크 */
     @GetMapping("/check-nickname-duplicate")
     public ResponseEntity<Map<String, Boolean>> checkDuplicateNickname(@RequestParam String nickname) {
@@ -62,8 +65,33 @@ public class UserManageAPI {
         UserENT target = userService.getLoginUserById(id);
         return ResponseEntity.ok(target);
     }
-    
-    //@GetMapping("/diary/{code}")
-    // code에 0 1 2 넣어서 요청하면 세션에서 계정 읽고 그 계정에 diaryispublic에 코드 반영
-    // 성공하면 그냥 ok 실패시 bad 리턴
+
+    /* 다이어리 공개 설정 업데이트 */
+    @GetMapping("/diary/{code}")
+    public ResponseEntity<String> updateDiaryVisibility(@PathVariable int code, HttpSession session) {
+        // 세션에서 로그인된 사용자 ID를 가져옴
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 세션에 사용자 정보가 없으면 Bad Request 반환
+        }
+        UserENT user = userService.getLoginUserById(userId); // 사용자 정보 조회
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 사용자 정보를 찾지 못하면 Bad Request 반환
+        }
+        String message;
+        if (code == 0) {
+            user.setDiaryispublic(0);
+            message = "success diaryIsPublic = 0";
+        } else if (code == 1) {
+            user.setDiaryispublic(1);
+            message = "success diaryIsPublic = 1";
+        } else if (code == 2) {
+            user.setDiaryispublic(2);
+            message = "success diaryIsPublic = 2";
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail this code not available"); // 잘못된 code 값이 들어온 경우 오류 메시지 반환
+        }
+        userService.saveUser(user); // 변경된 사용자 정보 저장
+        return ResponseEntity.ok(message); // 성공적으로 업데이트 되었을 경우 message 반환
+    }
 }
