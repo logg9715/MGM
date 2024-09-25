@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,5 +30,23 @@ public class FriendAPI {
     @GetMapping("/remove/{friendId}")
     public ResponseEntity<Map<String, Object>> removeFriend(@PathVariable Long friendId, HttpSession session) {
         return ResponseEntity.ok(friendSRV.removeFriend(friendId, session));
+    }
+
+    @GetMapping("/getallfriend")
+    public ResponseEntity<List<UserENT>> getAllFriendList(HttpSession session) {
+        List<UserENT> targetList = friendSRV.findUsersFriends(session);
+        if(targetList == null)
+            return ResponseEntity.badRequest().build();
+        else
+            return ResponseEntity.ok(targetList);
+    }
+
+    @GetMapping("/isfriendwith/{friendID}")
+    public ResponseEntity<Boolean> isFriendWith(@PathVariable Long friendId, HttpSession session) {
+        Boolean result = friendSRV.isFriend(session, friendId);
+        if (result == null)
+            return ResponseEntity.badRequest().build();
+        else
+            return ResponseEntity.ok(result);
     }
 }

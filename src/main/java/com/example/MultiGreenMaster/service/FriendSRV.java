@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -113,11 +114,25 @@ public class FriendSRV {
 
     //사용자와 친구 데이터를 미리 로드하여 컨트롤러로 전달
     @Transactional
-    public UserENT findUserWithFriends(Long id) {
-        UserENT user = userREP.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        // friends를 초기화하여 지연 로딩을 방지
-        user.getFriends().size();
-        return user;
+    public List<UserENT> findUsersFriends(HttpSession session) {
+        Object userId = session.getAttribute("userId");
+        if(userId == null)
+            return null;
+        return friendREP.findAllFriendByUserId((Long) userId);
+    }
+
+    public Boolean isFriend(HttpSession session, Long friendId) {
+        /* 세션 로그인 오류 */
+        Object userId = session.getAttribute("userId");
+        if(userId == null)
+            return null;
+
+        /* 계정 정보 찾기 오류 */
+        UserENT userENT_my = userREP.findById((Long) userId).orElse(null);
+        UserENT friendENT = userREP.findById(friendId).orElse(null);
+        if(userENT_my == null || friendENT == null)
+            return null;
+
+        return friendREP.existsByUserAndFriend(userENT_my, friendENT);
     }
 }
