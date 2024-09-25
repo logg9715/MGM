@@ -163,9 +163,6 @@ public class UserSRV {
                 .collect(Collectors.toList());
     }
 
-    @Autowired
-    private FriendREP friendRepository;
-
     //사용자와 친구 데이터를 미리 로드하여 컨트롤러로 전달
     @Transactional
     public UserENT findUserWithFriends(Long id) {
@@ -175,42 +172,4 @@ public class UserSRV {
         user.getFriends().size();
         return user;
     }
-
-    /* 친구 추가 메소드 */
-    // 0 : 정상작동, 1 : 이미 친구인 상태, 2 : 기타 오류 발생
-    public Integer addFriend(Long userId, Long friendId) {
-        UserENT user = userRepository.findById(userId).orElse(null);
-        UserENT friend = userRepository.findById(friendId).orElse(null);
-        if (user == null || friend == null) /* 자신 혹은 상대방 계정 정보를 못 찾으면 2 반환 */
-            return 2;
-
-        if (friendRepository.existsByUserAndFriend(user, friend)) /* 이미 친구인 경우 1 반환 */
-            return 1;
-
-        // 친구 추가
-        FriendENT newFriend = new FriendENT().builder().id(null).user(user).friend(friend).build();
-        FriendENT target = friendRepository.save(newFriend);
-        return target != null ? 0 : 2;
-    }
-
-    /* 친구 삭제 메소드 */
-    // 0 : 정상작동, 1 : 이미 친구 아닌 상태, 2 : 기타 오류 발생
-    @Transactional
-    public Integer removeFriend(Long userId, Long friendId) {
-        UserENT user = userRepository.findById(userId).orElse(null);
-        UserENT friend = userRepository.findById(friendId).orElse(null);
-
-        if (user == null || friend == null)
-            return 2;
-
-        /* 이미 친구가 아닌 경우 1 반환 */
-        if(!friendRepository.existsByUserAndFriend(user,friend))
-            return 1;
-
-        // 친구 삭제
-        FriendENT target = friendRepository.findByUser(user);
-        friendRepository.delete(target);
-        return 0;
-    }
-
 }

@@ -68,8 +68,6 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body(null);
         }
 
-
-
         List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
             List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
