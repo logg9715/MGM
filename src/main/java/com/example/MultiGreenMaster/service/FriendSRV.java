@@ -110,8 +110,14 @@ public class FriendSRV {
         }
 
         // 친구 삭제
-        friendREP.delete(friendREP.findByUser(userENT_my));
-        result.put("friendresult", 0);
+        FriendENT friendship = friendREP.findByUserAndFriend(userENT_my, friend);
+        if (friendship != null) {
+            friendREP.delete(friendship);
+            result.put("friendresult", 0); // 성공적으로 삭제된 경우
+        } else {
+            result.put("friendresult", 2); // 기타 오류
+        }
+
         return result;
     }
 
