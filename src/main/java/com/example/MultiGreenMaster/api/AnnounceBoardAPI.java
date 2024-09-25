@@ -19,12 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/announces")
 public class AnnounceBoardAPI extends SessionCheckCTL {
-    @Autowired
-    private AnnounceBoardREP announceRepository;
-    @Autowired
-    private UserREP userRepository;
-    @Autowired
-    private UserSRV userService;
 
     @Autowired
     private AnnounceBoardSRV announceBoardSRV;
@@ -52,34 +46,23 @@ public class AnnounceBoardAPI extends SessionCheckCTL {
     /* 최근 4개 공지사항 리스트 전송 */
     @GetMapping("/recent")
     public ResponseEntity<List<AnnounceBoardENT>> recent4AnnounceBoard() {
-        List<AnnounceBoardENT> targetList = announceRepository.findTop4ByDisableFalseOrderByCreatedDateDesc();
-        return ResponseEntity.ok(targetList);
+        List<AnnounceBoardENT> recentAnnounces = announceBoardSRV.getRecentAnnounces();
+        return ResponseEntity.ok(recentAnnounces);
     }
 
     /* 공지사항 수정 제출 */
     @PatchMapping("/{id}/edit")
     public ResponseEntity<AnnounceBoardENT> edit(@PathVariable Long id, @RequestBody AnnounceBoardFRM form) {
-        AnnounceBoardENT newData = form.toEntity();
-        System.out.println("@@@@ : 폼 id " + newData.getContent());
-        AnnounceBoardENT target = announceRepository.findById(id).orElse(null);
-
-        if(target == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();    // 코드가 없거나 존재하지 않는 글일 경우 튕겨냄
-        else
-            target.patch(newData);
-
-        return ResponseEntity.ok( announceRepository.save(target));
+        AnnounceBoardENT updatedAnnounce = announceBoardSRV.updateAnnounce(id, form);
+        if(updatedAnnounce == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.ok(updatedAnnounce);
     }
 
     /* 공지사항 삭제(비활성화) */
     @DeleteMapping("/{id}")
     public ResponseEntity<AnnounceBoardENT> delete(@PathVariable Long id, RedirectAttributes rttr) {
-        AnnounceBoardENT target = announceRepository.findById(id).orElse(null);
-        if (target != null) {
-            target.toDisable();
-            announceRepository.save(target);
-            rttr.addFlashAttribute("msg", "삭제됐습니다!");
-        }
-        return ResponseEntity.ok(target);
+        AnnounceBoardENT deletedAnnounce = announceBoardSRV.deleteAnnounce(id);
+        if (deletedAnnounce != null) rttr.addFlashAttribute("msg", "삭제됐습니다!");
+        return ResponseEntity.ok(deletedAnnounce);
     }
 }
