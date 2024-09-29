@@ -212,6 +212,16 @@ public class MakeInitData {
 
         diaryRepository.save(diary2);
 
+        DiaryBoardENT diary3 = DiaryBoardENT.builder()
+                .title("활성화 일기장2")
+                .content("활성화 일기장2")
+                .regdate(LocalDateTime.of(2024, 8, 5, 15, 59, 40))
+                .disable(false)  // disable 값을 true로 설정
+                .user(user1)     // 해당 유저로 설정
+                .build();
+
+        diaryRepository.save(diary3);
+
     }
 
     @Transactional

@@ -60,11 +60,13 @@ public class UserManageAPI {
     }
 
     /* 테스트용 메소드 지울예정 */
+    /*
     @GetMapping("/tmp/{id}")
     public ResponseEntity<UserENT> tmp(@PathVariable Long id) {
         UserENT target = userService.getLoginUserById(id);
         return ResponseEntity.ok(target);
     }
+     */
 
     /* 다이어리 공개 설정 업데이트 */
     @GetMapping("/diary/{code}")

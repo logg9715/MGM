@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.api;
 
+import com.example.MultiGreenMaster.Util.AccessAuthority;
 import com.example.MultiGreenMaster.controller.SessionCheckCTL;
 import com.example.MultiGreenMaster.dto.DiaryBoardFRM;
 import com.example.MultiGreenMaster.entity.DiaryBoardENT;
@@ -7,6 +8,7 @@ import com.example.MultiGreenMaster.entity.UserENT;
 import com.example.MultiGreenMaster.exeption.DiaryDeleteExcption;
 import com.example.MultiGreenMaster.exeption.DiaryNotFoundException;
 import com.example.MultiGreenMaster.service.DiaryBoardSRV;
+import com.example.MultiGreenMaster.service.FriendSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     @Autowired
     private UserSRV userService; // UserService 의존성 주입
 
+    @Autowired
+    private FriendSRV friendSRV;
 
     @PostMapping("/create")
     public ResponseEntity<String> createDiary(@ModelAttribute DiaryBoardFRM form, HttpSession session) {
@@ -60,18 +64,12 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     }
 
     /* 일기장 목록 가져오기 */
-    @GetMapping
-    public ResponseEntity<List<DiaryBoardFRM>> listDiaries(HttpSession session) {
-        /* 세션 로그인 오류 */
-        Long userId = (Long) session.getAttribute("userId");
-        if(userId == null)
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<DiaryBoardFRM>> listDiaries(@PathVariable Long userId, HttpSession session) {
+        // 접근제한 = 본인&친구
+        AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
+        if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
             return ResponseEntity.badRequest().build();
-
-        /* 접근제한 */
-        UserENT loginUser = userService.getLoginUserById(userId);
-        if (loginUser == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
 
         List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
@@ -93,9 +91,15 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok(diaryForms);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getDiary(@PathVariable Long id) {
+    @GetMapping("/{userId}/{id}")
+    public ResponseEntity<?> getDiary(@PathVariable Long userId, @PathVariable Long id, HttpSession session) {
         logger.info("Requesting diary detail: Diary ID {}", id);  // 로그: 다이어리 상세 조회 요청
+
+        // 접근제한 : 본인&친구
+        AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
+        if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
+            return ResponseEntity.badRequest().build();
+
 
         DiaryBoardENT diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
         if (diary == null) {
@@ -127,23 +131,14 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     }
 
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<String> updateDiary(
-            @PathVariable Long id,
-            @ModelAttribute DiaryBoardFRM form,
-            HttpSession session) {
-
-        logger.info("Request to update diary ID {}: {}", id, form);  // 다이어리 수정 요청 로그
-
-        Long userId = (Long) session.getAttribute("userId");
-        UserENT loginUser = userService.getLoginUserById(userId);
-        if (loginUser == null) {
-            logger.error("Logged in user not found.");
-            return ResponseEntity.badRequest().body("User not found");
-        }
+    @PutMapping("/{userId}/{id}/update")
+    public ResponseEntity<String> updateDiary(@PathVariable Long userId, @PathVariable Long id, @ModelAttribute DiaryBoardFRM form, HttpSession session) {
+        AccessAuthority accessAuthority = new AccessAuthority(session, this.userService);
+        if (!accessAuthority.forOwner(userId).isOk())
+            return ResponseEntity.badRequest().body("Login User Error");
 
         DiaryBoardENT existingDiary = diaryService.findDiaryById(id);
-        if (existingDiary == null || !existingDiary.getUser().getId().equals(loginUser.getId())) {
+        if (existingDiary == null || !existingDiary.getUser().getId().equals(userId)) {
             logger.error("Diary not found or unauthorized update attempt.");
             return ResponseEntity.status(403).body("Diary not found or unauthorized");
         }
@@ -172,19 +167,14 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         return ResponseEntity.ok("Diary updated successfully");
     }
 
-    @PutMapping("/{id}/delete")
-    public ResponseEntity<String> deleteDiary(@PathVariable Long id, HttpSession session) {
-        logger.info("Request to delete diary ID {}", id);  // 다이어리 삭제 요청 로그
-
-        Long userId = (Long) session.getAttribute("userId");
-        UserENT loginUser = userService.getLoginUserById(userId);
-        if (loginUser == null) {
-            logger.error("Logged in user not found.");
-            return ResponseEntity.badRequest().body("User not found");
-        }
+    @PutMapping("/{userId}/{id}/delete")
+    public ResponseEntity<String> deleteDiary(@PathVariable Long userId, @PathVariable Long id, HttpSession session) {
+        AccessAuthority accessAuthority = new AccessAuthority(session, this.userService);
+        if (!accessAuthority.forOwner(userId).isOk())
+            return ResponseEntity.badRequest().body("Login User error");
 
         DiaryBoardENT existingDiary = diaryService.findDiaryById(id);
-        if (existingDiary == null || !existingDiary.getUser().getId().equals(loginUser.getId())) {
+        if (existingDiary == null || !existingDiary.getUser().getId().equals(userId)) {
             logger.error("Diary not found or unauthorized delete attempt.");
             return ResponseEntity.status(403).body("Diary not found or unauthorized");
         }

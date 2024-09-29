@@ -147,4 +147,15 @@ public class FriendSRV {
 
         return friendREP.existsByUserAndFriend(userENT_my, friendENT);
     }
+
+    /* 접근제한 클래스에서 쓰는 전용 메소드 */
+    public Boolean isFriendforAccess(Long userId, Long friendId) {
+        /* 계정 정보 찾기 오류 */
+        UserENT userENT_my = userREP.findById(userId).orElse(null);
+        UserENT friendENT = userREP.findById(friendId).orElse(null);
+        if(userENT_my == null || friendENT == null)
+            return null;
+
+        return friendREP.existsByUserAndFriend(userENT_my, friendENT);
+    }
 }
