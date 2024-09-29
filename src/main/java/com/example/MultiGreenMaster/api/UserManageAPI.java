@@ -68,30 +68,20 @@ public class UserManageAPI {
 
     /* 다이어리 공개 설정 업데이트 */
     @GetMapping("/diary/{code}")
-    public ResponseEntity<String> updateDiaryVisibility(@PathVariable int code, HttpSession session) {
-        // 세션에서 로그인된 사용자 ID를 가져옴
+    public ResponseEntity<String> updateDiaryVisibilityApi(@PathVariable int code, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 세션에 사용자 정보가 없으면 Bad Request 반환
-        }
-        UserENT user = userService.getLoginUserById(userId); // 사용자 정보 조회
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 사용자 정보를 찾지 못하면 Bad Request 반환
-        }
-        String message;
-        if (code == 0) {
-            user.setDiaryispublic(0);
-            message = "success diaryIsPublic = 0";
-        } else if (code == 1) {
-            user.setDiaryispublic(1);
-            message = "success diaryIsPublic = 1";
-        } else if (code == 2) {
-            user.setDiaryispublic(2);
-            message = "success diaryIsPublic = 2";
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail this code not available"); // 잘못된 code 값이 들어온 경우 오류 메시지 반환
-        }
-        userService.saveUser(user); // 변경된 사용자 정보 저장
-        return ResponseEntity.ok(message); // 성공적으로 업데이트 되었을 경우 message 반환
+        if (userId == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        UserENT user = userService.getLoginUserById(userId);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        /* 잘못된 code 변수를 입력한 경우 null 반환 */
+        String message = userService.updateDiaryVisibility(code, user);
+        if (message == null)
+            return ResponseEntity.badRequest().body("fail this code not available");
+        else
+            return ResponseEntity.ok(message);
     }
 }

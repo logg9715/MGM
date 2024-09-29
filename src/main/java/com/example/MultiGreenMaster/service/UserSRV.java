@@ -14,6 +14,8 @@ import com.example.MultiGreenMaster.repository.UserREP;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -161,5 +163,25 @@ public class UserSRV {
         return responses.stream()
                 .sorted((r1, r2) -> r2.getRegdate().compareTo(r1.getRegdate()))
                 .collect(Collectors.toList());
+    }
+
+    /* 계정 일기장 공개 여부 */
+    public String updateDiaryVisibility(int code, UserENT user) {
+        String message;
+        if (code == 0) {
+            user.setDiaryispublic(0);
+            message = "success diaryIsPublic = 0";
+        } else if (code == 1) {
+            user.setDiaryispublic(1);
+            message = "success diaryIsPublic = 1";
+        } else if (code == 2) {
+            user.setDiaryispublic(2);
+            message = "success diaryIsPublic = 2";
+        } else {
+            return null; // 잘못된 code 값이 들어온 경우 null
+        }
+        userRepository.save(user); // 변경된 사용자 정보 저장
+
+        return message;
     }
 }
