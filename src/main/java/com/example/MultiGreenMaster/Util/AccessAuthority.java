@@ -54,13 +54,11 @@ public class AccessAuthority {
             this.ok = true;
         return this;
     }
-
-    /* 이 경우, 생성자의 session=접속시도자, friendId가 글 주인 id가 된다 */
-    // 둘의 친구 관계만 확인하면 되서 상관 x
+    
     public AccessAuthority forFriend(Long friendId) {
         if (this.userENT == null) return this;
 
-        if (friendSRV.isFriendforAccess(this.userENT.getId(), friendId))
+        if (friendSRV.isFriendforAccess(friendId, this.userENT.getId()))
             this.ok = true;
         return this;
     }

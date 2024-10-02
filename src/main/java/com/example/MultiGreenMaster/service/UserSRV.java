@@ -187,11 +187,7 @@ public class UserSRV {
     }
 
     /* 세션 정보를 받으면 계정의 일기장 공개 레벨 반환하는 메소드 */
-    public Integer getDiaryLevel(HttpSession session) {
-        Object userId = session.getAttribute("userId");
-        if (userId == null)
-            return null;
-
+    public Integer getDiaryLevel(Long userId) {
         UserENT target = userRepository.findById((Long) userId).orElse(null);
         if (target == null)
             return null;

@@ -61,21 +61,24 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         // ============================================ 접근제한자 ==================================================
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
         // case 1. 접근제한 = 본인
-        Integer diaryLevel = userService.getDiaryLevel(session);
+        Integer diaryLevel = userService.getDiaryLevel(userId);
         if (diaryLevel == null || diaryLevel == 0)
         {
+            System.out.println("case 1");
             if (!accessAuthority.forOwner(userId).isOk())
                 return ResponseEntity.badRequest().build();
         }
         // case 2. 접근제한 = 본인&친구
         else if (diaryLevel == 1)
         {
+            System.out.println("case 2");
             if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
                 return ResponseEntity.badRequest().build();
         }
         // case 3. 접근제한 = 전체공개
         else if (diaryLevel == 2) {
             /* 통과 */
+            System.out.println("case 3");
         }
         else
             return ResponseEntity.badRequest().build();
@@ -110,7 +113,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         // ============================================ 접근제한자 ==================================================
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
         // case 1. 접근제한 = 본인
-        Integer diaryLevel = userService.getDiaryLevel(session);
+        Integer diaryLevel = userService.getDiaryLevel(userId);
         if (diaryLevel == null || diaryLevel == 0)
         {
             if (!accessAuthority.forOwner(userId).isOk())
