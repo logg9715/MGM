@@ -184,20 +184,4 @@ public class UserSRV {
 
         return message;
     }
-
-    /* 일기장 공개 여부 확인 메서드 */
-    public String getDiaryVisibility(UserENT user) {
-        if (user.getDiaryispublic() == null) {
-            return "Diary visibility is not set"; // 설정되지 않은 경우
-        } else if (user.getDiaryispublic() == 0) {
-            return "Diary is private (0)"; // 비공개
-        } else if (user.getDiaryispublic() == 1) {
-            return "Diary is visible to friends only (1)"; // 친구에게만 공개
-        } else if (user.getDiaryispublic() == 2) {
-            return "Diary is public (2)"; // 전체 공개
-        } else {
-            return "Invalid visibility setting"; // 잘못된 값이 저장된 경우
-        }
-    }
-
 }
