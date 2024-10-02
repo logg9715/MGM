@@ -66,10 +66,28 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     /* 일기장 목록 가져오기 */
     @GetMapping("/{userId}")
     public ResponseEntity<List<DiaryBoardFRM>> listDiaries(@PathVariable Long userId, HttpSession session) {
-        // 접근제한 = 본인&친구
+        // ============================================ 접근제한자 ==================================================
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
-        if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
+        // case 1. 접근제한 = 본인
+        Integer diaryLevel = userService.getDiaryLevel(session);
+        if (diaryLevel == null || diaryLevel == 0)
+        {
+            if (!accessAuthority.forOwner(userId).isOk())
+                return ResponseEntity.badRequest().build();
+        }
+        // case 2. 접근제한 = 본인&친구
+        else if (diaryLevel == 1)
+        {
+            if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
+                return ResponseEntity.badRequest().build();
+        }
+        // case 3. 접근제한 = 전체공개
+        else if (diaryLevel == 2) {
+            /* 통과 */
+        }
+        else
             return ResponseEntity.badRequest().build();
+        // =================================================================================================
 
         List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
@@ -95,11 +113,28 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     public ResponseEntity<?> getDiary(@PathVariable Long userId, @PathVariable Long id, HttpSession session) {
         logger.info("Requesting diary detail: Diary ID {}", id);  // 로그: 다이어리 상세 조회 요청
 
-        // 접근제한 : 본인&친구
+        // ============================================ 접근제한자 ==================================================
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
-        if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
+        // case 1. 접근제한 = 본인
+        Integer diaryLevel = userService.getDiaryLevel(session);
+        if (diaryLevel == null || diaryLevel == 0)
+        {
+            if (!accessAuthority.forOwner(userId).isOk())
+                return ResponseEntity.badRequest().build();
+        }
+        // case 2. 접근제한 = 본인&친구
+        else if (diaryLevel == 1)
+        {
+            if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
+                return ResponseEntity.badRequest().build();
+        }
+        // case 3. 접근제한 = 전체공개
+        else if (diaryLevel == 2) {
+            /* 통과 */
+        }
+        else
             return ResponseEntity.badRequest().build();
-
+        // ========================================================================================================
 
         DiaryBoardENT diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
         if (diary == null) {

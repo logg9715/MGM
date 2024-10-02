@@ -11,6 +11,7 @@ import com.example.MultiGreenMaster.repository.FreeBoardCommentREP;
 import com.example.MultiGreenMaster.repository.FreeBoardREP;
 import com.example.MultiGreenMaster.repository.FriendREP;
 import com.example.MultiGreenMaster.repository.UserREP;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,5 +184,17 @@ public class UserSRV {
         userRepository.save(user); // 변경된 사용자 정보 저장
 
         return message;
+    }
+
+    /* 세션 정보를 받으면 계정의 일기장 공개 레벨 반환하는 메소드 */
+    public Integer getDiaryLevel(HttpSession session) {
+        Object userId = session.getAttribute("userId");
+        if (userId == null)
+            return null;
+
+        UserENT target = userRepository.findById((Long) userId).orElse(null);
+        if (target == null)
+            return null;
+        return target.getDiaryispublic();
     }
 }
