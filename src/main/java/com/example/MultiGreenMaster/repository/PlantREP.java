@@ -1,5 +1,6 @@
 package com.example.MultiGreenMaster.repository;
 
+import com.example.MultiGreenMaster.dto.PlantFRM;
 import com.example.MultiGreenMaster.dto.UserDTO_id_nickname;
 import com.example.MultiGreenMaster.entity.PlantENT;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,8 @@ import java.util.Optional;
 public interface PlantREP extends JpaRepository<PlantENT, Long> {
     @Query(value = "SELECT * FROM flower.plant where user_id = :userId", nativeQuery = true)
     Optional<PlantENT> findByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT new com.example.MultiGreenMaster.dto.PlantFRM(p.id, p.ipaddress, p.userENT.id) FROM PlantENT p")
+    List<PlantFRM> findAllOnForm();
+
 }

@@ -1,8 +1,11 @@
 package com.example.MultiGreenMaster.api;
 
 import com.example.MultiGreenMaster.Util.AccessAuthority;
+import com.example.MultiGreenMaster.dto.PlantFRM;
 import com.example.MultiGreenMaster.dto.UserFRM;
+import com.example.MultiGreenMaster.entity.PlantENT;
 import com.example.MultiGreenMaster.entity.UserENT;
+import com.example.MultiGreenMaster.service.PlantSRV;
 import com.example.MultiGreenMaster.service.UserSRV;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class AdminAPI {
     @Autowired
     UserSRV userSRV;
 
+    @Autowired
+    PlantSRV plantSRV;
+
     /* 모든 유저 정보를 가져온다 (비활성화 된 유저 포함) */
     @GetMapping("/getuserlist")
     public ResponseEntity<List<UserENT>> getUserList(HttpSession httpSession) {
@@ -34,9 +40,9 @@ public class AdminAPI {
     // talend로만 테스트한다, 머스태치 테스트 미구현
     @PostMapping("/update")
     public ResponseEntity<UserENT> updateUser(@RequestBody UserFRM form, HttpSession session) {
-        // 관리자 & 계정 본인의 경우만 허용, 아니면 badRequest 반환
+        // 관리자만 허용, 아니면 badRequest 반환
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userSRV);
-        if (accessAuthority.forAdmin().forOwner(form.getId()).isOk())
+        if (accessAuthority.forAdmin().isOk())
         {
             UserENT updatedUser = userSRV.updateUser(form);
             return (updatedUser == null) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(updatedUser);
@@ -70,6 +76,37 @@ public class AdminAPI {
                 return ResponseEntity.ok(target);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    // ================================================= 식물 정보 관련 =========================================
+
+    /* 식물 목록 가져오기 */
+    @GetMapping("/plant/list")
+    public ResponseEntity<List<PlantFRM>> getPlantList(HttpSession session) {
+        AccessAuthority accessAuthority = new AccessAuthority(session, userSRV);
+        if (!accessAuthority.forAdmin().isOk())
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok(plantSRV.findAllOnForm());
+    }
+
+    /* 식물 정보 업데이트 */
+    /******************************************************************************
+     *                                                                             *
+     * 받을 form 형식 :                                                            *
+     *                                                                             *
+     * Long id;                                                                    *
+     * String ipaddress;                                                           *
+     * Long userENT;                                                               *
+     *                                                                             *
+     ******************************************************************************/
+    @PostMapping("/plant/update")
+    public ResponseEntity<?> updatePlant(@ModelAttribute PlantFRM plantFRM, HttpSession session) {
+        AccessAuthority accessAuthority = new AccessAuthority(session,userSRV);
+        if(!accessAuthority.forAdmin().isOk())
+            return ResponseEntity.badRequest().body("Admin Login Error");
+
+        return ResponseEntity.ok(plantSRV.updatePlant(plantFRM));
     }
 
 }

@@ -229,6 +229,18 @@ public class MakeInitData {
                 .build();
         plantREP.save(plant1);
 
+        PlantENT plant2 = PlantENT.builder()
+                .ipaddress("127.0.0.10")
+                .userENT(user2)
+                .build();
+        plantREP.save(plant2);
+
+        PlantENT plant3 = PlantENT.builder()
+                .ipaddress("127.0.0.30")
+                .userENT(null)
+                .build();
+        plantREP.save(plant3);
+
     }
 
     @Transactional
