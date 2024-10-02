@@ -18,6 +18,7 @@ public class MakeInitData {
     private final FreeBoardREP cmPostRepository;
     private final FreeBoardCommentREP cmCommentRepository;
     private final DiaryBoardREP diaryRepository;
+    private final PlantREP plantREP;
 
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
@@ -221,6 +222,12 @@ public class MakeInitData {
                 .build();
 
         diaryRepository.save(diary3);
+
+        PlantENT plant1 = PlantENT.builder()
+                .ipaddress("127.0.0.2")
+                .userENT(user1)
+                .build();
+        plantREP.save(plant1);
 
     }
 
