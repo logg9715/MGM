@@ -45,23 +45,15 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().body("User not found");
         }
 
-        // MultipartFile을 byte[]로 변환
-        List<byte[]> pictureBytesList = form.getPictures().stream().map(picture -> {
-            try {
-                return picture.getBytes();
-            } catch (IOException e) {
-                return null;
-            }
-        }).collect(Collectors.toList());
-
-        // 다이어리 엔티티 생성
-        DiaryBoardENT diary = form.toEntity(pictureBytesList);
+        // 엔티티로 변환 및 사용자 설정
+        DiaryBoardENT diary = form.toEntity();
         diary.setUser(loginUser);
         diary.setTimeNow();
 
         diaryService.saveDiary(diary);
         return ResponseEntity.ok("Diary created successfully");
     }
+
 
     /* 일기장 목록 가져오기 */
     @GetMapping("/{userId}")
@@ -89,6 +81,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().build();
         // =================================================================================================
 
+        // 일기장 리스트 조회
         List<DiaryBoardENT> diaries = diaryService.findDiariesForUser(userId);
         List<DiaryBoardFRM> diaryForms = diaries.stream().map(diary -> {
             List<String> pictureBase64List = diary.getPictures() != null ? diary.getPictures().stream()
@@ -106,9 +99,10 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             );
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(diaryForms);
+        return ResponseEntity.ok(diaryForms); // 일기장 목록 반환
     }
 
+    /* 특정 일기장 조회 */
     @GetMapping("/{userId}/{id}")
     public ResponseEntity<?> getDiary(@PathVariable Long userId, @PathVariable Long id, HttpSession session) {
         logger.info("Requesting diary detail: Diary ID {}", id);  // 로그: 다이어리 상세 조회 요청
@@ -136,10 +130,11 @@ public class DiaryBoardAPI extends SessionCheckCTL {
             return ResponseEntity.badRequest().build();
         // ========================================================================================================
 
-        DiaryBoardENT diary = diaryService.findDiaryById(id);  // ID로 다이어리 조회
+        // 다이어리 조회
+        DiaryBoardENT diary = diaryService.findDiaryById(id);
         if (diary == null) {
             logger.error("Diary not found: Diary ID {}", id);  // 존재하지 않는 게시글에 접근 시 오류 로그
-            return ResponseEntity.status(404).body("Diary not found.");  // 404 오류 반환
+            return ResponseEntity.status(404).body("Diary not found");  // 404 오류 반환
         }
 
         if (diary.isDisable()) {
@@ -166,22 +161,29 @@ public class DiaryBoardAPI extends SessionCheckCTL {
     }
 
 
+
     @PutMapping("/{userId}/{id}/update")
     public ResponseEntity<String> updateDiary(@PathVariable Long userId, @PathVariable Long id, @ModelAttribute DiaryBoardFRM form, HttpSession session) {
+        // 세션에서 로그인된 사용자 확인
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService);
-        if (!accessAuthority.forOwner(userId).isOk())
+        if (!accessAuthority.forOwner(userId).isOk()) {
             return ResponseEntity.badRequest().body("Login User Error");
+        }
 
+        // 기존 다이어리 조회
         DiaryBoardENT existingDiary = diaryService.findDiaryById(id);
         if (existingDiary == null || !existingDiary.getUser().getId().equals(userId)) {
             logger.error("Diary not found or unauthorized update attempt.");
             return ResponseEntity.status(403).body("Diary not found or unauthorized");
         }
 
+        // 다이어리 제목 및 내용 업데이트
         existingDiary.setTitle(form.getTitle());
         existingDiary.setContent(form.getContent());
 
+        // 사진이 새로 업로드되었을 때만 처리
         if (form.getPictures() != null && !form.getPictures().isEmpty()) {
+            // MultipartFile -> byte[] 변환
             List<byte[]> pictureBytesList = form.getPictures().stream()
                     .map(picture -> {
                         try {
@@ -193,14 +195,17 @@ public class DiaryBoardAPI extends SessionCheckCTL {
                     })
                     .collect(Collectors.toList());
 
-            existingDiary.getPictures().clear();  // 기존 사진 제거
-            existingDiary.getPictures().addAll(pictureBytesList);  // 새 사진 추가
+            // 기존 사진 제거 및 새 사진 추가
+            existingDiary.getPictures().clear();  // 기존 사진 목록 제거
+            existingDiary.getPictures().addAll(pictureBytesList);  // 새로 업로드된 사진 목록 추가
         }
 
-        diaryService.saveDiary(existingDiary);  // 수정된 다이어리 저장
-        logger.info("Diary updated successfully: {}", existingDiary);  // 다이어리 수정 완료 로그
+        // 수정된 다이어리 저장
+        diaryService.saveDiary(existingDiary);
+        logger.info("Diary updated successfully: {}", existingDiary);  // 로그 출력
         return ResponseEntity.ok("Diary updated successfully");
     }
+
 
     @PutMapping("/{userId}/{id}/delete")
     public ResponseEntity<String> deleteDiary(@PathVariable Long userId, @PathVariable Long id, HttpSession session) {
