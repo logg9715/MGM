@@ -28,6 +28,10 @@ public class UdpAPI {
     @Autowired
     private UserSRV userSRV;
 
+    /* 세션 정보를 읽어서 배정된 식물 정보 제공 */
+    // 로그인오류&세션오류 => badRequest
+    // 배정된 식물이 없음 => ok, {"ip", "0"}
+    // 배정된 식물이 있음 => ok, {"ip", "127.0.0.2"}
     @GetMapping("/getipaddress")
     public ResponseEntity<?> getIpAddress(HttpSession session) {
         Map<String, String> result = new HashMap<>();
@@ -38,17 +42,14 @@ public class UdpAPI {
         if(userSRV.findUserById((Long) loginId) == null)
             return ResponseEntity.badRequest().body("Login user not Found");
 
-        System.out.println("@@@ : " + (Long)loginId);
-
         PlantENT target_plant = plantSRV.findByUserId((Long) loginId);
         if (target_plant == null)
-            return ResponseEntity.badRequest().body("Plant DB not Found");
+            result.put("ip", "0");
 
         result.put("ip", target_plant.getIpaddress());
         return ResponseEntity.ok(result);
 
     }
-
 
     @GetMapping("/sensor")
     public Map<String, Object> getSensorData() {
