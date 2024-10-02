@@ -108,5 +108,4 @@ public class AdminAPI {
 
         return ResponseEntity.ok(plantSRV.updatePlant(plantFRM));
     }
-
 }

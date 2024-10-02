@@ -223,12 +223,14 @@ public class MakeInitData {
 
         diaryRepository.save(diary3);
 
+        // 얘가 실제 작동하는 주소
         PlantENT plant1 = PlantENT.builder()
-                .ipaddress("127.0.0.2")
+                .ipaddress("175.123.202.85")
                 .userENT(user1)
                 .build();
         plantREP.save(plant1);
 
+        // 이 아래는 더미
         PlantENT plant2 = PlantENT.builder()
                 .ipaddress("127.0.0.10")
                 .userENT(user2)

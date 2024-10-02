@@ -51,11 +51,11 @@ public class UdpAPI {
 
     }
 
-    @GetMapping("/sensor")
-    public Map<String, Object> getSensorData() {
+    @GetMapping("/sensor/{ipAddress}")
+    public Map<String, Object> getSensorData(@PathVariable String ipAddress) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String[] data = udpCon.start("175.123.202.85", 20920);
+            String[] data = udpCon.start(ipAddress, 20920);
             response.put("sensorData", data);
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -63,11 +63,11 @@ public class UdpAPI {
         return response;
     }
 
-    @GetMapping("/rotater")
-    public Map<String, Object> getRotaterData() {
+    @GetMapping("/rotater/{ipAddress}")
+    public Map<String, Object> getRotaterData(@PathVariable String ipAddress) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String[] data = udpCon.actuator("175.123.202.85", 20920, ScFrm.ROTATER);
+            String[] data = udpCon.actuator(ipAddress, 20920, ScFrm.ROTATER);
             response.put("rotaterData", data);
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -75,11 +75,11 @@ public class UdpAPI {
         return response;
     }
 
-    @GetMapping("/sprinkler")
-    public Map<String, Object> getSprinklerData() {
+    @GetMapping("/sprinkler/{ipAddress}")
+    public Map<String, Object> getSprinklerData(@PathVariable String ipAddress) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String[] data = udpCon.actuator("175.123.202.85", 20920, ScFrm.SPRINKLER);
+            String[] data = udpCon.actuator(ipAddress, 20920, ScFrm.SPRINKLER);
             response.put("sprinklerData", data);
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -87,11 +87,11 @@ public class UdpAPI {
         return response;
     }
 
-    @GetMapping("/led")
-    public Map<String, Object> getLedData() {
+    @GetMapping("/led/{ipAddress}")
+    public Map<String, Object> getLedData(@PathVariable String ipAddress) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String[] data = udpCon.actuator("175.123.202.85", 20920, ScFrm.LED);
+            String[] data = udpCon.actuator(ipAddress, 20920, ScFrm.LED);
             response.put("ledData", data);
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -99,11 +99,11 @@ public class UdpAPI {
         return response;
     }
 
-    @GetMapping("/screenshot")
-    public Map<String, Object> getScreenshot() {
+    @GetMapping("/screenshot/{ipAddress}")
+    public Map<String, Object> getScreenshot(@PathVariable String ipAddress) {
         Map<String, Object> response = new HashMap<>();
         try {
-            udpCon.receiveAndProcessData();
+            udpCon.receiveAndProcessData("175.123.202.85");
             String screenshot = udpCon.getLatestScreenshotBase64();
             response.put("screenshot", screenshot);
         } catch (Exception e) {

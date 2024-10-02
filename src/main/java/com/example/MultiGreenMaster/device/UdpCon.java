@@ -88,10 +88,10 @@ public class UdpCon {
         return latestScreenshotBase64;
     }
 
-    public void receiveAndProcessData() {
+    public void receiveAndProcessData(String url) {
         try {
             // 스크린샷을 캡처합니다.
-            latestScreenshotBase64 = getScreenshotFromStreamUrl("http://175.123.202.85:20800/screenshot");
+            latestScreenshotBase64 = getScreenshotFromStreamUrl("http://" + url + ":20800/screenshot");
         } catch (IOException e) {
             e.printStackTrace();
         }
