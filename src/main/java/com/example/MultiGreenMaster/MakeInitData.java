@@ -192,7 +192,6 @@ public class MakeInitData {
         cmCommentRepository.save(recmcomment1);
 
         // 일기장
-
         DiaryBoardENT diary1 = DiaryBoardENT.builder()
                 .title("비활성화 일기장")
                 .content("비활성화 일기장")
