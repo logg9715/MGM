@@ -13,8 +13,13 @@ public class PlantCTL {
         return "test-plant/input";
     }
 
+
     @GetMapping("/admin_plant")
     public String admin_plant() {
         return "test-plant/admin_plant";
     }
+
+    @GetMapping("/adminuser")
+    public String adminuserPage () { return "test-plant/admin_user"; }
+
 }
