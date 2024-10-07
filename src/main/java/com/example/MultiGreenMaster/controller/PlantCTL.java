@@ -12,4 +12,9 @@ public class PlantCTL {
     public String inputPage () {
         return "test-plant/input";
     }
+
+    @GetMapping("/admin_plant")
+    public String admin_plant() {
+        return "test-plant/admin_plant";
+    }
 }
