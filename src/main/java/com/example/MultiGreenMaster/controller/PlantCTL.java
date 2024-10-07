@@ -12,4 +12,7 @@ public class PlantCTL {
     public String inputPage () {
         return "test-plant/input";
     }
+
+    @GetMapping("/adminuser")
+    public String adminuserPage () { return "test-plant/admin_user"; }
 }
