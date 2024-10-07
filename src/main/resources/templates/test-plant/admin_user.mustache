@@ -27,7 +27,6 @@
         <th>ID</th>
         <th>Login ID</th>
         <th>Password</th>
-        <th>Password Check</th>
         <th>Nickname</th>
         <th>Name</th>
         <th>Phone Number</th>
@@ -62,10 +61,15 @@
 
                     row.innerHTML = `
                         <td>${user.id}</td>
-                        <td><input type="text" id="loginId-${user.id}" value="${user.loginId}"></td>
-                        <td><input type="password" id="password-${user.id}" value="${user.password}"></td>
-                        <td><input type="password" id="passwordCheck-${user.id}" value="${user.passwordCheck}"></td>
-                        <td><input type="text" id="nickname-${user.id}" value="${user.nickname}"></td>
+                        <td>
+                            <input type="text" id="loginId-${user.id}" value="${user.loginId}">
+                            <button type="button" onclick="checkDuplicateLoginId(${user.id})">Check</button>
+                        </td>
+                        <td><input type="text" id="password-${user.id}" value="${user.password}"></td> <!-- Password를 텍스트로 표시 -->
+                        <td>
+                            <input type="text" id="nickname-${user.id}" value="${user.nickname}">
+                            <button type="button" onclick="checkDuplicateNickname(${user.id})">Check</button>
+                        </td>
                         <td><input type="text" id="name-${user.id}" value="${user.name}"></td>
                         <td><input type="text" id="phonenumber-${user.id}" value="${user.phonenumber}"></td>
                         <td><input type="text" id="email-${user.id}" value="${user.email}"></td>
@@ -77,7 +81,7 @@
                         </td>
                         <td>${user.active ? 'Active' : 'Inactive'}</td>
                         <td>
-                            <button type="button" onclick="updateUser(${user.id})">Update</button>
+                            <button type="button" onclick="updateUser(${user.id})" id="updateButton-${user.id}" disabled>Update</button>
                         </td>
                         <td>식물할당</td>
                     `;
@@ -88,12 +92,45 @@
             .catch(error => console.error('Error:', error));
     });
 
+    function checkDuplicateLoginId(userId) {
+        const loginId = document.getElementById(`loginId-${userId}`).value;
+
+        fetch(`/api/usermanage/check-duplicate?loginId=${encodeURIComponent(loginId)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.isDuplicate) {
+                    alert("Login ID is already taken.");
+                    document.getElementById(`updateButton-${userId}`).disabled = true;
+                } else {
+                    alert("Login ID is available.");
+                    document.getElementById(`updateButton-${userId}`).disabled = false;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function checkDuplicateNickname(userId) {
+        const nickname = document.getElementById(`nickname-${userId}`).value;
+
+        fetch(`/api/usermanage/check-nickname-duplicate?nickname=${encodeURIComponent(nickname)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.isDuplicate) {
+                    alert("Nickname is already taken.");
+                    document.getElementById(`updateButton-${userId}`).disabled = true;
+                } else {
+                    alert("Nickname is available.");
+                    document.getElementById(`updateButton-${userId}`).disabled = false;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
     function updateUser(userId) {
         const userForm = {
             id: userId,
             loginId: document.getElementById(`loginId-${userId}`).value,
             password: document.getElementById(`password-${userId}`).value,
-            passwordCheck: document.getElementById(`passwordCheck-${userId}`).value,
             nickname: document.getElementById(`nickname-${userId}`).value,
             name: document.getElementById(`name-${userId}`).value,
             phonenumber: document.getElementById(`phonenumber-${userId}`).value,
