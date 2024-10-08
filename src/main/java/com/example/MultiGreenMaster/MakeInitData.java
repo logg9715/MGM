@@ -71,6 +71,29 @@ public class MakeInitData {
                 .build();
         userRepository.save(user3);
 
+        // ============================================== 자유게시판 ==================================================
+
+        FreeBoardENT cmposta1 = FreeBoardENT.builder()
+                .title("게시글 a1")
+                .content("이 글은 게시글 a1입니다.")
+                .count(0)
+                //.likeCount(0)
+                .regdate(LocalDateTime.of(2024, 7, 14, 10, 22, 12))
+                .user(admin1)
+                .disable(true)
+                .build();
+        cmPostRepository.save(cmposta1);
+
+        FreeBoardENT cmposta2 = FreeBoardENT.builder()
+                .title("게시글 a2")
+                .content("이 글은 게시글 a2입니다.")
+                .count(0)
+                //.likeCount(0)
+                .regdate(LocalDateTime.of(2024, 7, 14, 10, 29, 12))
+                .user(admin1)
+                .build();
+        cmPostRepository.save(cmposta2);
+
         FreeBoardENT cmpost1 = FreeBoardENT.builder()
                 .title("게시글 1")
                 .content("이 글은 게시글 1입니다.")
@@ -160,7 +183,7 @@ public class MakeInitData {
 
         //댓글
         FreeBoardCommentENT cmcommenta1 = FreeBoardCommentENT.builder()
-                .content("이 글은 1번 댓글입니다.11")
+                .content("이 글은 1번 댓글입니다.a1")
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
                 .user(admin1)
                 .cmPost(cmpost6)

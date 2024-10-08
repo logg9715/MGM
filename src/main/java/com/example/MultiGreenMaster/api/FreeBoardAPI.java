@@ -137,7 +137,7 @@ public class FreeBoardAPI extends SessionCheckCTL {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    // 최신 4개의 게시글을 내림차순으로 반환
+    // 최신 4개의 게시글을 내림차순으로 반환(메인페이지에서 사용)
     @GetMapping("/recent")
     public List<FreeBoardFRM> getRecentPosts() {
         List<FreeBoardENT> posts = freeBoardSRV.findTop4PostsDesc();  // 최신 게시글 4개를 내림차순으로 조회

@@ -15,7 +15,7 @@ public interface FreeBoardCommentREP extends JpaRepository<FreeBoardCommentENT, 
     List<FreeBoardCommentENT> findByCmPostId(Long cmPostId);
 
     // 특정 유저의 댓글을 작성일 기준 내림차순으로 조회
-    @Query(value = "SELECT * FROM flower.freeboardcomment where user_id = :userId and disable = 1 ORDER BY regdate DESC LIMIT 3", nativeQuery = true)
+    @Query(value = "SELECT * FROM flower.freeboardcomment where user_id = :userId and disable = 0 ORDER BY regdate DESC LIMIT 3", nativeQuery = true)
     List<FreeBoardCommentENT> findRecentCommentsByUserId(@Param("userId") Long userId);
 
     // 특정 사용자의 댓글을 가져오는 메서드

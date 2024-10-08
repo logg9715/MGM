@@ -48,6 +48,6 @@ public class FreeBoardSRV {
     }
 
     public List<FreeBoardENT> findLast3FreeboardByUserId(Long userId) {
-        return freeBoardREP.findTop3ByUserIdOrderByRegdateDesc(userId);  // 사용자의 게시글 최신 3개 조회
+        return freeBoardREP.findTop3ByUserIdAndDisableFalseOrderByRegdateDesc(userId);  // 사용자의 게시글 최신 3개 조회
     }
 }
