@@ -43,8 +43,10 @@ public class UdpAPI {
             return ResponseEntity.badRequest().body("Login user not Found");
 
         PlantENT target_plant = plantSRV.findByUserId((Long) loginId);
-        if (target_plant == null)
+        if (target_plant == null) {
             result.put("ip", "0");
+            return ResponseEntity.ok(result);
+        }
 
         result.put("ip", target_plant.getIpaddress());
         return ResponseEntity.ok(result);

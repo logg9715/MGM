@@ -97,7 +97,7 @@ public class AdminAPI {
      *                                                                             *
      * Long id;                                                                    *
      * String ipaddress;                                                           *
-     * Long userENT;                                                               *
+     * Long user_id;                                                               *
      *                                                                             *
      ******************************************************************************/
     @PostMapping("/plant/update")
