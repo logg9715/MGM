@@ -71,14 +71,14 @@
             .catch(error => console.error('Error:', error));
     });
 
-    // 수정 필요========================================== 제출 영역 =============================
+    // ========================================== 제출 영역 =============================
     function updatePlant(plantId) {
         const userForm = {
             id: plantId,
-            ipAddress: document.getElementById(`ipAddressCol-${plantId}`).value,
+            ipaddress: document.getElementById(`ipAddressCol-${plantId}`).value,
             user_id: document.getElementById(`userIdCol-${plantId}`).value
         };
-        console.log(userForm);
+        //console.log(userForm);
 
         fetch('/api/admin/plant/update', {
             method: 'POST',

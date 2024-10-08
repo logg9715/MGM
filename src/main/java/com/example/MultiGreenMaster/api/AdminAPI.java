@@ -101,11 +101,12 @@ public class AdminAPI {
      *                                                                             *
      ******************************************************************************/
     @PostMapping("/plant/update")
-    public ResponseEntity<?> updatePlant(@ModelAttribute PlantFRM plantFRM, HttpSession session) {
+    public ResponseEntity<?> updatePlant(@RequestBody PlantFRM plantFRM, HttpSession session) {
         AccessAuthority accessAuthority = new AccessAuthority(session,userSRV);
         if(!accessAuthority.forAdmin().isOk())
             return ResponseEntity.badRequest().body("Admin Login Error");
 
+        //System.out.println("form :" + plantFRM);
         return ResponseEntity.ok(plantSRV.updatePlant(plantFRM));
     }
 }
