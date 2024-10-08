@@ -81,6 +81,15 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost1);
 
+        FreeBoardENT cmpost2_0 = FreeBoardENT.builder()
+                .title("게시글 2-0")
+                .content("이 글은 게시글 2-0입니다.")
+                .count(0)
+                .regdate(LocalDateTime.of(2023, 7, 12, 10, 35, 12))
+                .user(user1)
+                .build();
+        cmPostRepository.save(cmpost2_0);
+
         FreeBoardENT cmpost2 = FreeBoardENT.builder()
                 .title("게시글 2")
                 .content("이 글은 게시글 2입니다.")
@@ -90,6 +99,24 @@ public class MakeInitData {
                 .user(user1)
                 .build();
         cmPostRepository.save(cmpost2);
+
+        FreeBoardENT cmpost2_1 = FreeBoardENT.builder()
+                .title("게시글 2-1")
+                .content("이 글은 게시글 2-1입니다.")
+                .count(0)
+                .regdate(LocalDateTime.of(2024, 7, 12, 10, 35, 12))
+                .user(user1)
+                .build();
+        cmPostRepository.save(cmpost2_1);
+
+        FreeBoardENT cmpost2_2 = FreeBoardENT.builder()
+                .title("게시글 2-2")
+                .content("이 글은 게시글 2-2입니다.")
+                .count(0)
+                .regdate(LocalDateTime.of(2024, 7, 12, 10, 40, 12))
+                .user(user1)
+                .build();
+        cmPostRepository.save(cmpost2_2);
 
         FreeBoardENT cmpost3 = FreeBoardENT.builder()
                 .title("게시글 3")

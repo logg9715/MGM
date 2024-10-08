@@ -1,9 +1,6 @@
 package com.example.MultiGreenMaster.service;
 
-import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM;
-import com.example.MultiGreenMaster.dto.FreeBoardCommentFRM_V2;
-import com.example.MultiGreenMaster.dto.LoginRequestFRM;
-import com.example.MultiGreenMaster.dto.UserFRM;
+import com.example.MultiGreenMaster.dto.*;
 import com.example.MultiGreenMaster.entity.FreeBoardCommentENT;
 import com.example.MultiGreenMaster.entity.FriendENT;
 import com.example.MultiGreenMaster.entity.UserENT;
@@ -20,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -193,4 +191,21 @@ public class UserSRV {
             return null;
         return target.getDiaryispublic();
     }
+
+    // =========================================== 잔디 데이터 전송 ================================================
+    public List<MyPage_GrassFRM> getGrass(Long userId) {
+        List<Object[]> objList = userRepository.getGrassDateGroupByDateBefore1Year(userId);
+        List<MyPage_GrassFRM> tmpList = this.convertToDTO(objList);
+        return tmpList;
+    }
+
+    public List<MyPage_GrassFRM> convertToDTO(List<Object[]> results) {
+        return results.stream()
+                .map(result -> new MyPage_GrassFRM(
+                        ((java.sql.Date) result[0]).toLocalDate().atStartOfDay(),  // LocalDateTime으로 변환
+                        ((Number) result[1]).longValue()))  // count 변환
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -67,6 +67,14 @@ public class MyPageAPI {
         return ResponseEntity.ok(freeBoardCommentFRMS);
     }
 
+    // =============================== 잔디 정보 불러오기 ===========================================
+
+    @GetMapping("/{userId}/grassdata")
+    public ResponseEntity<?> getGrassData(@PathVariable Long userId) {
+        return ResponseEntity.ok(userSRV.getGrass(userId));
+    }
+
+
     // =============================== 마이페이지에서 계정 정보 수정 ===========================================
 
     /* 개인정보 수정용 form 받아오는 api */
