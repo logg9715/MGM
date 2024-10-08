@@ -43,6 +43,11 @@
 </table>
 
 <script>
+    let originalLoginId = {}; // 사용자의 초기 loginId를 저장
+    let originalNickname = {}; // 사용자의 초기 nickname을 저장
+    let loginIdChecked = {}; // 로그인 ID 중복 체크 여부 저장
+    let nicknameChecked = {}; // 닉네임 중복 체크 여부 저장
+
     document.addEventListener("DOMContentLoaded", function() {
         // 사용자 리스트 Fetch API 호출
         fetch('/api/admin/getuserlist')
@@ -57,6 +62,11 @@
                 userTable.innerHTML = '';  // 기존 내용을 지움
 
                 data.forEach(user => {
+                    originalLoginId[user.id] = user.loginId; // 초기 loginId 저장
+                    originalNickname[user.id] = user.nickname; // 초기 nickname 저장
+                    loginIdChecked[user.id] = false; // 로그인 ID 초기 상태
+                    nicknameChecked[user.id] = false; // 닉네임 초기 상태
+
                     const row = document.createElement('tr');
 
                     row.innerHTML = `
@@ -95,16 +105,25 @@
     function checkDuplicateLoginId(userId) {
         const loginId = document.getElementById(`loginId-${userId}`).value;
 
+        // 만약 로그인 ID가 원래 값과 동일하다면 통과 처리
+        if (loginId === originalLoginId[userId]) {
+            alert("사용가능한 ID 입니다.");
+            loginIdChecked[userId] = true;
+            enableUpdateButton(userId); // update 버튼 활성화 여부 확인
+            return;
+        }
+
         fetch(`/api/usermanage/check-duplicate?loginId=${encodeURIComponent(loginId)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.isDuplicate) {
-                    alert("Login ID is already taken.");
-                    document.getElementById(`updateButton-${userId}`).disabled = true;
+                    alert("이미 사용중인 ID 입니다.");
+                    loginIdChecked[userId] = false;
                 } else {
-                    alert("Login ID is available.");
-                    document.getElementById(`updateButton-${userId}`).disabled = false;
+                    alert("사용가능한 ID 입니다.");
+                    loginIdChecked[userId] = true;
                 }
+                enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             })
             .catch(error => console.error('Error:', error));
     }
@@ -112,18 +131,37 @@
     function checkDuplicateNickname(userId) {
         const nickname = document.getElementById(`nickname-${userId}`).value;
 
+        // 만약 닉네임이 원래 값과 동일하다면 통과 처리
+        if (nickname === originalNickname[userId]) {
+            alert("사용가능한 닉네임입니다.");
+            nicknameChecked[userId] = true;
+            enableUpdateButton(userId); // update 버튼 활성화 여부 확인
+            return;
+        }
+
         fetch(`/api/usermanage/check-nickname-duplicate?nickname=${encodeURIComponent(nickname)}`)
             .then(response => response.json())
             .then(data => {
                 if (data.isDuplicate) {
-                    alert("Nickname is already taken.");
-                    document.getElementById(`updateButton-${userId}`).disabled = true;
+                    alert("사용중인 닉네임입니다.");
+                    nicknameChecked[userId] = false;
                 } else {
-                    alert("Nickname is available.");
-                    document.getElementById(`updateButton-${userId}`).disabled = false;
+                    alert("사용가능한 닉네임입니다.");
+                    nicknameChecked[userId] = true;
                 }
+                enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function enableUpdateButton(userId) {
+        // loginIdChecked와 nicknameChecked가 모두 true인 경우에만 update 버튼 활성화
+        const updateButton = document.getElementById(`updateButton-${userId}`);
+        if (loginIdChecked[userId] && nicknameChecked[userId]) {
+            updateButton.disabled = false;
+        } else {
+            updateButton.disabled = true;
+        }
     }
 
     function updateUser(userId) {
