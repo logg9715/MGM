@@ -159,6 +159,24 @@ public class MakeInitData {
         cmPostRepository.save(cmpost6);
 
         //댓글
+        FreeBoardCommentENT cmcommenta1 = FreeBoardCommentENT.builder()
+                .content("이 글은 1번 댓글입니다.11")
+                .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
+                .user(admin1)
+                .cmPost(cmpost6)
+                .build();
+        
+        cmCommentRepository.save(cmcommenta1);
+
+        FreeBoardCommentENT cmcommenta2 = FreeBoardCommentENT.builder()
+                .content("이 글은 1번 댓글입니다.a2")
+                .regdate(LocalDateTime.of(2024, 8, 1, 4, 45, 22))
+                .user(admin1)
+                .cmPost(cmpost6)
+                .build();
+
+        cmCommentRepository.save(cmcommenta2);
+
         FreeBoardCommentENT cmcomment1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.11")
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
