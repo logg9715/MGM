@@ -164,8 +164,9 @@ public class MakeInitData {
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
                 .user(admin1)
                 .cmPost(cmpost6)
+                .disable(true)
                 .build();
-        
+
         cmCommentRepository.save(cmcommenta1);
 
         FreeBoardCommentENT cmcommenta2 = FreeBoardCommentENT.builder()
