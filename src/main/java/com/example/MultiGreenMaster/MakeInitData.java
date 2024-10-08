@@ -23,6 +23,7 @@ public class MakeInitData {
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
     public void makeAdminAndUserAndCMPostAndCMComment() {
+        // ============================================ 계정정보 ================================================
         UserENT admin1 = UserENT.builder()
                 .loginId("admin1")
                 .password("1234")
@@ -77,7 +78,6 @@ public class MakeInitData {
                 .title("게시글 a1")
                 .content("이 글은 게시글 a1입니다.")
                 .count(0)
-                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 14, 10, 22, 12))
                 .user(admin1)
                 .disable(true)
@@ -88,7 +88,6 @@ public class MakeInitData {
                 .title("게시글 a2")
                 .content("이 글은 게시글 a2입니다.")
                 .count(0)
-                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 14, 10, 29, 12))
                 .user(admin1)
                 .build();
@@ -98,7 +97,6 @@ public class MakeInitData {
                 .title("게시글 1")
                 .content("이 글은 게시글 1입니다.")
                 .count(0)
-                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 14, 10, 30, 12))
                 .user(user1)
                 .build();
@@ -117,7 +115,6 @@ public class MakeInitData {
                 .title("게시글 2")
                 .content("이 글은 게시글 2입니다.")
                 .count(0)
-                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 7, 12, 10, 30, 12))
                 .user(user1)
                 .build();
@@ -165,7 +162,6 @@ public class MakeInitData {
                 .title("게시글 5")
                 .content("이 글은 게시글 5입니다.")
                 .count(0)
-                //.likeCount(0)
                 .regdate(LocalDateTime.of(2024, 8, 15, 11, 36, 20))
                 .user(user1)
                 .build();
@@ -181,7 +177,7 @@ public class MakeInitData {
                 .build();
         cmPostRepository.save(cmpost6);
 
-        //댓글
+        // =================================================== 댓글 ================================================
         FreeBoardCommentENT cmcommenta1 = FreeBoardCommentENT.builder()
                 .content("이 글은 1번 댓글입니다.a1")
                 .regdate(LocalDateTime.of(2024, 8, 1, 4, 30, 22))
@@ -250,7 +246,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(cmcomment6);
 
-        // 대댓글
+        // ============================================= 대댓글 ========================================================
         FreeBoardCommentENT recmcomment1 = FreeBoardCommentENT.builder()
                 .content("대댓글 1번")
                 .regdate(LocalDateTime.now().withNano(0))
@@ -260,7 +256,7 @@ public class MakeInitData {
                 .build();
         cmCommentRepository.save(recmcomment1);
 
-        // 일기장
+        // =============================================== 일기장 =====================================================
         DiaryBoardENT diary1 = DiaryBoardENT.builder()
                 .title("비활성화 일기장")
                 .content("비활성화 일기장")
@@ -291,6 +287,7 @@ public class MakeInitData {
 
         diaryRepository.save(diary3);
 
+        // =============================================== 스마트팜 ==============================================
         // 얘가 실제 작동하는 주소
         PlantENT plant1 = PlantENT.builder()
                 .ipaddress("175.123.202.85")
@@ -316,6 +313,7 @@ public class MakeInitData {
     @Transactional
     @PostConstruct //이 어노테이션은 객체가 생성된 뒤 단 한 번만 실행이 된다.
     public void makeAnnounce() {
+        // ========================================== 공지사항 =====================================================
         AnnounceBoardENT announce1 = AnnounceBoardENT.builder()
                 .title("공지사항 1")
                 .content("이 글은 공지사항 1번입니다.")
