@@ -69,6 +69,8 @@ public class UserManageAPI {
      */
 
     /* 다이어리 공개 설정 업데이트 */
+    /* code=일기장 공개여부 */
+    // null : 미정, 0 : 비공개, 1 : 친구 공개, 2 : 전체공개
     @GetMapping("/diary/{code}")
     public ResponseEntity<String> updateDiaryVisibilityApi(@PathVariable int code, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
