@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +58,7 @@ public class DiaryBoardAPI extends SessionCheckCTL {
 
     /* 일기장 목록 가져오기 */
     @GetMapping("/{userId}")
-    public ResponseEntity<List<DiaryBoardFRM>> listDiaries(@PathVariable Long userId, HttpSession session) {
+    public ResponseEntity<?> listDiaries(@PathVariable Long userId, HttpSession session) {
         // ============================================ 접근제한자 ==================================================
         AccessAuthority accessAuthority = new AccessAuthority(session, this.userService, this.friendSRV);
         // case 1. 접근제한 = 본인
@@ -66,14 +67,14 @@ public class DiaryBoardAPI extends SessionCheckCTL {
         {
             System.out.println("case 1");
             if (!accessAuthority.forOwner(userId).isOk())
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized user");
         }
         // case 2. 접근제한 = 본인&친구
         else if (diaryLevel == 1)
         {
             System.out.println("case 2");
             if (!accessAuthority.forOwner(userId).forFriend(userId).isOk())
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("unauthorized user");
         }
         // case 3. 접근제한 = 전체공개
         else if (diaryLevel == 2) {
