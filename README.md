@@ -1,3 +1,6 @@
+## MGM 프로젝트 백엔드
+[스마트팜 코드](https://github.com/logg9715/MGM_Raspi)와 연계됨.
+
 MySql 연동 상태. 다만 이 점을 지켜줄 것.
 http://localhost:8081/
 
